@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Pacman.svg_0: 4730025024755632629
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
