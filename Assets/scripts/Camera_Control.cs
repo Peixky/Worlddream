@@ -1,53 +1,77 @@
-using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(Camera))]
 public class CameraController : MonoBehaviour
 {
+    [Header("边界 (可选)")]
+    [Tooltip("限制相机可视范围的 BoxCollider2D")]
+    [SerializeField] private BoxCollider2D bounds;
+
+    [Header("平滑参数")]
+    [SerializeField, Tooltip("跟随平滑速度，推荐 3~6")] private float smoothSpeed = 3f;
+
     private Camera cam;
     private Transform playerTransform;
-    private BoxCollider2D bounds;
-
     private float halfWidth;
     private float halfHeight;
 
     void Start()
     {
-        cam = Camera.main;
-        playerTransform = Game_Manager.instance.player_object.transform;
+        cam = GetComponent<Camera>();
 
-        GameObject boundObj = GameObject.Find("Camera_Bounding_Collider_1");
-        if (boundObj != null)
-            bounds = boundObj.GetComponent<BoxCollider2D>();
+        // 自动查找名为 "Player1" 的角色
+        GameObject playerObj = GameObject.Find("Player1");
+        if (playerObj != null)
+        {
+            playerTransform = playerObj.transform;
+        }
+        else
+        {
+            Debug.LogError("未找到名为 'Player1' 的游戏对象！");
+        }
 
-        Vector3 screenBottomLeft = cam.ScreenToWorldPoint(new Vector3(0, 0, 10));
-        halfWidth = Mathf.Abs(screenBottomLeft.x - cam.transform.position.x);
-        halfHeight = Mathf.Abs(screenBottomLeft.y - cam.transform.position.y);
+        // 计算正交相机的半宽半高
+        if (cam.orthographic)
+        {
+            halfHeight = cam.orthographicSize;
+            halfWidth  = cam.aspect * halfHeight;
+        }
+        else
+        {
+            Debug.LogWarning("当前不是正交相机，无法自动计算 halfWidth/halfHeight，请手动设置。");
+        }
     }
 
-    void Update()
+    void LateUpdate()
     {
-        if (Player_Control.is_lock) return;
+        if (playerTransform == null) return;
 
-        Vector3 targetPos = playerTransform.position;
+        Vector3 desiredPos = playerTransform.position;
 
-        if (bounds != null)
+        // 如果设置了边界，并且是正交相机，对目标位置进行限制
+        if (bounds != null && cam.orthographic)
         {
             Bounds b = bounds.bounds;
-
             float minX = b.min.x + halfWidth;
             float maxX = b.max.x - halfWidth;
             float minY = b.min.y + halfHeight;
             float maxY = b.max.y - halfHeight;
-            //mathf.lerp可以避免平滑相機的移動，相機就不會移動過快
-            targetPos.x = Mathf.Clamp(targetPos.x, minX, maxX);
-            targetPos.y = Mathf.Clamp(targetPos.y, minY, maxY);
 
-            // Debug 視覺化
-            Debug.DrawLine(targetPos + new Vector3(-halfWidth, 0), targetPos + new Vector3(halfWidth, 0), Color.red);
-            Debug.DrawLine(targetPos + new Vector3(0, -halfHeight), targetPos + new Vector3(0, halfHeight), Color.red);
+            desiredPos.x = Mathf.Clamp(desiredPos.x, minX, maxX);
+            desiredPos.y = Mathf.Clamp(desiredPos.y, minY, maxY);
+
+            // 可视化边界 (调试用红线)
+            Debug.DrawLine(
+                desiredPos + new Vector3(-halfWidth, 0f, 0f),
+                desiredPos + new Vector3( halfWidth, 0f, 0f), Color.red);
+            Debug.DrawLine(
+                desiredPos + new Vector3(0f, -halfHeight, 0f),
+                desiredPos + new Vector3(0f,  halfHeight, 0f), Color.red);
         }
 
-        Vector3 smoothPos = Vector3.Lerp(cam.transform.position, new Vector3(targetPos.x, targetPos.y, cam.transform.position.z), 3f * Time.deltaTime);
-        cam.transform.position = smoothPos;
+        // 保持原 Z 值，执行平滑跟随
+        Vector3 currentPos = transform.position;
+        Vector3 targetPos  = new Vector3(desiredPos.x, desiredPos.y, currentPos.z);
+        transform.position = Vector3.Lerp(currentPos, targetPos, smoothSpeed * Time.deltaTime);
     }
 }
