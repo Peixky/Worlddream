@@ -20,7 +20,7 @@ public class CameraController : MonoBehaviour
         cam = GetComponent<Camera>();
 
         // 自动查找名为 "Player1" 的角色
-        GameObject playerObj = GameObject.Find("Player1");
+        GameObject playerObj = GameObject.Find("Player");
         if (playerObj != null)
         {
             playerTransform = playerObj.transform;
