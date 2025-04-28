@@ -27,7 +27,9 @@ public class Pre_Introduction_Control : MonoBehaviour
         flowerSystem = FlowerManager.Instance.CreateFlowerSystem(defaultSceneName, false);
         flowerSystem.SetupDialog();
         flowerSystem.ReadTextFromResource("Pre_Introduction");
-
+        /*
+        flowerSystem.AddDialog("你好，歡迎來到我的村莊");
+        */
         RegisterCommands();
     }
 
