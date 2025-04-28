@@ -22,6 +22,21 @@ public class CameraController : MonoBehaviour
     {
         cam = GetComponent<Camera>();
 
+<<<<<<< HEAD:Assets/scripts/Camera_Control.cs
+        // 自动查找名为 "Player1" 的角色
+        GameObject playerObj = GameObject.Find("Player");
+        if (playerObj != null)
+        {
+            playerTransform = playerObj.transform;
+        }
+        else
+        {
+            Debug.LogError("未找到名为 'Player1' 的游戏对象！");
+        }
+
+        // 计算正交相机的半宽半高
+=======
+>>>>>>> d8ac183583c8e17b59723999eb2ff318d1b69e95:Assets/scripts/camera_v2.cs
         if (cam.orthographic)
         {
             halfHeight = cam.orthographicSize;
