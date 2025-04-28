@@ -65,3 +65,18 @@ public class Portal : MonoBehaviour
         }
     }
 }
+
+/*1. 把你的音樂檔放進 Unity
+把你的 .mp3 或 .wav 檔案拖進 Unity 的 Assets 資料夾。（不是丟網址！是音樂檔案）
+
+建議用 .wav 格式，載入比較快；.mp3 也可以。
+
+例如拖進去後，會看到一個 PassMusic.wav 出現在 Assets 裡面。
+
+2. 設定到 Portal 物件上
+在場景(Scene)裡，選到你的 Portal（傳送門）物件。
+
+在 Inspector 裡會看到 Portal (Script) 這個欄位。
+
+在 Pass Music 欄位旁邊會是空的，你只要把剛剛匯入的音樂檔 直接拉進去 就完成了。
+加入音樂的方法*/
