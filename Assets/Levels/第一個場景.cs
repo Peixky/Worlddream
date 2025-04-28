@@ -46,9 +46,9 @@ public class ATM_Story : MonoBehaviour
         onStoryEndCallback?.Invoke();
     }
 
-    public void Lose_In_ATM()
+    public void Lose_In_第一個場景故事()
     {
-        StartStory("Lose_In_ATM");
+        StartStory("Lose_In_第一個場景故事");
     }
 
     public void Win()
