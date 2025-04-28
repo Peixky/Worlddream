@@ -3,12 +3,15 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class CameraController : MonoBehaviour
 {
-    [Header("边界 (可选)")]
-    [Tooltip("限制相机可视范围的 BoxCollider2D")]
+    [Header("玩家名稱")]
+    [Tooltip("要跟隨的玩家 GameObject 名稱")]
+    [SerializeField] private string playerName = "456";
+
+    [Header("邊界 (可選)")]
     [SerializeField] private BoxCollider2D bounds;
 
-    [Header("平滑参数")]
-    [SerializeField, Tooltip("跟随平滑速度，推荐 3~6")] private float smoothSpeed = 3f;
+    [Header("平滑速度")]
+    [SerializeField] private float smoothSpeed = 3f;
 
     private Camera cam;
     private Transform playerTransform;
@@ -19,6 +22,7 @@ public class CameraController : MonoBehaviour
     {
         cam = GetComponent<Camera>();
 
+<<<<<<< HEAD:Assets/scripts/Camera_Control.cs
         // 自动查找名为 "Player1" 的角色
         GameObject playerObj = GameObject.Find("Player");
         if (playerObj != null)
@@ -31,14 +35,28 @@ public class CameraController : MonoBehaviour
         }
 
         // 计算正交相机的半宽半高
+=======
+>>>>>>> d8ac183583c8e17b59723999eb2ff318d1b69e95:Assets/scripts/camera_v2.cs
         if (cam.orthographic)
         {
             halfHeight = cam.orthographicSize;
-            halfWidth  = cam.aspect * halfHeight;
+            halfWidth = cam.aspect * halfHeight;
         }
         else
         {
-            Debug.LogWarning("当前不是正交相机，无法自动计算 halfWidth/halfHeight，请手动设置。");
+            Debug.LogWarning("非正交相機，請確認相機類型！");
+        }
+
+        TryFindPlayer();
+    }
+
+    void Update()
+    {
+        // 如果角色不存在，重新搜尋（角色換了或被刪除時）
+        if (playerTransform == null)
+        {
+            TryFindPlayer();
+            return; // 等下一幀再移動相機
         }
     }
 
@@ -48,7 +66,6 @@ public class CameraController : MonoBehaviour
 
         Vector3 desiredPos = playerTransform.position;
 
-        // 如果设置了边界，并且是正交相机，对目标位置进行限制
         if (bounds != null && cam.orthographic)
         {
             Bounds b = bounds.bounds;
@@ -59,19 +76,24 @@ public class CameraController : MonoBehaviour
 
             desiredPos.x = Mathf.Clamp(desiredPos.x, minX, maxX);
             desiredPos.y = Mathf.Clamp(desiredPos.y, minY, maxY);
-
-            // 可视化边界 (调试用红线)
-            Debug.DrawLine(
-                desiredPos + new Vector3(-halfWidth, 0f, 0f),
-                desiredPos + new Vector3( halfWidth, 0f, 0f), Color.red);
-            Debug.DrawLine(
-                desiredPos + new Vector3(0f, -halfHeight, 0f),
-                desiredPos + new Vector3(0f,  halfHeight, 0f), Color.red);
         }
 
-        // 保持原 Z 值，执行平滑跟随
         Vector3 currentPos = transform.position;
-        Vector3 targetPos  = new Vector3(desiredPos.x, desiredPos.y, currentPos.z);
+        Vector3 targetPos = new Vector3(desiredPos.x, desiredPos.y, currentPos.z);
         transform.position = Vector3.Lerp(currentPos, targetPos, smoothSpeed * Time.deltaTime);
+    }
+
+    private void TryFindPlayer()
+    {
+        GameObject playerObj = GameObject.Find(playerName);
+        if (playerObj != null)
+        {
+            playerTransform = playerObj.transform;
+            Debug.Log($"已找到角色：{playerName}");
+        }
+        else
+        {
+            Debug.LogWarning($"找不到名為「{playerName}」的物件！");
+        }
     }
 }
