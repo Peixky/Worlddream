@@ -76,13 +76,13 @@ public class Pre_Introduction_Control : MonoBehaviour
         Intro_System_Control.show_intro = true;
     }
 
-    // 開始父親相關事件
+    /*這行可以改成別的事件或是不加入
     public void StartDad()
     {
         player1_dad.timer_dad = 5;
         Camera.main.transform.position = new Vector3(-70.0f, -22.86f, -10.0f);
     }
-
+*/
     // 顯示最終提示
     public void ShowFinalHint()
     {
