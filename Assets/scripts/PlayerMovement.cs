@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Playermovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float speed = 5f;  // 玩家移動速度
     [SerializeField] private float jumpPower;
@@ -43,7 +43,7 @@ public class Playermovement : MonoBehaviour
                 body.gravityScale = 0;
                 body.linearVelocity = Vector2.zero;
             }else{
-                body.gravityScale = 7;
+                body.gravityScale = 3;
             }
             if(Input.GetKey(KeyCode.Space) && isGrounded()){
                 jump();

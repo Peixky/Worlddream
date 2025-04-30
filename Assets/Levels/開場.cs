@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -30,7 +30,7 @@ public class Pre_Introduction_Control : MonoBehaviour
         /*
         flowerSystem.AddDialog("你好，歡迎來到我的村莊");
         */
-        RegisterCommands();
+        /*RegisterCommands();
     }
 
     // 註冊指令，這些指令會在對話中觸發
@@ -86,8 +86,8 @@ public class Pre_Introduction_Control : MonoBehaviour
     }
 */
     // 顯示最終提示
-    public void ShowFinalHint()
+    /*public void ShowFinalHint()
     {
         GameObject.Find("System").GetComponent<Final_Hint>().final_hint.SetActive(true);
     }
-}
+}*/

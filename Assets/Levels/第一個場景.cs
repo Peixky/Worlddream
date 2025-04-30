@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using UnityEngine;
 using Flower;
 
@@ -66,4 +66,4 @@ public class ATM_Story : MonoBehaviour
         Debug.Log("故事結束了，載入下一個場景或觸發下一個事件！");
         // 這裡可以加上換場景的程式，比如 SceneManager.LoadScene("下一個場景名字");
     }
-}
+}*/
