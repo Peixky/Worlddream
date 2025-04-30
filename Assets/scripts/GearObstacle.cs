@@ -19,11 +19,12 @@ public class GearObstacle : MonoBehaviour
     {
         if (hasFallen || player == null) return;
 
-        float distance = Vector2.Distance(transform.position, player.position);
-        if (distance <= triggerDistance)
-        {
-            Fall();
-        }
+    float verticalDistance = Mathf.Abs(transform.position.y - player.position.y);
+    if (verticalDistance <= triggerDistance)
+{
+    Fall();
+}
+
     }
 
     void Fall()
