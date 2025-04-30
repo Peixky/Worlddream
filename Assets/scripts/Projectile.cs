@@ -20,10 +20,19 @@ public class Projectile : MonoBehaviour{
     }
 
     private void OnTriggerEnter2D(Collider2D collision){
-        hit = true;
-        boxCollider.enabled = false;
-        anim.SetTrigger("explode");
+        // 碰到 Player 自己就跳過
+        if (collision.CompareTag("Player")) return;
+
+        // 碰到牆壁或敵人就爆炸
+        if (collision.CompareTag("Wall") || collision.CompareTag("Enemy"))
+        {
+            hit = true;
+            boxCollider.enabled = false;
+            anim.SetTrigger("explode");
+        }
     }
+
+
     public void SetDirection(float _direction){
         direction = _direction;
         gameObject.SetActive(true);

@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using UnityEngine;
 using Flower;
 
@@ -12,7 +12,7 @@ public class ATM_Story : MonoBehaviour
     void Start()
     {
         flowerSystem = FlowerManager.Instance.GetFlowerSystem(defaultSceneName);
-        StartStory("第一個場景故事");
+        StartStory("backgrounds");
     }
 
     void Update()
@@ -67,6 +67,7 @@ public class ATM_Story : MonoBehaviour
         // 這裡可以加上換場景的程式，比如 SceneManager.LoadScene("下一個場景名字");
     }
 }
+<<<<<<< HEAD
 
 /*void Start()
 {
@@ -98,3 +99,6 @@ Camera.main.transform.position = new Vector3(0, 0, -10);
 Player_Control.is_lock = true;
 這行會導致故事開啟，角色被鎖住不會移動
 */
+=======
+*/
+>>>>>>> bfe685d (New)

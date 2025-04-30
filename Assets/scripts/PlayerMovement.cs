@@ -45,7 +45,7 @@ public class Playermovement : MonoBehaviour
             }else{
                 body.gravityScale = 7;
             }
-            if(Input.GetKey(KeyCode.Space) && isGrounded()){
+            if(Input.GetKeyDown(KeyCode.Space) && isGrounded()){
                 jump();
             }
         }else{

@@ -1,4 +1,5 @@
-using System.Collections;
+/*
+/*using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement; // 加入這個才能換場景
 
@@ -56,3 +57,4 @@ public class ATM_Story : MonoBehaviour
         nextSceneName = ""; // ATM失敗也不用換場景
     }
 }
+*/
