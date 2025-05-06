@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour
     private Animator anim;
     private float wallJumpCooldown;
     private float horizontalInput;
+    public bool canMove = true; // 預設可以移動
+
 
     private void Awake(){
         // 初始化
@@ -20,6 +22,8 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void Update(){
+        if (!canMove)
+            return;
         // 獲取水平輸入值（例如，A 或 D 鍵，或方向鍵）
         horizontalInput = Input.GetAxis("Horizontal");
 
@@ -45,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
             }else{
                 body.gravityScale = 3;
             }
-            if(Input.GetKey(KeyCode.Space) && isGrounded()){
+            if(Input.GetKeyDown(KeyCode.Space) && isGrounded()){
                 jump();
             }
         }else{
@@ -81,4 +85,12 @@ public class PlayerMovement : MonoBehaviour
     public bool canAttack(){
         return horizontalInput == 0 && isGrounded() && !onWall();
     }
+
+    private void EnableMovement()
+    {
+        Playermovement pm = GetComponent<Playermovement>();
+        if (pm != null)
+            pm.canMove = true;
+    }
+
 }

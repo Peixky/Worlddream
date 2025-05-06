@@ -29,8 +29,8 @@ public class Pre_Introduction_Control : MonoBehaviour
         flowerSystem.ReadTextFromResource("Pre_Introduction");
         /*
         flowerSystem.AddDialog("你好，歡迎來到我的村莊");
-        */
-        /*RegisterCommands();
+        
+        RegisterCommands();
     }
 
     // 註冊指令，這些指令會在對話中觸發
@@ -84,10 +84,11 @@ public class Pre_Introduction_Control : MonoBehaviour
         player1_dad.timer_dad = 5;
         Camera.main.transform.position = new Vector3(-70.0f, -22.86f, -10.0f);
     }
-*/
+
     // 顯示最終提示
     /*public void ShowFinalHint()
     {
         GameObject.Find("System").GetComponent<Final_Hint>().final_hint.SetActive(true);
     }
-}*/
+}
+*/

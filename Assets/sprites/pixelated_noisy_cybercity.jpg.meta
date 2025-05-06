@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 80155238a09984b2cb0f9dea1b022c3c
+guid: 2d0bd1f053e8c45e6983e63fb5828238
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 553103467783823420
-    second: trap_0
+      213: -3780135960615053824
+    second: pixelated_noisy_cybercity_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: trap_0
+      name: pixelated_noisy_cybercity_0
       rect:
         serializedVersion: 2
-        x: 279
-        y: 379
-        width: 292
-        height: 52
-      alignment: 2
-      pivot: {x: 0.5, y: 1}
+        x: 0
+        y: 0
+        width: 1600
+        height: 760
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c30aa496ca40da700800000000000000
-      internalID: 553103467783823420
+      spriteID: 0061cd03f524a8bc0800000000000000
+      internalID: -3780135960615053824
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 9baf576b7fbc34ecc8ab52606cea0470
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      trap_0: 553103467783823420
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

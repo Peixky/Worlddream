@@ -1,3 +1,4 @@
+/*
 /*using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement; // 加入這個才能換場景
