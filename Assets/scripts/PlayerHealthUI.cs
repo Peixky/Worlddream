@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class PlayerHealthUI : MonoBehaviour
 {
+    
+
     public Image[] hearts; // 在 Inspector 中設置三顆愛心的 Image
     public Sprite fullHeart;  // 正常愛心（紅色）
     public Sprite emptyHeart; // 空愛心（灰色）
