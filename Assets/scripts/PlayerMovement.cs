@@ -88,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void EnableMovement()
     {
-        Playermovement pm = GetComponent<Playermovement>();
+        PlayerMovement pm = GetComponent<PlayerMovement>();
         if (pm != null)
             pm.canMove = true;
     }
