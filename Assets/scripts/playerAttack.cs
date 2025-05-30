@@ -6,20 +6,21 @@ public class playerAttack : MonoBehaviour
     [SerializeField] private Transform firePoint;
     [SerializeField] private GameObject[] fireballs;
     private Animator anim;
-    private Playermovement playerMovement;
+    private Playermovement playermovement;
     private float cooldownTimer;
 
     private void Start(){
         anim = GetComponent<Animator>();
-        playerMovement = GetComponent<Playermovement>();
+        playermovement = GetComponent<Playermovement>();
     }
 
     private void Update(){
-        if (Input.GetMouseButton(0) && cooldownTimer > attackCooldown && playerMovement.canAttack()){
+        if (Input.GetMouseButton(0) && cooldownTimer > attackCooldown){
             Attack();
         }
         cooldownTimer += Time.deltaTime;
     }
+
 
     private void Attack(){
         anim.SetTrigger("attack");

@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      pixelated_noisy_cybercity_0: -3780135960615053824
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

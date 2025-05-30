@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI; // UI 系統用
 
 public class PlayerDeathManager : MonoBehaviour
 {
@@ -8,23 +7,26 @@ public class PlayerDeathManager : MonoBehaviour
     private float knockbackTime = 0.3f;
     private float knockbackTimer;
 
-    [Header("死亡設定")]
-    public float deathYThreshold = -10f;  // 掉下地圖的高度
-    public int maxHP = 3;                 // 最大血量
-    private int currentHP;
+    [Header("掉出地圖會死亡")]
+    public float deathYThreshold = -10f;
 
     [Header("死亡畫面 UI")]
-    public GameObject deathScreenUI;       // 黑色遮罩 Panel
+    public GameObject deathScreenUI;
 
     private bool isDead = false;
 
-    void Start()
+    [Header("角色控制")]
+    public Health health; // 連結 Health 腳本
+
+    private void Start()
     {
-        currentHP = maxHP;
-        deathScreenUI.SetActive(false); // 開場不要顯示
+        if (deathScreenUI != null)
+            deathScreenUI.SetActive(false);
+        else
+            Debug.LogWarning("deathScreenUI 沒有設定！");
     }
 
-    void Update()
+    private void Update()
     {
         if (isDead)
         {
@@ -36,6 +38,11 @@ public class PlayerDeathManager : MonoBehaviour
             return;
         }
 
+        if (transform.position.y < deathYThreshold)
+        {
+            health.TakeDamage(health.maxHealth); // 掉下地圖，扣光血量
+        }
+
         if (isKnockback)
         {
             knockbackTimer -= Time.deltaTime;
@@ -44,66 +51,37 @@ public class PlayerDeathManager : MonoBehaviour
                 isKnockback = false;
             }
         }
-
-        if (transform.position.y < deathYThreshold)
-        {
-            Die();
-        }
     }
-
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (isDead) return;
 
-        // 碰到陷阱死亡
         if (other.CompareTag("Spike"))
         {
-            // Knockback 彈跳
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
             if (rb != null)
-            {
-                rb.linearVelocity = new Vector2(-8f, 15f); // 往左上
-            }
+                rb.linearVelocity = new Vector2(-8f, 15f);
 
-            // 暫時停用移動
             Playermovement pm = GetComponent<Playermovement>();
             if (pm != null)
             {
                 pm.canMove = false;
-                Invoke(nameof(EnableMovement), 0.3f); // 0.3 秒後恢復移動
+                Invoke(nameof(EnableMovement), knockbackTime);
             }
 
-            TakeDamage(1);
+            health.TakeDamage(1);
         }
 
-        // 碰到敵人扣血（你可以設敵人 Tag 為 "Enemy"）
         if (other.CompareTag("Enemy"))
         {
-            TakeDamage(1);
+            health.TakeDamage(1);
         }
 
-        // 撞到指定物件死亡（例如特殊機關）
         if (other.CompareTag("KillZone"))
         {
-            Die();
+            health.TakeDamage(health.maxHealth); // 碰到致命物件一次死亡
         }
-    }
-
-    public void TakeDamage(int damage)
-    {
-        currentHP -= damage;
-        if (currentHP <= 0)
-        {
-            Die();
-        }
-    }
-
-    private void Die()
-    {
-        isDead = true;
-        Time.timeScale = 0f;           // 暫停遊戲
-        deathScreenUI.SetActive(true); // 顯示黑畫面
     }
 
     private void EnableMovement()
@@ -113,4 +91,14 @@ public class PlayerDeathManager : MonoBehaviour
             pm.canMove = true;
     }
 
+    public void TriggerDeath()
+    {
+        isDead = true;
+        Time.timeScale = 0f;
+
+        if (deathScreenUI != null)
+        {
+            deathScreenUI.SetActive(true);
+        }
+    }
 }
