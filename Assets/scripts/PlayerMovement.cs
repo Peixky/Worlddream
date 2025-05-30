@@ -57,6 +57,12 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        canMove = true; // 確保角色一開始可以動
+    }
+
+
     private void jump(){
         if(isGrounded()){
             body.linearVelocity = new Vector2(body.linearVelocity.x, jumpPower);
@@ -92,5 +98,12 @@ public class PlayerMovement : MonoBehaviour
         if (pm != null)
             pm.canMove = true;
     }
+
+    public void Bounce(Vector2 force)
+    {
+        body.linearVelocity = Vector2.zero; // 重設原本速度
+        body.AddForce(force, ForceMode2D.Impulse);
+    }
+
 
 }

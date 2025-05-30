@@ -6,7 +6,13 @@ TagManager:
   tags:
   - Ground
   - Wall
-  - Spike
+  - KillZone
+  - Enemy
+  - Spring
+  - Zipline
+  - Undefined
+  - EnemyBullet
+  - EnemyBody
   layers:
   - Default
   - TransparentFX

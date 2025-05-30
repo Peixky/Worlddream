@@ -1,4 +1,4 @@
-/*using UnityEngine;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
@@ -27,4 +27,4 @@ public class MenuManager : MonoBehaviour
         Debug.Log("Quitting game...");
         Application.Quit();  // 這行只會在 build 後有效，編輯器看不到效果
     }
-}*/
+}

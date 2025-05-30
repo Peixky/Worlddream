@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI; // UI 系統用
+using System.Collections;
 
 public class PlayerDeathManager : MonoBehaviour
 {
@@ -8,23 +8,44 @@ public class PlayerDeathManager : MonoBehaviour
     private float knockbackTime = 0.3f;
     private float knockbackTimer;
 
-    [Header("死亡設定")]
-    public float deathYThreshold = -10f;  // 掉下地圖的高度
-    public int maxHP = 3;                 // 最大血量
-    private int currentHP;
+    [Header("反彈設定")]
+    [SerializeField] private float knockbackHorizontalForce = 8f;
+    [SerializeField] private float knockbackVerticalForce = 15f;
+
+    [Header("掉出地圖會死亡")]
+    public float deathYThreshold = -10f;
 
     [Header("死亡畫面 UI")]
-    public GameObject deathScreenUI;       // 黑色遮罩 Panel
+    public GameObject deathScreenUI;
 
     private bool isDead = false;
 
-    void Start()
+    [Header("角色控制")]
+    public Health health; // 連結 Health 腳本
+
+    [Header("無敵設定")]
+    [SerializeField] private float invincibilityDuration = 1.5f;
+    [SerializeField] private float flashInterval = 0.1f;
+    private bool isInvincible = false;
+
+    private SpriteRenderer spriteRenderer;
+    private bool hasTakenDamageRecently = false;
+
+    private void Start()
     {
-        currentHP = maxHP;
-        deathScreenUI.SetActive(false); // 開場不要顯示
+        if (deathScreenUI != null)
+            deathScreenUI.SetActive(false);
+        else
+            Debug.LogWarning("deathScreenUI 沒有設定！");
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer == null)
+        {
+            Debug.LogError("Player 上缺少 SpriteRenderer 元件！");
+        }
     }
 
-    void Update()
+    private void Update()
     {
         if (isDead)
         {
@@ -36,6 +57,11 @@ public class PlayerDeathManager : MonoBehaviour
             return;
         }
 
+        if (transform.position.y < deathYThreshold)
+        {
+            TryTakeDamage(health.maxHealth); // 不需反彈
+        }
+
         if (isKnockback)
         {
             knockbackTimer -= Time.deltaTime;
@@ -44,66 +70,84 @@ public class PlayerDeathManager : MonoBehaviour
                 isKnockback = false;
             }
         }
-
-        if (transform.position.y < deathYThreshold)
-        {
-            Die();
-        }
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!collision.gameObject.CompareTag("EnemyBody")) return;
+
+        TryTakeDamage(1, null, collision);
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (isDead) return;
+        if (!other.CompareTag("EnemyBullet")) return;
 
-        // 碰到陷阱死亡
-        if (other.CompareTag("Spike"))
+        float xDir = 1f;
+
+        // 從子彈腳本拿方向資訊
+        Bullet bulletScript = other.GetComponent<Bullet>();
+        if (bulletScript != null)
         {
-            // Knockback 彈跳
-            Rigidbody2D rb = GetComponent<Rigidbody2D>();
-            if (rb != null)
-            {
-                rb.linearVelocity = new Vector2(-8f, 15f); // 往左上
-            }
-
-            // 暫時停用移動
-            PlayerMovement pm = GetComponent<PlayerMovement>();
-            if (pm != null)
-            {
-                pm.canMove = false;
-                Invoke(nameof(EnableMovement), 0.3f); // 0.3 秒後恢復移動
-            }
-
-            TakeDamage(1);
+            xDir = bulletScript.direction > 0 ? 1f : -1f; // 子彈向右飛 → 玩家向左彈
         }
 
-        // 碰到敵人扣血（你可以設敵人 Tag 為 "Enemy"）
-        if (other.CompareTag("Enemy"))
-        {
-            TakeDamage(1);
-        }
+        TryTakeDamage(1, xDir);
 
-        // 撞到指定物件死亡（例如特殊機關）
-        if (other.CompareTag("KillZone"))
-        {
-            Die();
-        }
+        Destroy(other.gameObject);
+    }
+    private void TryTakeDamage(int amount, float? xDirectionOverride = null, Collision2D collision = null)
+    {
+        if (hasTakenDamageRecently || isDead || isInvincible) return;
+
+        hasTakenDamageRecently = true;
+        TakeDamage(amount, xDirectionOverride, collision);
+        Invoke(nameof(ResetDamageFlag), 0.05f);
     }
 
-    public void TakeDamage(int damage)
+    private void ResetDamageFlag()
     {
-        currentHP -= damage;
-        if (currentHP <= 0)
-        {
-            Die();
-        }
+        hasTakenDamageRecently = false;
     }
 
-    private void Die()
+    private void TakeDamage(int amount, float? xDirectionOverride = null, Collision2D collision = null)
     {
-        isDead = true;
-        Time.timeScale = 0f;           // 暫停遊戲
-        deathScreenUI.SetActive(true); // 顯示黑畫面
+        health.TakeDamage(amount);
+
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            float xDirection = xDirectionOverride ?? 1f;
+
+            if (!xDirectionOverride.HasValue && collision != null)
+            {
+                ContactPoint2D contact = collision.GetContact(0);
+                xDirection = transform.position.x < contact.point.x ? -1f : 1f;
+            }
+
+            Vector2 knockback = new Vector2(xDirection * knockbackHorizontalForce, knockbackVerticalForce);
+            rb.linearVelocity = Vector2.zero;
+            rb.AddForce(knockback, ForceMode2D.Impulse);
+
+            Debug.Log("反彈方向：" + knockback);
+        }
+
+        PlayerMovement pm = GetComponent<PlayerMovement>();
+        if (pm != null)
+        {
+            pm.canMove = false;
+            Invoke(nameof(EnableMovement), knockbackTime);
+        }
+
+        isKnockback = true;
+        knockbackTimer = knockbackTime;
+
+        StartCoroutine(InvincibilityCoroutine());
+
+        if (health.currentHealth <= 0)
+        {
+            TriggerDeath();
+        }
     }
 
     private void EnableMovement()
@@ -113,4 +157,34 @@ public class PlayerDeathManager : MonoBehaviour
             pm.canMove = true;
     }
 
+    private IEnumerator InvincibilityCoroutine()
+    {
+        isInvincible = true;
+
+        float elapsed = 0f;
+        while (elapsed < invincibilityDuration)
+        {
+            if (spriteRenderer != null)
+                spriteRenderer.enabled = !spriteRenderer.enabled;
+
+            yield return new WaitForSeconds(flashInterval);
+            elapsed += flashInterval;
+        }
+
+        if (spriteRenderer != null)
+            spriteRenderer.enabled = true;
+
+        isInvincible = false;
+    }
+
+    public void TriggerDeath()
+    {
+        isDead = true;
+        Time.timeScale = 0f;
+
+        if (deathScreenUI != null)
+        {
+            deathScreenUI.SetActive(true);
+        }
+    }
 }
