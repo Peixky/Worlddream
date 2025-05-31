@@ -6691,7 +6691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 438b4b187c1d4f04da1d69606875e464, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 2265496482585001981, guid: 1e7cba8f6ce95bd4283918eda8c9d047, type: 3}
+  bulletPrefab: {fileID: 2265496482585001981, guid: f0d1a673421205d419fec7f011b26940, type: 3}
   firePoint: {fileID: 1634315435}
   fireInterval: 5
   bulletSpeed: 8
@@ -33363,7 +33363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 438b4b187c1d4f04da1d69606875e464, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 2265496482585001981, guid: 1e7cba8f6ce95bd4283918eda8c9d047, type: 3}
+  bulletPrefab: {fileID: 2265496482585001981, guid: f0d1a673421205d419fec7f011b26940, type: 3}
   firePoint: {fileID: 811008190}
   fireInterval: 5
   bulletSpeed: 8
@@ -38060,7 +38060,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 438b4b187c1d4f04da1d69606875e464, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 2265496482585001981, guid: 1e7cba8f6ce95bd4283918eda8c9d047, type: 3}
+  bulletPrefab: {fileID: 2265496482585001981, guid: f0d1a673421205d419fec7f011b26940, type: 3}
   firePoint: {fileID: 1753148661}
   fireInterval: 5
   bulletSpeed: 8
