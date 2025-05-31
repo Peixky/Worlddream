@@ -3,16 +3,25 @@ using UnityEngine.UI;
 
 public class HealthBarUI : MonoBehaviour
 {
-    public RectTransform barTransform;  // 血條的 RectTransform
-    public float maxWidth = 100f;       // 血條滿血時寬度（與 UI 寬度一致）
+    [Header("血條設定")]
+    public Image fillImage;              // 拖入要縮放的血條 Image（type: Filled）
+    public bool fillFromRight = false;   // 設 true 表示從右邊開始縮減
+
+    private void Awake()
+    {
+        if (fillImage != null)
+        {
+            fillImage.type = Image.Type.Filled;
+            fillImage.fillMethod = Image.FillMethod.Horizontal;
+            fillImage.fillOrigin = fillFromRight ? 1 : 0; // 1=Right, 0=Left
+        }
+    }
 
     public void UpdateHealthBar(float currentHealth, float maxHealth)
     {
-        float percent = currentHealth / maxHealth;
-        float newWidth = maxWidth * percent;
+        if (fillImage == null) return;
 
-        Vector2 size = barTransform.sizeDelta;
-        size.x = newWidth;
-        barTransform.sizeDelta = size;
+        float percent = Mathf.Clamp01(currentHealth / maxHealth);
+        fillImage.fillAmount = percent;
     }
 }

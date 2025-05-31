@@ -1,52 +1,72 @@
 using UnityEngine;
+using System;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] public int maxHealth = 3;
-    public int currentHealth;
+    [Header("生命設定")]
+    [SerializeField] private int maxHealth = 5;
+    public int MaxHealth => maxHealth;
 
+    public int CurrentHealth { get; private set; }
+
+    // ✅ 新增：是否死亡的屬性
+    public bool IsDead => CurrentHealth <= 0;
+
+    [Header("UI")]
     [SerializeField] private HealthBarUI healthBarUI;
-    [SerializeField] private PlayerDeathManager deathManager;
 
-    private void Start()
+    // ✅ 事件
+    public event Action<int, int> OnHealthChanged;
+    public event Action OnDied;
+
+    private void Awake()
     {
-        currentHealth = maxHealth;
+        CurrentHealth = maxHealth;
+        UpdateHealthUI();
+        OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
+    }
 
-        if (healthBarUI != null)
+    public void TakeDamage(int amount)
+    {
+        if (IsDead) return;
+
+        CurrentHealth = Mathf.Clamp(CurrentHealth - amount, 0, MaxHealth);
+        Debug.Log($"{gameObject.name} 受到 {amount} 傷害，當前血量：{CurrentHealth}");
+
+        UpdateHealthUI();
+        OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
+
+        if (IsDead)
         {
-            healthBarUI.UpdateHealthBar(currentHealth, maxHealth);
-        }
-        else
-        {
-            Debug.LogWarning("HealthBarUI 尚未連接！");
+
+            OnDied?.Invoke(); // 觸發死亡事件（如 BossHealth 或 PlayerDeathHandler 可接收）
         }
     }
 
-    public void TakeDamage(int damage)
+    public void Heal(int amount)
     {
-        currentHealth -= damage;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        if (IsDead) return;
 
-        Debug.Log(gameObject.name + " 扣血！剩餘血量：" + currentHealth);
+        CurrentHealth = Mathf.Clamp(CurrentHealth + amount, 0, MaxHealth);
+        Debug.Log($"{gameObject.name} 回復 {amount} 血量，當前血量：{CurrentHealth}");
 
+        UpdateHealthUI();
+        OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
+    }
+
+    private void UpdateHealthUI()
+    {
         if (healthBarUI != null)
         {
-            healthBarUI.UpdateHealthBar(currentHealth, maxHealth);
-        }
-
-        if (currentHealth <= 0)
-        {
-            Die();
+            healthBarUI.UpdateHealthBar(CurrentHealth, MaxHealth);
         }
     }
 
-    private void Die()
+    // ✅ 提供手動設置血量（可用於存檔或編輯器設置）
+    public void SetHealth(int value)
     {
-        Debug.Log(gameObject.name + " 死亡");
-
-        if (deathManager != null)
-        {
-            deathManager.TriggerDeath();
-        }
+        CurrentHealth = Mathf.Clamp(value, 0, MaxHealth);
+        UpdateHealthUI();
+        OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
     }
 }

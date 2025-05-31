@@ -1,41 +1,63 @@
 using UnityEngine;
 
-public class playerAttack : MonoBehaviour
+public class PlayerAttack : MonoBehaviour
 {
-    [SerializeField] private float attackCooldown;
-    [SerializeField] private Transform firePoint;
-    [SerializeField] private GameObject[] fireballs;
-    private Animator anim;
-    private PlayerMovement playerMovement;
-    private float cooldownTimer;
+    [Header("攻擊設定")]
+    public Animator animator;
+    public Transform attackPoint;
+    public float attackRange = 1f;
+    public int attackDamage = 1;
+    public LayerMask enemyLayer;
 
-    private void Start(){
-        anim = GetComponent<Animator>();
-        playerMovement = GetComponent<PlayerMovement>();
-    }
+    [Header("攻擊後回彈設定")]
+    public PlayerMovement2 playerMovement;
+    public float recoilDuration = 0.3f;
 
-    private void Update(){
-        if (Input.GetMouseButton(0) && cooldownTimer > attackCooldown){
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
             Attack();
         }
-        cooldownTimer += Time.deltaTime;
     }
 
+    void Attack()
+    {
+        if (playerMovement != null && playerMovement.IsRecoilActive())
+            return;
 
-    private void Attack(){
-        anim.SetTrigger("attack");
-        cooldownTimer = 0;
+        animator.SetTrigger("Attack");
 
-        fireballs[FindFireball()].transform.position = firePoint.position;
-        fireballs[FindFireball()].GetComponent<Projectile>().SetDirection(Mathf.Sign(transform.localScale.x));
-    }
+        Collider2D[] hits = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
 
-    private int FindFireball(){
-        for(int i = 0; i < fireballs.Length; i++){
-            if(!fireballs[i].activeInHierarchy){
-                return i;
+        foreach (Collider2D hit in hits)
+        {
+            Debug.Log("擊中：" + hit.name);
+
+            // ✅ 嘗試取得通用 Health 模組
+            Health enemyHealth = hit.GetComponent<Health>();
+            if (enemyHealth != null)
+            {
+                enemyHealth.TakeDamage(attackDamage);
+                Debug.Log($"{hit.name} 受到 {attackDamage} 傷害");
+
+                if (playerMovement != null)
+                {
+                    playerMovement.StartRecoilToLastIdle(recoilDuration);
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"{hit.name} 沒有 Health 腳本，無法造成傷害。", hit.gameObject);
             }
         }
-        return 0;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (attackPoint == null) return;
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
 }

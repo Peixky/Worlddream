@@ -13,7 +13,6 @@ public class PlayerMovement : MonoBehaviour
     private BoxCollider2D boxCollider;
     private Animator anim;
 
-    private float wallJumpCooldown;
     private float horizontalInput;
     public bool canMove = true;
 
@@ -24,55 +23,30 @@ public class PlayerMovement : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
-    private void Start()
-    {
-        canMove = true;
-    }
-
     private void Update()
     {
         if (!canMove) return;
 
+        // 取得水平輸入
         horizontalInput = Input.GetAxis("Horizontal");
 
-        // Flip sprite
+        // 控制水平移動
+        body.linearVelocity = new Vector2(horizontalInput * speed, body.linearVelocity.y);
+
+        // 角色翻面
         if (horizontalInput > 0.01f)
             transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         else if (horizontalInput < -0.01f)
             transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
 
-        anim.SetBool("run", horizontalInput != 0);
+        // 動畫參數設置
+        anim.SetBool("run", Mathf.Abs(horizontalInput) > 0.01f);
         anim.SetBool("grounded", isGrounded());
 
-        if (wallJumpCooldown > 0.2f)
+        // 跳躍（使用 W 或 ↑）
+        if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && isGrounded())
         {
-            body.linearVelocity = new Vector2(horizontalInput * speed, body.linearVelocity.y);
-
-            if (onWall() && !isGrounded())
-            {
-                body.gravityScale = 1f;
-                if (body.linearVelocity.y < -2f)
-                    body.linearVelocity = new Vector2(body.linearVelocity.x, -2f);
-
-                anim.SetBool("onWall", true);
-            }
-            else
-            {
-                body.gravityScale = 3f;
-                anim.SetBool("onWall", false);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                if (onWall() && !isGrounded())
-                    WallJump();
-                else if (isGrounded())
-                    Jump();
-            }
-        }
-        else
-        {
-            wallJumpCooldown += Time.deltaTime;
+            Jump();
         }
     }
 
@@ -82,23 +56,9 @@ public class PlayerMovement : MonoBehaviour
         anim.SetTrigger("jump");
     }
 
-    private void WallJump()
-    {
-        float jumpDirectionX = -Mathf.Sign(transform.localScale.x);
-        float wallJumpX = (horizontalInput == 0) ? 10f : 3f;
-        float wallJumpY = 6f;
-
-        body.linearVelocity = Vector2.zero;
-        body.linearVelocity = new Vector2(jumpDirectionX * wallJumpX, wallJumpY);
-        transform.localScale = new Vector3(jumpDirectionX, transform.localScale.y, transform.localScale.z);
-
-        wallJumpCooldown = 0f;
-        anim.SetTrigger("jump");
-    }
-
     private bool isGrounded()
     {
-        RaycastHit2D raycastHit = Physics2D.BoxCast(
+        RaycastHit2D hit = Physics2D.BoxCast(
             boxCollider.bounds.center,
             boxCollider.bounds.size,
             0f,
@@ -106,31 +66,12 @@ public class PlayerMovement : MonoBehaviour
             0.1f,
             groundLayer
         );
-        return raycastHit.collider != null;
+        return hit.collider != null;
     }
 
-    private bool onWall()
+    public bool CanAttack()
     {
-        Vector2 direction = new Vector2(transform.localScale.x, 0);
-        RaycastHit2D raycastHit = Physics2D.BoxCast(
-            boxCollider.bounds.center,
-            boxCollider.bounds.size,
-            0f,
-            direction,
-            0.1f,
-            groundLayer
-        );
-        return raycastHit.collider != null;
-    }
-
-    public bool canAttack()
-    {
-        return horizontalInput == 0 && isGrounded() && !onWall();
-    }
-
-    private void EnableMovement()
-    {
-        canMove = true;
+        return horizontalInput == 0 && isGrounded();
     }
 
     public void Bounce(Vector2 force)
@@ -145,9 +86,22 @@ public class PlayerMovement : MonoBehaviour
 
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(boxCollider.bounds.center + Vector3.down * 0.1f, boxCollider.bounds.size);
-
-        Gizmos.color = Color.red;
-        Vector3 direction = new Vector3(transform.localScale.x, 0, 0);
-        Gizmos.DrawWireCube(boxCollider.bounds.center + direction * 0.1f, boxCollider.bounds.size);
     }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("MovingPlatform"))
+        {
+            transform.parent = collision.transform;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("MovingPlatform"))
+        {
+            transform.parent = null;
+        }
+    }
+
 }

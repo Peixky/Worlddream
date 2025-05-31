@@ -8,17 +8,24 @@ TagManager:
   - Wall
   - Spike
   - Coin
+  - Zipline
+  - Spring
+  - EnemyBody
+  - EnemyBullet
+  - MovingPlatform
+  - Button
+  - DestructiblePlatform
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - Ground
   - Wall
-  - 
-  - 
+  - Platform
+  - Enemy
   - 
   - 
   - 

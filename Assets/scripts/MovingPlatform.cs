@@ -10,14 +10,18 @@ public class MovingPlatform : MonoBehaviour
 
     private float speed;
     private Transform target;
+    private Vector3 lastPosition;
+
+    // ✅ 提供平台移動速度給角色用
+    public Vector3 PlatformVelocity { get; private set; }
 
     private void Start()
     {
         target = pointB;
-
-        // 根據 A 和 B 的距離自動計算速度
         float distance = Vector3.Distance(pointA.position, pointB.position);
         speed = distance / moveDuration;
+
+        lastPosition = transform.position;
     }
 
     private void Update()
@@ -32,24 +36,12 @@ public class MovingPlatform : MonoBehaviour
             target = (target == pointA) ? pointB : pointA;
         }
 
+        // ✅ 計算每幀移動速度
+        PlatformVelocity = (transform.position - lastPosition) / Time.deltaTime;
+        lastPosition = transform.position;
+
         Vector3 fixedPos = transform.position;
         fixedPos.y = Mathf.Round(fixedPos.y * 1000f) / 1000f;
         transform.position = fixedPos;
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            collision.transform.SetParent(transform);
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            collision.transform.SetParent(null);
-        }
     }
 }
