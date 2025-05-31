@@ -10,7 +10,7 @@ public class PlayerAttack : MonoBehaviour
     public LayerMask Enemy; // 拖曳 Boss 的 Layer 到這裡 (在 Inspector 中選擇 Boss 所屬的 Layer，例如 "Enemy")
 
     [Header("攻擊後回彈設定")]
-    public PlayerMovement playerMovement; // 拖曳 Player 物件上的 PlayerMovement 腳本到這裡
+    public PlayerMovement2 playerMovement; // 拖曳 Player 物件上的 PlayerMovement 腳本到這裡
     public float recoilDuration = 0.3f; // 攻擊命中 Boss 後，回彈到上一個靜止位置所需的時間
 
     void Update()

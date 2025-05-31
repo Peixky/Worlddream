@@ -6,12 +6,12 @@ public class playerAttack : MonoBehaviour
     [SerializeField] private Transform firePoint;
     [SerializeField] private GameObject[] fireballs;
     private Animator anim;
-    private PlayerMovement playerMovement;
+    private PlayerMovement2 playerMovement;
     private float cooldownTimer;
 
     private void Start(){
         anim = GetComponent<Animator>();
-        playerMovement = GetComponent<PlayerMovement>();
+        playerMovement = GetComponent<PlayerMovement2>();
     }
 
     private void Update(){

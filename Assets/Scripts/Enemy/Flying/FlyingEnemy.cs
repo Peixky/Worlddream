@@ -8,7 +8,7 @@ public class FlyingEnemy : MonoBehaviour
     public Transform pointA;
     public Transform pointB;
     public float moveSpeed = 2f;
-    public float pauseTime = 1f; // 停在端點的時間
+    public float pauseTime = 1f;
 
     [Header("炸彈攻擊")]
     public GameObject bombPrefab;
@@ -28,8 +28,9 @@ public class FlyingEnemy : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.gravityScale = 0; // ✅ 不受重力影響
+        rb.gravityScale = 0f;
         rb.freezeRotation = true;
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionY;
 
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
 
@@ -63,7 +64,6 @@ public class FlyingEnemy : MonoBehaviour
 
         Vector2 currentPos = rb.position;
         Vector2 targetPos = (currentTarget == pointA) ? pointAPos : pointBPos;
-
         float distance = Vector2.Distance(currentPos, targetPos);
 
         if (distance < 0.1f)
@@ -78,21 +78,20 @@ public class FlyingEnemy : MonoBehaviour
         }
 
         float direction = Mathf.Sign(targetPos.x - currentPos.x);
-        rb.linearVelocity = new Vector2(direction * moveSpeed, 0f); // ✅ 飛行怪只要移動 X
+        rb.linearVelocity = new Vector2(direction * moveSpeed, 0f);
+
+        // ✅ 即時翻轉（圖片預設朝左）
+        Vector3 scale = transform.localScale;
+        scale.x = Mathf.Abs(scale.x) * -direction;
+        transform.localScale = scale;
     }
 
     IEnumerator WaitBeforeSwitchTarget()
     {
-        isWaiting = true;
-
         yield return new WaitForSeconds(pauseTime);
-
         currentTarget = (currentTarget == pointA) ? pointB : pointA;
-        Flip();
-
         isWaiting = false;
     }
-
 
     void ThrowBomb()
     {
@@ -109,20 +108,17 @@ public class FlyingEnemy : MonoBehaviour
             bombRb.linearVelocity = direction * bombSpeed;
         }
 
-        // 讓炸彈旋轉朝著方向
-        bomb.transform.right = direction;
+        // ✅ 如果炸彈圖片預設朝右 → 使用這個
+        bomb.transform.right = -direction;
+
+        // ✅ 如果炸彈圖片預設朝上 → 改成這個
+        // bomb.transform.up = direction;
+
+        // ✅ 若不確定方向，直接用角度算（萬用版）
+        // float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        // bomb.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
-
-
-
-    void Flip()
-    {
-        Vector3 scale = transform.localScale;
-        scale.x = (currentTarget == pointB) ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
-        scale.x *= -1;
-        transform.localScale = scale;
-    }
 
     void OnDrawGizmos()
     {

@@ -15,15 +15,25 @@ public class RangedChaserEnemy : MonoBehaviour
 
     public float shootingRange = 8f;
 
+    private Animator animator; // 加入動畫控制器
+
+
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rb = GetComponent<Rigidbody2D>();
+
+        animator = GetComponent<Animator>();
+
     }
 
     void FixedUpdate()
     {
         if (player == null) return;
+
+        float speed = Mathf.Abs(rb.linearVelocity.x);
+        animator.SetFloat("Speed", speed);
+
 
         // 追蹤玩家
         Vector2 direction = (player.position - transform.position).normalized;
@@ -52,17 +62,20 @@ public class RangedChaserEnemy : MonoBehaviour
     {
         if (player == null || bulletPrefab == null) return;
 
-        GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+        // 播放丟子彈動畫
+        animator.SetTrigger("Attack");
 
+        // 建立子彈
+        GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
         Vector2 dir = new Vector2(player.position.x - transform.position.x, 0).normalized;
         bullet.GetComponent<Rigidbody2D>().linearVelocity = dir * bulletSpeed;
-        
     }
+
 
     void Flip()
     {
         Vector3 scale = transform.localScale;
-        scale.x = (player.position.x > transform.position.x) ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
+        scale.x = (player.position.x > transform.position.x) ? -Mathf.Abs(scale.x) : Mathf.Abs(scale.x);
         transform.localScale = scale;
     }
 
