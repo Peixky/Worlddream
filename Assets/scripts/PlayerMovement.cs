@@ -2,46 +2,53 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float speed = 5f;  // 玩家移動速度
-    [SerializeField] private float jumpPower;
-    [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private LayerMask wallLayer;
-    private Rigidbody2D body;  // 角色的 2D 剛體
-    private BoxCollider2D boxCollider;  // 角色的 2D 碰撞器
+    [Header("移動參數")]
+    [SerializeField] private float speed = 5f;
+    [SerializeField] private float jumpPower = 10f;
+    [SerializeField] private float wallJumpX = 5f;
+    [SerializeField] private float wallJumpY = 10f;
+    [SerializeField] private float wallSlideSpeed = -2f; // 貼牆下滑速度
+
+    [Header("偵測區域與層級")]
+    [SerializeField] private LayerMask groundLayer; // 專用於地面檢測的 Layer
+    [SerializeField] private LayerMask wallLayer;   // 專用於牆壁檢測的 Layer
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private Transform wallCheck; // 只有一個 wallCheck
+    [SerializeField] private float checkRadius = 0.2f;
+
+    [Header("壁跳鎖定時間")]
+    [SerializeField] private float wallJumpDuration = 0.2f; // 壁跳後無法水平控制的時間
+
+    private Rigidbody2D body;
     private Animator anim;
-    private float wallJumpCooldown;
     private float horizontalInput;
-    public bool canMove = true; // 預設可以移動
+    private bool isGrounded;
+    private bool isTouchingWall;
+    private bool isWallJumping;
+    private float wallJumpTimer;
 
+    public bool canMove = true;
 
-    private void Awake(){
-        // 初始化
+    private void Awake()
+    {
         body = GetComponent<Rigidbody2D>();
-        boxCollider = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
     }
 
-    private void Update(){
+    private void Update()
+    {
         if (!canMove)
+        {
+            body.linearVelocity = new Vector2(0f, body.linearVelocity.y);
+            anim.SetBool("run", false);
             return;
-        // 獲取水平輸入值（例如，A 或 D 鍵，或方向鍵）
-        horizontalInput = Input.GetAxis("Horizontal");
-
-        // 面向修正（右為正，左為負）
-        if (horizontalInput > 0.01f) {
-            Vector3 scale = transform.localScale;
-            scale.x = Mathf.Abs(scale.x); // 面向右
-            transform.localScale = scale;
-        }else if (horizontalInput < -0.01f) {
-            Vector3 scale = transform.localScale;
-            scale.x = -Mathf.Abs(scale.x); // 面向左
-            transform.localScale = scale;
         }
 
-        anim.SetBool("run", horizontalInput != 0);
-        anim.SetBool("grounded", isGrounded());
-        
-        if(wallJumpCooldown > 0.2f){
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+
+        // 當 wall jump 時不允許水平控制，直到壁跳計時器結束
+        if (!isWallJumping || wallJumpTimer <= 0)
+        {
             body.linearVelocity = new Vector2(horizontalInput * speed, body.linearVelocity.y);
             if(onWall() && !isGrounded()){
                 body.gravityScale = 0;
@@ -77,20 +84,18 @@ public class PlayerMovement : MonoBehaviour
         return raycastHit.collider != null;
     }
 
-    private bool onWall(){
-        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, new Vector2(transform.localScale.x, 0), 0.1f, wallLayer);
-        return raycastHit.collider != null;
-    }
-
-    public bool canAttack(){
-        return horizontalInput == 0 && isGrounded() && !onWall();
-    }
-
-    private void EnableMovement()
+    private void WallJump(float direction)
     {
-        Playermovement pm = GetComponent<Playermovement>();
-        if (pm != null)
-            pm.canMove = true;
-    }
+        isWallJumping = true; // 設置壁跳狀態為 true
+        wallJumpTimer = wallJumpDuration; // 重置壁跳鎖定計時器
 
+        body.linearVelocity = new Vector2(direction * wallJumpX, wallJumpY);
+        anim.SetTrigger("jump");
+
+        // 壁跳時，角色立即翻轉面向跳躍方向
+        transform.localScale = new Vector3(direction, 1, 1);
+
+        // 不再使用 Invoke，改為在 FixedUpdate 中根據 wallJumpTimer 判斷結束
+        // Invoke(nameof(StopWallJump), wallJumpDuration); // 移除這行
+    }
 }

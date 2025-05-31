@@ -13,20 +13,23 @@ public class PlayerHealthUI : MonoBehaviour
 {
     Debug.Log("更新愛心！當前血量：" + currentHP + "，最大血量：" + maxHP);  // 檢查當前血量與最大血量
 
+    // 從右到左顯示愛心
     for (int i = 0; i < hearts.Length; i++)
     {
+        int heartIndex = hearts.Length - 1 - i; // 愛心從右往左變
         if (i < currentHP)
         {
-            Debug.Log("設置愛心 " + i + " 為紅心");  // 檢查愛心是否設為紅心
-            hearts[i].sprite = fullHeart;
+            Debug.Log("設置愛心 " + heartIndex + " 為紅心");  // 確認設置為紅心
+            hearts[heartIndex].sprite = fullHeart;
         }
         else
         {
-            Debug.Log("設置愛心 " + i + " 為空心");  // 檢查愛心是否設為空心
-            hearts[i].sprite = emptyHeart;
+            Debug.Log("設置愛心 " + heartIndex + " 為空心");  // 確認設置為空心
+            hearts[heartIndex].sprite = emptyHeart;
         }
     }
 }
+
 
 
 }
