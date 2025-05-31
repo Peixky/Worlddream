@@ -34,3 +34,6 @@ public class Health : MonoBehaviour
         gameObject.SetActive(false); // 暫時讓角色消失
     }
 }
+
+
+
