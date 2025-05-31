@@ -2,24 +2,23 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] public int maxHealth = 3; // 最大血量
+    [SerializeField] public int maxHealth = 3;
     public int currentHealth;
 
-    [SerializeField] private PlayerHealthUI healthUI; // 拖入 PlayerHealthUI 腳本
-
-    [SerializeField] private PlayerDeathManager deathManager; // 拖入 PlayerDeathManager 腳本
+    [SerializeField] private HealthBarUI healthBarUI;
+    [SerializeField] private PlayerDeathManager deathManager;
 
     private void Start()
     {
         currentHealth = maxHealth;
 
-        if (healthUI != null)
+        if (healthBarUI != null)
         {
-            healthUI.UpdateHearts(currentHealth, maxHealth); // 初始化顯示愛心
+            healthBarUI.UpdateHealthBar(currentHealth, maxHealth);
         }
         else
         {
-            Debug.LogWarning("healthUI 沒有設定！");
+            Debug.LogWarning("HealthBarUI 尚未連接！");
         }
     }
 
@@ -30,9 +29,9 @@ public class Health : MonoBehaviour
 
         Debug.Log(gameObject.name + " 扣血！剩餘血量：" + currentHealth);
 
-        if (healthUI != null)
+        if (healthBarUI != null)
         {
-            healthUI.UpdateHearts(currentHealth, maxHealth);
+            healthBarUI.UpdateHealthBar(currentHealth, maxHealth);
         }
 
         if (currentHealth <= 0)
@@ -48,10 +47,6 @@ public class Health : MonoBehaviour
         if (deathManager != null)
         {
             deathManager.TriggerDeath();
-        }
-        else
-        {
-            Debug.LogWarning("deathManager 沒有設定！");
         }
     }
 }

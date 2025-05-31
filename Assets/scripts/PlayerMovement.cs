@@ -2,100 +2,170 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("移動參數")]
+    [Header("Movement Settings")]
     [SerializeField] private float speed = 5f;
     [SerializeField] private float jumpPower = 10f;
-    [SerializeField] private float wallJumpX = 5f;
-    [SerializeField] private float wallJumpY = 10f;
-    [SerializeField] private float wallSlideSpeed = -2f; // 貼牆下滑速度
 
-    [Header("偵測區域與層級")]
-    [SerializeField] private LayerMask groundLayer; // 專用於地面檢測的 Layer
-    [SerializeField] private LayerMask wallLayer;   // 專用於牆壁檢測的 Layer
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private Transform wallCheck; // 只有一個 wallCheck
-    [SerializeField] private float checkRadius = 0.2f;
-
-    [Header("壁跳鎖定時間")]
-    [SerializeField] private float wallJumpDuration = 0.2f; // 壁跳後無法水平控制的時間
+    [Header("Environment Detection")]
+    [SerializeField] private LayerMask groundLayer;
 
     private Rigidbody2D body;
+    private BoxCollider2D boxCollider;
     private Animator anim;
-    private float horizontalInput;
-    private bool isGrounded;
-    private bool isTouchingWall;
-    private bool isWallJumping;
-    private float wallJumpTimer;
 
+    private float wallJumpCooldown;
+    private float horizontalInput;
     public bool canMove = true;
 
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
+    }
+
+    private void Start()
+    {
+        canMove = true;
     }
 
     private void Update()
     {
-        if (!canMove)
-        {
-            body.linearVelocity = new Vector2(0f, body.linearVelocity.y);
-            anim.SetBool("run", false);
-            return;
-        }
+        if (!canMove) return;
 
-        horizontalInput = Input.GetAxisRaw("Horizontal");
+        horizontalInput = Input.GetAxis("Horizontal");
 
-        // 當 wall jump 時不允許水平控制，直到壁跳計時器結束
-        if (!isWallJumping || wallJumpTimer <= 0)
+        // Flip sprite
+        if (horizontalInput > 0.01f)
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        else if (horizontalInput < -0.01f)
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+
+        // Animation parameters
+        anim.SetBool("run", horizontalInput != 0);
+        anim.SetBool("grounded", isGrounded());
+
+        if (wallJumpCooldown > 0.2f)
         {
+            // Apply horizontal movement
             body.linearVelocity = new Vector2(horizontalInput * speed, body.linearVelocity.y);
-            if(onWall() && !isGrounded()){
-                body.gravityScale = 0;
-                body.linearVelocity = Vector2.zero;
-            }else{
-                body.gravityScale = 3;
+
+            // Wall slide
+            if (onWall() && !isGrounded())
+            {
+                body.gravityScale = 1f;
+
+                // Optional: Limit sliding speed
+                if (body.linearVelocity.y < -2f)
+                    body.linearVelocity = new Vector2(body.linearVelocity.x, -2f);
+
+                anim.SetBool("onWall", true); // Optional for wall slide animation
             }
-            if(Input.GetKeyDown(KeyCode.Space) && isGrounded()){
-                jump();
+            else
+            {
+                body.gravityScale = 3f;
+                anim.SetBool("onWall", false);
             }
-        }else{
+
+            // Jump
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                if (onWall() && !isGrounded())
+                {
+                    WallJump(); // 優先跳牆
+                }
+                else if (isGrounded())
+                {
+                    Jump(); // 不在牆上才跳地板
+                }
+            }
+
+        }
+        else
+        {
             wallJumpCooldown += Time.deltaTime;
         }
     }
 
-    private void jump(){
-        if(isGrounded()){
-            body.linearVelocity = new Vector2(body.linearVelocity.x, jumpPower);
-            anim.SetTrigger("jump");
-        }else if(onWall()){
-            if(horizontalInput == 0){
-                body.linearVelocity = new Vector2((-Mathf.Sign(transform.localScale.x)) * 10, 0);
-                transform.localScale = new Vector3(-Mathf.Sign(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-            }else{
-                body.linearVelocity = new Vector2((-Mathf.Sign(transform.localScale.x)) * 3, 6);
-            }
-            wallJumpCooldown = 0;
-        }
-        
+    private void Jump()
+    {
+        body.linearVelocity = new Vector2(body.linearVelocity.x, jumpPower);
+        anim.SetTrigger("jump");
     }
-    private bool isGrounded(){
-        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
+
+    private void WallJump()
+    {
+        float jumpDirectionX = -Mathf.Sign(transform.localScale.x); // 往反方向跳
+        float wallJumpX = (horizontalInput == 0) ? 10f : 3f;
+        float wallJumpY = (horizontalInput == 0) ? 6f : 6f;
+
+        // 重設速度，避免與下墜疊加
+        body.linearVelocity = Vector2.zero;
+
+        body.linearVelocity = new Vector2(jumpDirectionX * wallJumpX, wallJumpY);
+
+        // 讓角色面對新方向
+        transform.localScale = new Vector3(jumpDirectionX, transform.localScale.y, transform.localScale.z);
+
+        wallJumpCooldown = 0f;
+
+        anim.SetTrigger("jump");
+    }
+
+    private bool isGrounded()
+    {
+        RaycastHit2D raycastHit = Physics2D.BoxCast(
+            boxCollider.bounds.center,
+            boxCollider.bounds.size,
+            0f,
+            Vector2.down,
+            0.1f,
+            groundLayer
+        );
+
         return raycastHit.collider != null;
     }
 
-    private void WallJump(float direction)
+    private bool onWall()
     {
-        isWallJumping = true; // 設置壁跳狀態為 true
-        wallJumpTimer = wallJumpDuration; // 重置壁跳鎖定計時器
+        Vector2 direction = new Vector2(transform.localScale.x, 0);
+        RaycastHit2D raycastHit = Physics2D.BoxCast(
+            boxCollider.bounds.center,
+            boxCollider.bounds.size,
+            0f,
+            direction,
+            0.1f,
+            groundLayer
+        );
 
-        body.linearVelocity = new Vector2(direction * wallJumpX, wallJumpY);
-        anim.SetTrigger("jump");
+        return raycastHit.collider != null;
+    }
 
-        // 壁跳時，角色立即翻轉面向跳躍方向
-        transform.localScale = new Vector3(direction, 1, 1);
+    public bool canAttack()
+    {
+        return horizontalInput == 0 && isGrounded() && !onWall();
+    }
 
-        // 不再使用 Invoke，改為在 FixedUpdate 中根據 wallJumpTimer 判斷結束
-        // Invoke(nameof(StopWallJump), wallJumpDuration); // 移除這行
+    private void EnableMovement()
+    {
+        canMove = true;
+    }
+
+    public void Bounce(Vector2 force)
+    {
+        body.linearVelocity = Vector2.zero;
+        body.AddForce(force, ForceMode2D.Impulse);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (boxCollider == null) return;
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(boxCollider.bounds.center + Vector3.down * 0.1f, boxCollider.bounds.size);
+
+        Gizmos.color = Color.red;
+        Vector3 direction = new Vector3(transform.localScale.x, 0, 0);
+        Gizmos.DrawWireCube(boxCollider.bounds.center + direction * 0.1f, boxCollider.bounds.size);
     }
 }
