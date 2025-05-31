@@ -82183,99 +82183,13 @@ CompositeCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1220001318}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  serializedVersion: 3
+  m_Density: 1
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 1750361378779758313, guid: 6a0380cf378fe41688f20468f1ef2043, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &931983219
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 931983216}
-  m_CullTransparentMesh: 1
---- !u!1 &939087156
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 939087159}
-  - component: {fileID: 939087158}
-  - component: {fileID: 939087157}
-  m_Layer: 5
-  m_Name: Text (TMP)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &939087157
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 939087156}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_text: x 0
-  m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
-  m_fontMaterial: {fileID: 0}
-  m_fontMaterials: []
-  m_fontColor32:
+  m_IncludeLayers:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 0
-  m_colorMode: 3
-  m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
-  m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
-  m_tintAllSprites: 0
-  m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: -1183493901
-  m_overrideHtmlColors: 0
-  m_faceColor:
+    m_Bits: 0
+  m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
@@ -82301,59 +82215,7 @@ MonoBehaviour:
   m_EdgeRadius: 0
   m_ColliderPaths: []
   m_CompositePaths:
-    m_Paths:
-    - - {x: 147.01332, y: 4.9866667}
-      - {x: 147.01332, y: 6.0133333}
-      - {x: 145.01334, y: 6.0133624}
-      - {x: 145.01337, y: 8.986667}
-      - {x: 146.01334, y: 8.986696}
-      - {x: 146.01337, y: 9.986667}
-      - {x: 147.01334, y: 9.986696}
-      - {x: 147.01337, y: 10.986667}
-      - {x: 148.01334, y: 10.986696}
-      - {x: 148.01332, y: 13.013333}
-      - {x: 147.01334, y: 13.013363}
-      - {x: 147.01332, y: 14.013333}
-      - {x: 145.98666, y: 14.013304}
-      - {x: 145.98663, y: 13.013333}
-      - {x: 143.01334, y: 13.013363}
-      - {x: 143.01332, y: 14.013333}
-      - {x: 141.98666, y: 14.013304}
-      - {x: 141.98663, y: 13.013333}
-      - {x: 140.98666, y: 13.013304}
-      - {x: 140.9867, y: 10.986667}
-      - {x: 141.98666, y: 10.986637}
-      - {x: 141.9867, y: 9.986667}
-      - {x: 142.98666, y: 9.986637}
-      - {x: 142.9867, y: 8.986667}
-      - {x: 143.98666, y: 8.986637}
-      - {x: 143.98663, y: 6.0133333}
-      - {x: 141.98666, y: 6.013304}
-      - {x: 141.9867, y: 4.9866667}
-    - - {x: 146.98666, y: 11.013363}
-      - {x: 146.01334, y: 11.013363}
-      - {x: 146.01337, y: 12.986667}
-      - {x: 146.98666, y: 12.986637}
-    - - {x: 142.98666, y: 11.013363}
-      - {x: 142.01334, y: 11.013363}
-      - {x: 142.01337, y: 12.986667}
-      - {x: 142.98666, y: 12.986637}
-    - - {x: 48.0133, y: -12.013333}
-      - {x: 48.0133, y: -0.98666674}
-      - {x: 45.986668, y: -0.986696}
-      - {x: 45.9867, y: -12.013333}
-    - - {x: 42.0133, y: -16.013332}
-      - {x: 42.0133, y: -13.986668}
-      - {x: 14.013333, y: -13.986639}
-      - {x: 14.013304, y: -2.9866667}
-      - {x: -15.013333, y: -2.986696}
-      - {x: -15.013304, y: -5.0133333}
-      - {x: 11.986667, y: -5.0133624}
-      - {x: 11.986696, y: -16.013332}
-    - - {x: 52.0133, y: -16.013332}
-      - {x: 52.0133, y: -13.986668}
-      - {x: 48.986668, y: -13.986696}
-      - {x: 48.9867, y: -16.013332}
+    m_Paths: []
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
