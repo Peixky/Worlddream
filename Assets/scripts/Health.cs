@@ -70,3 +70,6 @@ public class Health : MonoBehaviour
         OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
     }
 }
+
+
+
