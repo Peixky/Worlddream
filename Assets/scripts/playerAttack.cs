@@ -10,7 +10,8 @@ public class PlayerAttack : MonoBehaviour
     public LayerMask enemyLayer;
 
     [Header("攻擊後回彈設定")]
-    public PlayerMovement2 playerMovement;
+    public PlayerMovement playerMovement; // ✅ 修正錯誤型別名稱（原本是錯誤的 `PlayerMovement;`）
+
     public float recoilDuration = 0.3f;
 
     void Update()
@@ -34,7 +35,6 @@ public class PlayerAttack : MonoBehaviour
         {
             Debug.Log("擊中：" + hit.name);
 
-            // ✅ 嘗試取得通用 Health 模組
             Health enemyHealth = hit.GetComponent<Health>();
             if (enemyHealth != null)
             {
@@ -43,7 +43,7 @@ public class PlayerAttack : MonoBehaviour
 
                 if (playerMovement != null)
                 {
-                    playerMovement.StartRecoilToLastIdle(recoilDuration);
+                    playerMovement.StartRecoilToLastIdle(recoilDuration); // ✅ 你需要確保這個方法存在於 PlayerMovement
                 }
             }
             else

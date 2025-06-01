@@ -136,7 +136,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &63482574
 RectTransform:
   m_ObjectHideFlags: 0
@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.64705884, b: 0.7471829, a: 0.23529412}
+  m_Color: {r: 1, g: 0.64705884, b: 0.7471829, a: 0.50980395}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -359,31 +359,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 808428683}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c75f9d16b2d76477a8a9fe5edd47be44, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c50d9f508e764665b652e89f74f78e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   backgroundImageUI: {fileID: 1757317880}
   dialoguePanelObject: {fileID: 63482573}
   dialogueTextUI: {fileID: 767686775}
   backgrounds:
-  - {fileID: 3903403619922610258, guid: df6cc7508289b47c38ac3bb0f00c44ac, type: 3}
-  - {fileID: 3903403619922610258, guid: df6cc7508289b47c38ac3bb0f00c44ac, type: 3}
-  - {fileID: -2628940549468577326, guid: c8eaae6a80f144dac88367df22281537, type: 3}
-  - {fileID: 5184339967693236625, guid: d17ff6293fe014c9aa1a9988abd13b9e, type: 3}
-  - {fileID: 1962548438054099922, guid: f3ebaf7dd03a1456cb37d8537c8855ea, type: 3}
+  - {fileID: 5580227955796761200, guid: c192a60c4ad4e4a34a814b2450aa04c8, type: 3}
+  - {fileID: 5580227955796761200, guid: c192a60c4ad4e4a34a814b2450aa04c8, type: 3}
+  - {fileID: 5554356014891633469, guid: 65265d4aacdc2437f9de8502adad145a, type: 3}
+  - {fileID: 7104523956616870032, guid: 03d548bba1b464b9da965241f16c4a03, type: 3}
+  - {fileID: 4916845596176811942, guid: ed5875c72755049ce8c3b95ff59dc124, type: 3}
+  - {fileID: -3734124153235199092, guid: 8cbfd8c3c43ae47e0b58c55819cf19ed, type: 3}
   - {fileID: -5463555160324168427, guid: 82dfdb9201dc6498e9e7fbc236ed9cd3, type: 3}
   - {fileID: -5463555160324168427, guid: 82dfdb9201dc6498e9e7fbc236ed9cd3, type: 3}
   - {fileID: -4832355584681267828, guid: 7eb6bf71c34f5416ba2128db2a1d07b5, type: 3}
+  - {fileID: -234824681610274591, guid: aa8a87ef8942041e4b89feb00270091b, type: 3}
   dialogues:
-  - "Let's hit the gym today! That way, I can become a hunk! \U0001F4AA\U0001F60E "
-  - "Wait a minute... why do I suddenly feel so tired? I just want to sleep. \U0001F634"
+  - 'Let''s hit the gym today! That way, I can become a hunk! '
+  - 'Wait a minute... why do I suddenly feel so tired? I just want to sleep. '
   - "Well then... I guess I'll just take a nap. \U0001F60C\U0001F4A4 "
-  - "Well then... I guess I'll just take a nap. \U0001F60C\U0001F4A4 "
-  - "Well then... I guess I'll just take a nap. \U0001F60C\U0001F4A4 "
-  - "Wha\u2026 What happened to me? Why did I turn into a weird blue thing?! \U0001F631\U0001F499"
+  - 'Well then... I guess I''ll just take a nap. '
+  - 'Well then... I guess I''ll just take a nap. '
+  - 'Well then... I guess I''ll just take a nap. '
+  - "Wha\u2026 What happened to me? Why did I turn into a weird blue thing?! "
   - "Could it be\u2026 that I\u2019m in a dream?"
   - 'Game Guide: Complete the parkour to clear the level!'
-  nextSceneIndex: -1
+  - 'Game Guide: Use the arrow keys to move left and right, and to jump.'
+  dialogueEndAction: 0
 --- !u!4 &808428685
 Transform:
   m_ObjectHideFlags: 0
@@ -394,6 +398,135 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.36617532, y: -1.6752279, z: 96.5953}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &889337035
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 889337037}
+  - component: {fileID: 889337036}
+  m_Layer: 0
+  m_Name: BGM
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!82 &889337036
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 889337035}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 20029b72c09434b74907052e19144fa2, type: 3}
+  m_Resource: {fileID: 8300000, guid: 20029b72c09434b74907052e19144fa2, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!4 &889337037
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 889337035}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 286.09387, y: 208.23674, z: 14856.538}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -489,6 +622,7 @@ GameObject:
   - component: {fileID: 1620564855}
   - component: {fileID: 1620564854}
   - component: {fileID: 1620564853}
+  - component: {fileID: 1620564856}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -570,6 +704,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1620564856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1620564852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!1 &1757317877
 GameObject:
   m_ObjectHideFlags: 0
@@ -587,7 +765,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1757317878
 RectTransform:
   m_ObjectHideFlags: 0
@@ -756,3 +934,4 @@ SceneRoots:
   - {fileID: 1823350317}
   - {fileID: 1317948870}
   - {fileID: 808428685}
+  - {fileID: 889337037}

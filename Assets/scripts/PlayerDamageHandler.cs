@@ -16,6 +16,11 @@ public class PlayerDamageHandler : MonoBehaviour
     [SerializeField] private float invincibleTime = 1.5f;
     [SerializeField] private float flashInterval = 0.1f;
 
+    [Header("擊退拳頭力道 (KnockbackProjectile)")]
+    [SerializeField] private float shockKnockbackForceX = 12f;
+    [SerializeField] private float shockKnockbackForceY = 10f;
+
+
     private bool isInvincible = false;
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
@@ -105,7 +110,6 @@ public class PlayerDamageHandler : MonoBehaviour
 
         isInvincible = false;
     }
-
     public void ResetState()
     {
         isInvincible = false;
@@ -119,5 +123,30 @@ public class PlayerDamageHandler : MonoBehaviour
 
         Debug.Log("玩家狀態已重置");
     }
+    public void TakeHitFromShockwave(int damage, float direction)
+    {
+        TakeHit(damage, direction);
+    }
+    public bool IsInvincible()
+    {
+        return isInvincible;
+    }
+    public void ApplyKnockbackOnly(float xDirection)
+    {
+        Vector2 knockback = new Vector2(xDirection * shockKnockbackForceX, shockKnockbackForceY);
+        rb.linearVelocity = Vector2.zero;
+        rb.AddForce(knockback, ForceMode2D.Impulse);
+
+        PlayerMovement movement = GetComponent<PlayerMovement>();
+        if (movement != null)
+        {
+            movement.canMove = false;
+            Invoke(nameof(EnableMovement), knockbackDuration);
+        }
+
+        Debug.Log("⚡ 玩家被 KnockbackProjectile 擊退（無傷害）");
+    }
+
+
 
 }
