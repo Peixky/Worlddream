@@ -15,6 +15,7 @@ TagManager:
   - MovingPlatform
   - Button
   - DestructiblePlatform
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -26,8 +27,8 @@ TagManager:
   - Wall
   - Platform
   - Enemy
-  - 
-  - 
+  - EnemyOnlyTrigger
+  - EnemyOnlyWall
   - 
   - 
   - 

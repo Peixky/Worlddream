@@ -1,93 +1,119 @@
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BoxCollider2D))]
 public class RangedChaserEnemy : MonoBehaviour
 {
-    public float moveSpeed = 2f;
+    [Header("攻擊設定")]
     public float shootInterval = 2f;
     public float bulletSpeed = 5f;
+    public float shootingRange = 8f;
     public GameObject bulletPrefab;
+
+    [Header("移動設定")]
+    public float moveSpeed = 2f;
 
     private Transform player;
     private Rigidbody2D rb;
+    private Animator animator;
     private float shootTimer;
+    private bool isShooting = false;
 
-    public float shootingRange = 8f;
-
-    private Animator animator; // 加入動畫控制器
-
+    [Header("動畫設定")]
+    public float shootAnimDuration = 1.2f;      // 投擲動畫總長度
+    public float bulletFireDelay = 0.5f;        // 幾秒後發射子彈（動畫中段）
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
         rb = GetComponent<Rigidbody2D>();
-
         animator = GetComponent<Animator>();
-
-    }
-
-    void FixedUpdate()
-    {
-        if (player == null) return;
-
-        float speed = Mathf.Abs(rb.linearVelocity.x);
-        animator.SetFloat("Speed", speed);
-
-
-        // 追蹤玩家
-        Vector2 direction = (player.position - transform.position).normalized;
-        rb.linearVelocity = new Vector2(direction.x * moveSpeed, rb.linearVelocity.y);
-
-        Flip();
     }
 
     void Update()
     {
         if (player == null) return;
 
-        shootTimer += Time.deltaTime;
-        if (shootTimer >= shootInterval)
+        float distance = Vector2.Distance(transform.position, player.position);
+
+        if (distance > shootingRange)
         {
-            float distance = Vector2.Distance(transform.position, player.position);
-            if (distance <= shootingRange)
+            if (!isShooting)
             {
-                Shoot();
+                Vector2 dir = (player.position - transform.position).normalized;
+                rb.linearVelocity = new Vector2(dir.x * moveSpeed, rb.linearVelocity.y);
+                animator.SetBool("IsWalking", true);
             }
-            shootTimer = 0f;
-        }     
+        }
+        else
+        {
+            rb.linearVelocity = Vector2.zero;
+            animator.SetBool("IsWalking", false);
+
+            shootTimer += Time.deltaTime;
+            if (shootTimer >= shootInterval && !isShooting)
+            {
+                StartCoroutine(ShootSequence());
+                shootTimer = 0f;
+            }
+        }
+
+        FlipToFacePlayer();
     }
 
-    void Shoot()
+    IEnumerator ShootSequence()
     {
-        if (player == null || bulletPrefab == null) return;
+        isShooting = true;
 
-        // 播放丟子彈動畫
-        animator.SetTrigger("Attack");
+        // 播放投擲動畫
+        if (animator != null)
+        {
+            animator.SetTrigger("Shoot");
+        }
 
-        // 建立子彈
-        GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-        Vector2 dir = new Vector2(player.position.x - transform.position.x, 0).normalized;
-        bullet.GetComponent<Rigidbody2D>().linearVelocity = dir * bulletSpeed;
+        // 等到動畫中段再發射子彈
+        yield return new WaitForSeconds(bulletFireDelay);
+        FireBullet();
+
+        // 等待動畫播完
+        yield return new WaitForSeconds(shootAnimDuration - bulletFireDelay);
+
+        isShooting = false;
     }
 
+    void FireBullet()
+    {
+        if (bulletPrefab == null || player == null) return;
 
-    void Flip()
+        Vector2 direction = (player.position - transform.position).normalized;
+        Vector3 spawnPos = transform.position + new Vector3(direction.x * 0.5f, 0, 0);
+
+        GameObject bullet = Instantiate(bulletPrefab, spawnPos, Quaternion.identity);
+        Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
+        if (bulletRb != null)
+        {
+            bulletRb.linearVelocity = direction * bulletSpeed;
+        }
+
+        Debug.Log("敵人射擊子彈！");
+    }
+
+    void FlipToFacePlayer()
     {
         Vector3 scale = transform.localScale;
-        scale.x = (player.position.x > transform.position.x) ? -Mathf.Abs(scale.x) : Mathf.Abs(scale.x);
+        scale.x = -Mathf.Abs(scale.x) * Mathf.Sign(player.position.x - transform.position.x);
         transform.localScale = scale;
     }
-
 
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.CompareTag("Player"))
         {
-            Health playerHealth = collision.collider.GetComponent<Health>();
-            if (playerHealth != null)
+            Health health = collision.collider.GetComponent<Health>();
+            if (health != null)
             {
-                playerHealth.TakeDamage(1); // 近身碰撞傷害
+                health.TakeDamage(1);
             }
         }
     }

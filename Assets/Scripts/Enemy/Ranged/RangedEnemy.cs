@@ -2,32 +2,35 @@ using UnityEngine;
 
 public class RangedEnemy : MonoBehaviour
 {
+    [Header("Shooting Settings")]
     public GameObject bulletPrefab;
     public float shootInterval = 2f;
     public float bulletSpeed = 5f;
-    public float shootingRange = 10f; // 玩家進入這個距離才會開火
+    public float shootingRange = 10f;
+
+    [Header("Player Collision Damage")]
+    public int contactDamage = 1;
 
     private Transform player;
     private float timer;
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
     }
 
     void Update()
     {
         if (player == null) return;
 
-        // ✅ 朝向玩家（轉向）
+        // ✅ 朝向玩家
         Vector3 scale = transform.localScale;
         scale.x = Mathf.Abs(scale.x) * -Mathf.Sign(player.position.x - transform.position.x);
         transform.localScale = scale;
 
-        // ✅ 計算玩家與敵人的距離
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
-        // ✅ 玩家進入射程才會進行射擊計時與射擊
+        // ✅ 射擊判斷
         if (distanceToPlayer <= shootingRange)
         {
             timer += Time.deltaTime;
@@ -41,12 +44,34 @@ public class RangedEnemy : MonoBehaviour
 
     void Shoot()
     {
-        if (player == null) return;
+        if (player == null || bulletPrefab == null) return;
 
-        GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+        // 正確取得射擊方向（只管位置差）
         Vector2 direction = (player.position - transform.position).normalized;
 
+        // 子彈生成位置偏移（向玩家方向偏一點）
+        Vector3 spawnPos = transform.position + (Vector3)(direction * 0.5f); 
+
+        GameObject bullet = Instantiate(bulletPrefab, spawnPos, Quaternion.identity);
+
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        rb.linearVelocity = direction * bulletSpeed; // ✅ 建議使用 velocity 而非 linearVelocity（更常見用法）
+        if (rb != null)
+        {
+            rb.linearVelocity = direction * bulletSpeed;
+        }
+    }
+
+
+    // ✅ 玩家碰撞扣血
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Player"))
+        {
+            Health health = collision.collider.GetComponent<Health>();
+            if (health != null)
+            {
+                health.TakeDamage(contactDamage);
+            }
+        }
     }
 }
