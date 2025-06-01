@@ -1,8 +1,9 @@
 using UnityEngine;
-using UnityEngine.UI; // 如果有 UI 元件 (Image, Text) 需要使用，就需要這個
-using TMPro; // 如果使用 TextMeshPro 文本，就需要這個
-using System.Collections; // 如果使用協程 (IEnumerator, StartCoroutine, WaitForSecondsRealtime) 需要這個
-using System; // 使用 Action 事件需要引入此命名空間
+using UnityEngine.UI; 
+using TMPro; 
+using System.Collections; 
+using System; 
+using UnityEngine.SceneManagement; // 確保有這個 using
 
 public class IntroManager : MonoBehaviour
 {
@@ -27,10 +28,8 @@ public class IntroManager : MonoBehaviour
         GameOver    // 遊戲結束
     }
 
-    // 靜態變數，讓其他腳本可以輕鬆地讀取當前遊戲狀態 (例如 BossController, PlayerMovement)
     public static GameState currentGameState = GameState.Intro; // 靜態變數，初始為 Intro
 
-    // Unity 內建方法，在腳本第一次啟用時被呼叫
     void Start()
     {
         // 確保所有 UI Panel 在遊戲開始時都是隱藏的 (即使在 Inspector 中設定了，這裡也再次確認)
@@ -39,15 +38,30 @@ public class IntroManager : MonoBehaviour
         if (startTextPanel != null) startTextPanel.SetActive(false);
         if (gameOverPanel != null) gameOverPanel.SetActive(false); 
 
-        // 遊戲開始時，先將遊戲時間暫停，只讓 UI 顯示相關的協程運行
+        // 遊戲開始時，先將遊戲時間暫停
         Time.timeScale = 0f; 
-        currentGameState = GameState.Intro; // 設定初始遊戲狀態為 Intro
+        currentGameState = GameState.Intro;
 
-        // 啟動遊戲開場流程的協程
+        // 遊戲啟動時，由 GameProgressionManager 負責加載正確的 Scene
+        // 如果目前在 IntroScene，則自動顯示 Intro 畫面
+        if (SceneManager.GetActiveScene().name == GameProgressionManager.instance.storyScenes[0])
+        {
+            StartCoroutine(IntroRoutine());
+        }
+        else // 如果不在 IntroScene (例如從 Level 或 Lobby 進入)
+        {
+            Time.timeScale = 1f; // 恢復遊戲時間
+            currentGameState = GameState.Playing; // 遊戲直接進入 Playing 狀態
+        }
+    }
+
+    // 這個方法由外部 (例如 GameProgressionManager) 呼叫來顯示 IntroScreen
+    public void ShowIntroScreen()
+    {
+        Debug.Log("IntroManager: ShowIntroScreen 被呼叫，啟動開場協程。");
         StartCoroutine(IntroRoutine());
     }
 
-    // 遊戲開場流程協程
     IEnumerator IntroRoutine()
     {
         // 1. 顯示 V.S. 畫面 (激活 introPanel)
@@ -60,34 +74,34 @@ public class IntroManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(vsScreenDuration); // 等待設定的 V.S. 畫面顯示時間
 
         // 2. 隱藏 V.S. 畫面，顯示 "START" 文字 (激活 startTextPanel)
-        if (introPanel != null) introPanel.SetActive(false); // 隱藏 V.S. 圖片 Panel
+        if (introPanel != null) introPanel.SetActive(false); 
 
-        if (startTextPanel != null) startTextPanel.SetActive(true); // 顯示 "START" 文字 Panel
+        if (startTextPanel != null) startTextPanel.SetActive(true); 
         else Debug.LogError("IntroManager: startTextPanel 未連結！請在 Inspector 中設定。", this);
 
         // 獲取 startTextPanel 下的 TextMeshProUGUI 元件並設定文字
         // GetComponentInChildren 會尋找子物件中的元件，即使子物件是隱藏的也能找到
-        TextMeshProUGUI startTextMesh = startTextPanel?.GetComponentInChildren<TextMeshProUGUI>(true); // <<<< 這裡新增了 (true) 參數 >>>>>>
+        TextMeshProUGUI startTextMesh = startTextPanel?.GetComponentInChildren<TextMeshProUGUI>(true); 
         if (startTextMesh != null)
         {
-            startTextMesh.text = "GAME START !";
+            startTextMesh.text = "START";
             // 確保 TextMeshProUGUI 元件也是激活的
-            if (!startTextMesh.gameObject.activeSelf) startTextMesh.gameObject.SetActive(true); // 如果子物件是隱藏的，也激活它
+            if (!startTextMesh.gameObject.activeSelf) startTextMesh.gameObject.SetActive(true);
         }
         else
         {
-            Debug.LogWarning("IntroManager: 未找到 StartTextPanel 下的 TextMeshProUGUI 元件！請確認有 TextMeshProUGUI 作為子物件。", startTextPanel);
+            Debug.LogWarning("IntroManager: 未找到 StartTextPanel 下的 TextMeshProUGUI 元件！", startTextPanel);
         }
         
         Debug.Log("步驟 2: V.S. 圖片消失延遲結束。顯示 START 文字。");
-        yield return new WaitForSecondsRealtime(startTextDuration); // 等待設定的 START 文字顯示時間
+        yield return new WaitForSecondsRealtime(startTextDuration); 
 
         // 3. 隱藏 "START" 文字，恢復遊戲
         if (startTextPanel != null) startTextPanel.SetActive(false);
         Debug.Log("步驟 3: START 文字消失。遊戲開始！");
 
-        Time.timeScale = 1f; // 恢復遊戲時間
-        currentGameState = GameState.Playing; // 設定遊戲狀態為「遊戲中」
+        Time.timeScale = 1f; 
+        currentGameState = GameState.Playing; 
 
         // 觸發 GameEvents.OnGameStart 事件，通知其他腳本 (例如 BossController) 可以開始其行為
         GameEvents.OnGameStart?.Invoke(); 
@@ -96,18 +110,17 @@ public class IntroManager : MonoBehaviour
     // 當 Player 死亡或其他遊戲結束條件滿足時，外部腳本 (例如 PlayerHealth) 會呼叫此方法
     public static void ShowGameOver()
     {
-        // 只有當遊戲狀態不是已經是 GameOver 時才執行，避免重複顯示
         if (currentGameState != GameState.GameOver) 
         {
-            Time.timeScale = 0f; // 暫停遊戲
-            currentGameState = GameState.GameOver; // 設定遊戲狀態為 GameOver
+            Time.timeScale = 0f; 
+            currentGameState = GameState.GameOver; 
 
             // 尋找場景中唯一一個 IntroManager 的實例來操作其 UI
             // 因為這是靜態方法，無法直接訪問非靜態變數，所以需要 FindFirstObjectByType
             IntroManager instance = FindFirstObjectByType<IntroManager>();
             if (instance != null && instance.gameOverPanel != null)
             {
-                instance.gameOverPanel.SetActive(true); // 激活遊戲結束 Panel
+                instance.gameOverPanel.SetActive(true); 
                 Debug.Log("IntroManager: 顯示遊戲結束畫面。");
             }
             else

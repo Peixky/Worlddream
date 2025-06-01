@@ -338,7 +338,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 682060936}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c75f9d16b2d76477a8a9fe5edd47be44, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c50d9f508e764665b652e89f74f78e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   backgroundImageUI: {fileID: 110527455}
@@ -356,7 +356,7 @@ MonoBehaviour:
   - You must defeat me to wake up from the dream!
   - This time, I actually turned into something kinda normal.
   - Becoming a brave knight should be enough to beat the BOSS!
-  nextSceneIndex: -1
+  dialogueEndAction: 3
 --- !u!1 &1129617296
 GameObject:
   m_ObjectHideFlags: 0

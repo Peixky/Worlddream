@@ -296,27 +296,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 1006357851}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c75f9d16b2d76477a8a9fe5edd47be44, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c50d9f508e764665b652e89f74f78e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   backgroundImageUI: {fileID: 48730898}
   dialoguePanelObject: {fileID: 90430712}
   dialogueTextUI: {fileID: 1533986507}
   backgrounds:
-  - {fileID: 3903403619922610258, guid: df6cc7508289b47c38ac3bb0f00c44ac, type: 3}
-  - {fileID: -719263221308622721, guid: ca66e3b3a69dd4d528519abc5232ddbd, type: 3}
-  - {fileID: -4411237961214844658, guid: 3ccc1caa7dc8c41a4a44b7b60ca114a1, type: 3}
-  - {fileID: -719263221308622721, guid: ca66e3b3a69dd4d528519abc5232ddbd, type: 3}
-  - {fileID: -719263221308622721, guid: ca66e3b3a69dd4d528519abc5232ddbd, type: 3}
-  - {fileID: -4411237961214844658, guid: 3ccc1caa7dc8c41a4a44b7b60ca114a1, type: 3}
+  - {fileID: 2066934778785229562, guid: 30b89cb3630f94e0b8fe96f2b257c797, type: 3}
+  - {fileID: 2066934778785229562, guid: 30b89cb3630f94e0b8fe96f2b257c797, type: 3}
+  - {fileID: -1108580848350517844, guid: 80517cd2d18074eacb65c9d6f24887a9, type: 3}
+  - {fileID: 2066934778785229562, guid: 30b89cb3630f94e0b8fe96f2b257c797, type: 3}
+  - {fileID: 2066934778785229562, guid: 30b89cb3630f94e0b8fe96f2b257c797, type: 3}
+  - {fileID: -1108580848350517844, guid: 80517cd2d18074eacb65c9d6f24887a9, type: 3}
+  - {fileID: -1108580848350517844, guid: 80517cd2d18074eacb65c9d6f24887a9, type: 3}
   dialogues:
   - "Finally awake\u2026 what a scary dream."
   - "Alright, it\u2019s really time to start working out now."
   - 
   - Wait What???
   - Seriously?
-  - I still in the dream? NO WAY~~~
-  nextSceneIndex: -1
+  - I still in the dream?
+  - NO WAYYYYYYYYYY
+  dialogueEndAction: 4
 --- !u!4 &1006357853
 Transform:
   m_ObjectHideFlags: 0

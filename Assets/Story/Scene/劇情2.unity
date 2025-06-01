@@ -552,29 +552,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 1182109170}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c75f9d16b2d76477a8a9fe5edd47be44, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c50d9f508e764665b652e89f74f78e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   backgroundImageUI: {fileID: 1786354935}
   dialoguePanelObject: {fileID: 29119163}
   dialogueTextUI: {fileID: 1033595497}
   backgrounds:
-  - {fileID: -5463555160324168427, guid: 82dfdb9201dc6498e9e7fbc236ed9cd3, type: 3}
-  - {fileID: -5463555160324168427, guid: 82dfdb9201dc6498e9e7fbc236ed9cd3, type: 3}
-  - {fileID: -5463555160324168427, guid: 82dfdb9201dc6498e9e7fbc236ed9cd3, type: 3}
+  - {fileID: 7037424620819492479, guid: b0698db9ffe6f431c8a7ad8f75ee838d, type: 3}
+  - {fileID: 7037424620819492479, guid: b0698db9ffe6f431c8a7ad8f75ee838d, type: 3}
+  - {fileID: 7037424620819492479, guid: b0698db9ffe6f431c8a7ad8f75ee838d, type: 3}
+  - {fileID: -3350598829305327983, guid: a86238abc96ed408982933c41885ce9e, type: 3}
+  - {fileID: -7449936795007096057, guid: 3de1228f11ada42d492a9edf698822d9, type: 3}
   - {fileID: -5535821660565706578, guid: 0bd65a8f21c11470883af6d6d3221f00, type: 3}
   - {fileID: -5535821660565706578, guid: 0bd65a8f21c11470883af6d6d3221f00, type: 3}
-  - {fileID: -5535821660565706578, guid: 0bd65a8f21c11470883af6d6d3221f00, type: 3}
-  - {fileID: -5535821660565706578, guid: 0bd65a8f21c11470883af6d6d3221f00, type: 3}
+  - {fileID: -4832355584681267828, guid: 7eb6bf71c34f5416ba2128db2a1d07b5, type: 3}
+  - {fileID: -234824681610274591, guid: aa8a87ef8942041e4b89feb00270091b, type: 3}
+  - {fileID: -3744307979370998673, guid: 94eacb2540d124bfa8caf603805953fb, type: 3}
   dialogues:
   - Phew... I almost died there.
   - "It should be over now\u2026 Time to get up and hit the gym!"
   - Wait...My body hurts so much!
+  - Wait...My body hurts so much!
+  - Wait...My body hurts so much!
   - ARE YOU KIDDING ME???  A dragon???
   - ' There still more?!'
-  - 'Game Guide: You must defeat five monsters to clear the level.'
+  - 'Game Guide: You must defeat all monsters to clear the level.'
+  - Use the arrow keys to move left and right, and to jump.
   - 'Game Guide: Right-click the mouse to shoot fireballs and attack enemies. '
-  nextSceneIndex: -1
+  dialogueEndAction: 3
 --- !u!4 &1182109172
 Transform:
   m_ObjectHideFlags: 0

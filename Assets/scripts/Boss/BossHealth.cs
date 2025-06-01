@@ -50,6 +50,7 @@ public class BossHealth : MonoBehaviour
         }
 
         StartCoroutine(RotateToTarget());
+        
     }
 
     IEnumerator RotateToTarget()
@@ -76,5 +77,18 @@ public class BossHealth : MonoBehaviour
         }
 
         transform.rotation = Quaternion.Euler(0, 0, targetRotationZ);
+        if (GameProgressionManager.instance != null)
+        {
+            GameProgressionManager.AdvanceStory();      // 推進劇情索引 (到劇情四)
+            GameProgressionManager.LoadNextStoryScene(); // 載入新的 CurrentStoryIndex 對應的劇情 (即劇情四)
+        }
+        else
+        {
+            Debug.LogError("BossHealth: GameProgressionManager 尚未初始化！無法加載劇情四。");
+            // 作為備用方案，如果 GameProgressionManager 沒準備好
+            // 但這會繞過進度管理，通常不建議作為最終解決方案
+            SceneFlowManager.Instance.nextSceneName = "Story/Scene/劇情四"; // 直接指定劇情四的名稱
+            SceneFlowManager.Instance.GoToNextScene();
+        }
     }
 }
