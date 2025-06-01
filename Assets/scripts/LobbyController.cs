@@ -51,7 +51,7 @@ public class LobbyController : MonoBehaviour
         {
             // 我們希望進入「下一個劇情」，所以先推進劇情索引
             // 然後載入這個新的劇情場景
-            GameProgressionManager.AdvanceStory();
+            //GameProgressionManager.AdvanceStory();
             GameProgressionManager.LoadNextStoryScene();
         }
         else

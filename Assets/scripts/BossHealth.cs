@@ -77,18 +77,19 @@ public class BossHealth : MonoBehaviour
         }
 
         transform.rotation = Quaternion.Euler(0, 0, targetRotationZ);
-        if (GameProgressionManager.instance != null)
+        if (GameProgressionManager.CurrentLevelIndex == (GameProgressionManager.instance.gameScenes.Length - 1)) 
         {
-            GameProgressionManager.AdvanceStory();      // 推進劇情索引 (到劇情四)
-            GameProgressionManager.LoadNextStoryScene(); // 載入新的 CurrentStoryIndex 對應的劇情 (即劇情四)
+            Debug.Log("BossHealth: 最後一關 Boss 死亡。加載劇情四。");
+            GameProgressionManager.AdvanceStory(); // 推進劇情到劇情四
+            GameProgressionManager.LoadNextStoryScene(); // 加載 StoryScene4
         }
-        else
+        else // 其他關卡的 Boss 死亡 (這個流程中，只有第三關是 Boss 死亡觸發劇情)
         {
-            Debug.LogError("BossHealth: GameProgressionManager 尚未初始化！無法加載劇情四。");
-            // 作為備用方案，如果 GameProgressionManager 沒準備好
-            // 但這會繞過進度管理，通常不建議作為最終解決方案
-            SceneFlowManager.Instance.nextSceneName = "Story/Scene/劇情四"; // 直接指定劇情四的名稱
-            SceneFlowManager.Instance.GoToNextScene();
+            // 這裡根據流程圖，其他關卡的 Boss 死亡不會發生，或者會導致流程錯誤
+            // 因為只有 Level3GameScene 的 Boss 死亡才會觸發劇情四。
+            // 如果其他關卡也有 Boss 死亡的邏輯，而您希望它們回到大廳，則需要額外判斷
+            Debug.LogWarning("BossHealth: 非最後一關的 Boss 死亡，但流程圖中未指定後續動作。");
+            // GameProgressionManager.LoadLobbyScene(); // 例如可以回到大廳
         }
     }
 }
