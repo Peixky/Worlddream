@@ -2398,6 +2398,7 @@ MonoBehaviour:
   introPanel: {fileID: 734168394}
   startTextPanel: {fileID: 371828957}
   gameOverPanel: {fileID: 977939291}
+  startText: {fileID: 371828959}
   vsScreenDuration: 5
   startTextDuration: 2
 --- !u!4 &1683698109
@@ -3297,3 +3298,4 @@ SceneRoots:
   - {fileID: 545278093}
   - {fileID: 1677674884}
   - {fileID: 2052562228}
+  - {fileID: 2085241700}
