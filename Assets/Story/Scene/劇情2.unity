@@ -580,7 +580,7 @@ MonoBehaviour:
   - 'Game Guide: You must defeat all monsters to clear the level.'
   - Use the arrow keys to move left and right, and to jump.
   - 'Game Guide: Right-click the mouse to shoot fireballs and attack enemies. '
-  nextSceneIndex: -1
+  dialogueEndAction: 3
 --- !u!4 &1182109172
 Transform:
   m_ObjectHideFlags: 0
