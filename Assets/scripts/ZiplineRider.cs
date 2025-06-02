@@ -89,10 +89,12 @@ public class ZiplineRider : MonoBehaviour
         onZipline = false;
         rb.gravityScale = 1f;
 
-        Vector2 launchVelocity = direction.normalized * ziplineSpeed + Vector2.up * jumpForce;
-        rb.linearVelocity = launchVelocity;
+        // 往滑索方向瞬移一段距離
+        float dashDistance = 0.5f; // 可調整為你想要的距離
+        Vector2 dashOffset = direction * dashDistance;
+        transform.position += (Vector3)dashOffset;
 
-        // ✨ 啟動滑索的碰撞器重啟
+        // 重啟碰撞器防止馬上再掛回滑索
         if (currentZipline != null)
         {
             StartCoroutine(ResetZiplineCollider(currentZipline));
@@ -100,6 +102,7 @@ public class ZiplineRider : MonoBehaviour
 
         currentZipline = null;
     }
+
 
     private System.Collections.IEnumerator ResetZiplineCollider(Zipline zipline)
     {

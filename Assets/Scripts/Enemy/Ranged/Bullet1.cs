@@ -15,11 +15,7 @@ public class Bullet1 : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             // ✅ 傷害處理
-            Health health = other.GetComponent<Health>();
-            if (health != null)
-            {
-                health.TakeDamage(damage);
-            }
+            
 
             // ✅ 加上減速效果（如果還沒加過）
             if (other.GetComponent<PlayerSlowEffect>() == null)
