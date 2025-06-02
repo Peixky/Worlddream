@@ -14,11 +14,6 @@ public class RangedChaserBullet : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Health health = other.GetComponent<Health>();
-            if (health != null)
-            {
-                health.TakeDamage(damage);
-            }
 
             Destroy(gameObject); // 撞到玩家後刪除
         }

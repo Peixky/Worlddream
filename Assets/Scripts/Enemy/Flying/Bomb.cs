@@ -12,12 +12,7 @@ public class Bomb : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.CompareTag("Player"))
-        {
-            Health health = collision.collider.GetComponent<Health>();
-            if (health != null)
-                health.TakeDamage(damage);
-        }
+       
 
         Destroy(gameObject); // 撞到任何東西就爆
     }
