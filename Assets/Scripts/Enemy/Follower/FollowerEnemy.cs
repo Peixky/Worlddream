@@ -10,18 +10,16 @@ public class FollowerEnemy : MonoBehaviour
     private float jumpTimer;
 
     [Header("Ground Check")]
-    [SerializeField] private Transform groundCheckPoint;
+    [SerializeField] private Transform[] groundCheckPoints; // 支援多個地板檢查點
     [SerializeField] private float groundCheckRadius = 0.1f;
     [SerializeField] private LayerMask groundLayer;
 
     [Header("Jump Control")]
     [SerializeField] private float horizontalFactor = 0.4f;
 
-
     private Transform player;
     private Rigidbody2D rb;
-
-    private bool facingRight = false; // 預設圖片面朝左，邏輯面也視為朝左
+    private bool facingRight = false;
 
     void Start()
     {
@@ -49,9 +47,7 @@ public class FollowerEnemy : MonoBehaviour
 
         rb.linearVelocity = Vector2.zero;
 
-        float horizontalFactor = 0.4f; // ⭐️ 調整這裡控制水平移動量
         Vector2 jumpDirection = new Vector2(direction.x * horizontalFactor, 1f).normalized;
-
         rb.AddForce(jumpDirection * jumpForce, ForceMode2D.Impulse);
 
         if (direction.x < 0 && facingRight)
@@ -60,11 +56,15 @@ public class FollowerEnemy : MonoBehaviour
             Flip();
     }
 
-
     private bool IsGrounded()
     {
-        Collider2D hit = Physics2D.OverlapCircle(groundCheckPoint.position, groundCheckRadius, groundLayer);
-        return hit != null;
+        foreach (Transform point in groundCheckPoints)
+        {
+            Collider2D hit = Physics2D.OverlapCircle(point.position, groundCheckRadius, groundLayer);
+            if (hit != null)
+                return true;
+        }
+        return false;
     }
 
     private void Flip()
@@ -77,10 +77,15 @@ public class FollowerEnemy : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        if (groundCheckPoint == null) return;
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(groundCheckPoint.position, groundCheckRadius);
+        if (groundCheckPoints != null)
+        {
+            Gizmos.color = Color.red;
+            foreach (Transform point in groundCheckPoints)
+            {
+                if (point != null)
+                    Gizmos.DrawWireSphere(point.position, groundCheckRadius);
+            }
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

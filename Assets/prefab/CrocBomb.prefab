@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 850900983882002444}
   - component: {fileID: 3167113182000470974}
   m_Layer: 0
-  m_Name: Bomb
+  m_Name: CrocBomb
   m_TagString: EnemyBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -111,8 +111,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  m_Offset: {x: -0.25128675, y: 0}
+  m_Radius: 0.62432075
 --- !u!114 &3167113182000470974
 MonoBehaviour:
   m_ObjectHideFlags: 0
