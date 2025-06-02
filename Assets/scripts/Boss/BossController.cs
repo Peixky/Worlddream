@@ -68,14 +68,12 @@ public class BossController : MonoBehaviour
 
     private void OnGameStart()
     {
-        Debug.Log("BossController 偵測到遊戲開始，啟動 Boss 行為！");
+        Debug.Log("✅ BossController 啟動成功！");
 
-        if (!isPlayerDead && bossHealthSystem != null && !bossHealthSystem.IsDead)
-        {
-            StartCoroutine(JumpRoutine());
-            StartCoroutine(ThrowRoutine());
-        }
+        StartCoroutine(JumpRoutine());
+        StartCoroutine(ThrowRoutine());
     }
+
 
     private void OnPlayerDied()
     {
