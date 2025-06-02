@@ -6,7 +6,7 @@ public class ShopScript : MonoBehaviour
     public Slider healthSlider;
     public int maxHealth = 10;
     int currentHealth;
-
+    int cash;
     void Start()
     {
         SetDefs();
@@ -22,19 +22,30 @@ public class ShopScript : MonoBehaviour
 
     void SetDefs()
     {
+        cash = 1000;
         currentHealth = PlayerPrefs.GetInt("health", 0);
         healthSlider.maxValue = maxHealth;
         healthSlider.value = currentHealth;
     }
 
-    public void buyHealth()
+    public void buyHealth(int price)
     {
         if (currentHealth < maxHealth)
         {
+            if(cash > price)
+            {
+                cash -= price;
             currentHealth += 1;
             PlayerPrefs.SetInt("health", currentHealth);
-            healthSlider.value = currentHealth;
+             healthSlider.value = currentHealth;
             Debug.Log("Health Upgraded");
+            }
+            else 
+            {
+                Debug.Log("out of cash");
+            }
+             
+            
         }
         else
         {
