@@ -681,6 +681,7 @@ GameObject:
   m_Component:
   - component: {fileID: 570352903}
   - component: {fileID: 570352904}
+  - component: {fileID: 570352905}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -716,6 +717,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextSceneName: "\u958B\u5834\u5287\u60C5"
+--- !u!114 &570352905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 570352900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 909a9f7e743ff495f913698a8ccd0057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  introPanelName: VsIntroImage
+  startTextPanelName: StartTextPanel
+  gameOverPanelName: FadePanel
+  loserTextUI: {fileID: 0}
+  restartButton: {fileID: 0}
+  vsScreenDuration: 3
+  startTextDuration: 3
+  gameOverFadeDelay: 1
 --- !u!1 &1009341957
 GameObject:
   m_ObjectHideFlags: 0

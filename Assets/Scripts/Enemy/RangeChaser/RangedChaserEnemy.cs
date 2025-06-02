@@ -69,7 +69,7 @@ public class RangedChaserEnemy : MonoBehaviour
         // 播放投擲動畫
         if (animator != null)
         {
-            animator.SetTrigger("Shoot");
+            //animator.SetTrigger("Shoot");
         }
 
         // 等到動畫中段再發射子彈
