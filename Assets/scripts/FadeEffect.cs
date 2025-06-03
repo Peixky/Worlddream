@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI; // 使用 UnityEngine.UI.Image 需要這個命名空間
 using System.Collections; // 使用協程 (IEnumerator, StartCoroutine, WaitForSecondsRealtime) 需要這個命名空間
 
-public class FadeEffect : MonoBehaviour // <<<< 這裡的類名必須是 FadeEffect >>>>>
+public class FadeEffect : MonoBehaviour 
 {
     public Image fadeImage; // 拖曳 FadePanel 自己的 Image 元件到這裡
     public float fadeDuration = 1.0f; // 漸變時間 (秒)
