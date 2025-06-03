@@ -587,6 +587,7 @@ GameObject:
   - component: {fileID: 539973281}
   - component: {fileID: 539973282}
   - component: {fileID: 539973284}
+  - component: {fileID: 539973285}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -746,6 +747,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bfa74a268a920824b9f0909ce5d25cca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &539973285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 539973277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad510e2e1952e6a41abb403e77fc49a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &701144763
@@ -969,7 +982,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 539973282}
         m_TargetAssemblyTypeName: Level2, Assembly-CSharp
-        m_MethodName: level_option1
+        m_MethodName: level_option2
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1662,7 +1675,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2071867085}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 539973285}
+        m_TargetAssemblyTypeName: Homemenu, Assembly-CSharp
+        m_MethodName: Home_option3
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2071867085
 MonoBehaviour:
   m_ObjectHideFlags: 0
