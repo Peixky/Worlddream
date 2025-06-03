@@ -8,6 +8,11 @@ public class EnemyHealth : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
+
+        void OnEnable()
+        {
+            currentHealth = maxHealth;
+        }
     }
 
     public void TakeDamage(int damage)

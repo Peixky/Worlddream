@@ -14,15 +14,11 @@ public class Bullet1 : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            // ✅ 傷害處理
-            
-
-            // ✅ 加上減速效果（如果還沒加過）
             if (other.GetComponent<PlayerSlowEffect>() == null)
             {
                 PlayerSlowEffect effect = other.gameObject.AddComponent<PlayerSlowEffect>();
-                effect.slowMultiplier = 0.5f; // 50% 移動速度
-                effect.duration = 1f;         // 持續 1 秒
+                effect.slowMultiplier = 0.25f;
+                effect.duration = 1f;         
             }
 
             Destroy(gameObject);

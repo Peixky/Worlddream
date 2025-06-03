@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public GameObject monsterPrefab;
-    public float spawnRange = 10f;
+    public GameObject enemyPrefab;
+    public float spawnRadius = 15f;
 
+    private GameObject spawnedEnemy;
     private Transform player;
-    private bool hasSpawned = false;
 
     void Start()
     {
@@ -15,13 +15,23 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
-        if (hasSpawned || player == null) return;
+        if (player == null || enemyPrefab == null) return;
 
-        float distance = Vector3.Distance(transform.position, player.position);
-        if (distance <= spawnRange)
+        float distance = Vector2.Distance(transform.position, player.position);
+
+        if (distance <= spawnRadius && spawnedEnemy == null)
         {
-            Instantiate(monsterPrefab, transform.position, Quaternion.identity);
-            hasSpawned = true;
+            spawnedEnemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
         }
+        else if (distance > spawnRadius && spawnedEnemy != null)
+        {
+            Destroy(spawnedEnemy);
+        }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, spawnRadius);
     }
 }
