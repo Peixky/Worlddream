@@ -10,7 +10,7 @@ public class PlayerAttack : MonoBehaviour
     public LayerMask enemyLayer;
 
     [Header("攻擊後回彈設定")]
-    public PlayerMovement playerMovement; // ✅ 修正錯誤型別名稱（原本是錯誤的 `PlayerMovement;`）
+    public PlayerController playerMovement; 
 
     public float recoilDuration = 0.3f;
 

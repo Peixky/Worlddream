@@ -8,7 +8,7 @@ public class Spring : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            PlayerMovement player = collision.GetComponent<PlayerMovement>();
+            PlayerController player = collision.GetComponent<PlayerController>();
             if (player != null)
             {
                 // 彈跳向上

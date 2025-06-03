@@ -4,13 +4,13 @@ public class FallDeath : MonoBehaviour
 {
     public float fallDeathY = -10f; // 設定死亡的最低 Y 值
     private Animator anim;
-    private PlayerMovement movementScript;
+    private PlayerController movementScript;
     private bool isDead = false;
 
     void Start()
     {
         anim = GetComponent<Animator>();
-        movementScript = GetComponent<PlayerMovement>();
+        movementScript = GetComponent<PlayerController>();
     }
 
     void Update()

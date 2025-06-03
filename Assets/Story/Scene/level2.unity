@@ -18177,7 +18177,6 @@ GameObject:
   - component: {fileID: 1834820062}
   - component: {fileID: 1834820061}
   - component: {fileID: 1834820060}
-  - component: {fileID: 1834820059}
   - component: {fileID: 1834820058}
   - component: {fileID: 1834820057}
   - component: {fileID: 1834820056}
@@ -18288,24 +18287,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &1834820059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1834820053}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e441da0c1c775492ca56fd12b5dffae1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 5
-  jumpPower: 16
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  canMove: 1
 --- !u!61 &1834820060
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -18451,11 +18432,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1834820053}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9411ac14d881e3b47b36fd4af4372f82, type: 3}
+  m_Script: {fileID: 11500000, guid: e441da0c1c775492ca56fd12b5dffae1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ziplineSpeed: 10
-  jumpForce: 10
+  speed: 5
+  jumpPower: 10
+  ziplineSpeed: 5
+  jumpOffDistance: 0.5
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  canMove: 1
 --- !u!1 &1856521025
 GameObject:
   m_ObjectHideFlags: 0

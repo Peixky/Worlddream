@@ -76,7 +76,7 @@ public class PlayerDamageHandler : MonoBehaviour
 
         StartCoroutine(InvincibilityCoroutine());
 
-        PlayerMovement movement = GetComponent<PlayerMovement>();
+        PlayerController movement = GetComponent<PlayerController>();
         if (movement != null)
         {
             movement.canMove = false;
@@ -86,7 +86,7 @@ public class PlayerDamageHandler : MonoBehaviour
 
     private void EnableMovement()
     {
-        PlayerMovement movement = GetComponent<PlayerMovement>();
+        PlayerController movement = GetComponent<PlayerController>();
         if (movement != null)
             movement.canMove = true;
     }
@@ -117,7 +117,7 @@ public class PlayerDamageHandler : MonoBehaviour
         if (spriteRenderer != null)
             spriteRenderer.enabled = true;
 
-        var movement = GetComponent<PlayerMovement>();
+        var movement = GetComponent<PlayerController>();
         if (movement != null)
             movement.canMove = true;
 
@@ -137,7 +137,7 @@ public class PlayerDamageHandler : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         rb.AddForce(knockback, ForceMode2D.Impulse);
 
-        PlayerMovement movement = GetComponent<PlayerMovement>();
+        PlayerController movement = GetComponent<PlayerController>();
         if (movement != null)
         {
             movement.canMove = false;
