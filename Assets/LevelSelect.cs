@@ -6,6 +6,6 @@ public class LevelSelect : MonoBehaviour
 {
     public void lobbychoose()
     {
-        SceneManager.LoadSceneAsync("test-LobbyScene");
+        SceneManager.LoadSceneAsync("Levelselect");
     }
 }
