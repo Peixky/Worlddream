@@ -771,7 +771,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.5, y: -79.999985}
+  m_AnchoredPosition: {x: 0.5, y: -80}
   m_SizeDelta: {x: 1, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1009341959
@@ -1023,11 +1023,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   storyScenes:
-  - "Story/Scene/\u958B\u5834\u5287\u60C5"
-  - "Story/Scene/\u5287\u60C52"
-  - "Story/Scene/\u5287\u60C53"
-  - "Story/Scene/\u5287\u60C54"
-  - Story/Scene/End Scene
+  - "Scene/Scene/\u958B\u5834\u5287\u60C5"
+  - "Scene/Scene/\u5287\u60C52"
+  - "Scene/Scene/\u5287\u60C53"
+  - "Scene/Scene/\u5287\u60C54"
+  - Scene/Scene/End Scene
   gameScenes:
   - Scene1
   - level2
