@@ -11,9 +11,8 @@ public class GameProgressionManager : MonoBehaviour
 
     [Header("場景名稱設定 (與 Build Settings 匹配)")]
     public string[] storyScenes; 
-    public string[] gameScenes;  
-    public string lobbySceneName = "LobbyScene"; 
-    public string storeSceneName = "StoreScene"; // <<<< 新增：商店場景名稱 >>>>>
+    public string[] gameScenes;      public string lobbySceneName = "LobbyScene"; 
+    public string storeSceneName = "StoreScene";
     public string endingSceneName = "EndingScene"; 
 
     public static GameProgressionManager instance;
@@ -68,14 +67,13 @@ public class GameProgressionManager : MonoBehaviour
         Debug.Log($"關卡推進到：{CurrentLevelIndex}");
     }
 
-    // 啟動整個遊戲流程 (由 MainMenuController 的 "Game Start" 按鈕呼叫)
     public static void StartGameFlow()
     {
         ResetProgress(); 
-        CurrentStoryIndex = 0; // 從劇情一開始
-        CurrentLevelIndex = 0; // 從第一關開始
+        CurrentStoryIndex = 0;
+        CurrentLevelIndex = 0;
         instance.SaveProgress();
-        LoadLobbyScene(); // <<<< 遊戲流程從大廳開始 >>>>>
+        LoadLobbyScene();
     }
 
     public static void LoadNextStoryScene()
@@ -116,7 +114,7 @@ public class GameProgressionManager : MonoBehaviour
         SceneManager.LoadScene(instance.lobbySceneName);
     }
 
-    public static void LoadStoreScene() // <<<< 新增：加載商店 Scene >>>>>
+    public static void LoadStoreScene()
     {
         if (instance == null) return;
         Debug.Log($"加載商店 Scene: {instance.storeSceneName}");

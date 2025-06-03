@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private float horizontalInput;
     public bool canMove = true;
 
-    private bool isRecoiling = false; // ✅ 新增 recoil 狀態追蹤
+    private bool isRecoiling = false; 
 
     private void Awake()
     {
@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (!canMove || isRecoiling) return; // ✅ 禁止在 recoil 狀態下移動
+        if (!canMove || isRecoiling) return; 
 
         horizontalInput = Input.GetAxis("Horizontal");
 
@@ -67,18 +67,12 @@ public class PlayerMovement : MonoBehaviour
         return hit.collider != null;
     }
 
-    public bool CanAttack()
-    {
-        return horizontalInput == 0 && isGrounded();
-    }
-
     public void Bounce(Vector2 force)
     {
         body.linearVelocity = Vector2.zero;
         body.AddForce(force, ForceMode2D.Impulse);
     }
 
-    // ✅ recoil 機制
     public void StartRecoilToLastIdle(float duration)
     {
         if (isRecoiling) return;
@@ -90,7 +84,7 @@ public class PlayerMovement : MonoBehaviour
         isRecoiling = true;
         canMove = false;
         anim.SetBool("run", false);
-        anim.SetTrigger("recoil"); // 可選，如果有 recoil 動畫
+        anim.SetTrigger("recoil");
         yield return new WaitForSeconds(duration);
         isRecoiling = false;
         canMove = true;
