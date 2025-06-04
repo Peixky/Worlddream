@@ -60,18 +60,4 @@ public class RangedEnemy : MonoBehaviour
             rb.linearVelocity = direction * bulletSpeed;
         }
     }
-
-
-    // ✅ 玩家碰撞扣血
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.collider.CompareTag("Player"))
-        {
-            Health health = collision.collider.GetComponent<Health>();
-            if (health != null)
-            {
-                health.TakeDamage(contactDamage);
-            }
-        }
-    }
 }

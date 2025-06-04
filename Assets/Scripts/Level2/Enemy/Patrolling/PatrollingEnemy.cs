@@ -182,12 +182,6 @@ public class PatrollingEnemy : MonoBehaviour
     {
         if (collision.collider.CompareTag("Player"))
         {
-            Health health = collision.collider.GetComponent<Health>();
-            if (health != null)
-            {
-                health.TakeDamage(1);
-            }
-
             if (isDashing)
             {
                 Rigidbody2D playerRb = collision.collider.GetComponent<Rigidbody2D>();

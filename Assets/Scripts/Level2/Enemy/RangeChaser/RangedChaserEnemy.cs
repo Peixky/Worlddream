@@ -16,19 +16,13 @@ public class RangedChaserEnemy : MonoBehaviour
 
     private Transform player;
     private Rigidbody2D rb;
-    private Animator animator;
     private float shootTimer;
     private bool isShooting = false;
-
-    [Header("動畫設定")]
-    public float shootAnimDuration = 1.2f;      // 投擲動畫總長度
-    public float bulletFireDelay = 0.5f;        // 幾秒後發射子彈（動畫中段）
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
         rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -43,13 +37,11 @@ public class RangedChaserEnemy : MonoBehaviour
             {
                 Vector2 dir = (player.position - transform.position).normalized;
                 rb.linearVelocity = new Vector2(dir.x * moveSpeed, rb.linearVelocity.y);
-                animator.SetBool("IsWalking", true);
             }
         }
         else
         {
             rb.linearVelocity = Vector2.zero;
-            animator.SetBool("IsWalking", false);
 
             shootTimer += Time.deltaTime;
             if (shootTimer >= shootInterval && !isShooting)
@@ -66,18 +58,11 @@ public class RangedChaserEnemy : MonoBehaviour
     {
         isShooting = true;
 
-        // 播放投擲動畫
-        if (animator != null)
-        {
-            //animator.SetTrigger("Shoot");
-        }
-
-        // 等到動畫中段再發射子彈
-        yield return new WaitForSeconds(bulletFireDelay);
+        // 立即發射子彈
         FireBullet();
 
-        // 等待動畫播完
-        yield return new WaitForSeconds(shootAnimDuration - bulletFireDelay);
+        // 簡單延遲，模擬射擊冷卻
+        yield return new WaitForSeconds(0.1f);
 
         isShooting = false;
     }
@@ -104,17 +89,5 @@ public class RangedChaserEnemy : MonoBehaviour
         Vector3 scale = transform.localScale;
         scale.x = -Mathf.Abs(scale.x) * Mathf.Sign(player.position.x - transform.position.x);
         transform.localScale = scale;
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.collider.CompareTag("Player"))
-        {
-            Health health = collision.collider.GetComponent<Health>();
-            if (health != null)
-            {
-                health.TakeDamage(1);
-            }
-        }
     }
 }
