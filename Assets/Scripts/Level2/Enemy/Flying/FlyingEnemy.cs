@@ -108,15 +108,7 @@ public class FlyingEnemy : MonoBehaviour
             bombRb.linearVelocity = direction * bombSpeed;
         }
 
-        // ✅ 如果炸彈圖片預設朝右 → 使用這個
         bomb.transform.right = -direction;
-
-        // ✅ 如果炸彈圖片預設朝上 → 改成這個
-        // bomb.transform.up = direction;
-
-        // ✅ 若不確定方向，直接用角度算（萬用版）
-        // float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        // bomb.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 
 

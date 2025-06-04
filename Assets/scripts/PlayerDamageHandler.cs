@@ -46,10 +46,12 @@ public class PlayerDamageHandler : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("EnemyBody"))
+        if (collision.gameObject.CompareTag("EnemyBody") || collision.gameObject.CompareTag("Enemy"))
         {
             Vector2 dir = collision.GetContact(0).point - (Vector2)transform.position;
             TakeHit(1, dir.x > 0 ? -1 : 1);
+            
+            Debug.Log("玩家碰到怪物");
         }
     }
 
