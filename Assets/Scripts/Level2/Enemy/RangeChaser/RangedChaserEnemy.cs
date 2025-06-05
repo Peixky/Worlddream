@@ -13,6 +13,10 @@ public class RangedChaserEnemy : MonoBehaviour
 
     [Header("移動設定")]
     public float moveSpeed = 2f;
+    public float boostSpeed = 4f;          // 加速速度
+    public float boostRange = 5f;          // 觸發加速的距離
+    public float chaseRange = 12f;
+    public float chaseAcceleration = 10f;
 
     private Transform player;
     private Rigidbody2D rb;
@@ -30,24 +34,36 @@ public class RangedChaserEnemy : MonoBehaviour
         if (player == null) return;
 
         float distance = Vector2.Distance(transform.position, player.position);
+        shootTimer += Time.deltaTime; // ✅ 始終累加計時器
 
+        // 玩家太遠 → 停止
+        if (distance > chaseRange)
+        {
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
+
+        // 玩家在追擊範圍內但未進入射擊距離 → 追擊
         if (distance > shootingRange)
         {
             if (!isShooting)
             {
+                float currentSpeed = distance <= boostRange ? boostSpeed : moveSpeed;
+
                 Vector2 dir = (player.position - transform.position).normalized;
-                rb.linearVelocity = new Vector2(dir.x * moveSpeed, rb.linearVelocity.y);
+                Vector2 targetVelocity = new Vector2(dir.x * currentSpeed, rb.linearVelocity.y);
+
+                rb.linearVelocity = Vector2.MoveTowards(rb.linearVelocity, targetVelocity, chaseAcceleration * Time.deltaTime);
             }
         }
-        else
+        else // 玩家進入射擊距離
         {
             rb.linearVelocity = Vector2.zero;
 
-            shootTimer += Time.deltaTime;
             if (shootTimer >= shootInterval && !isShooting)
             {
                 StartCoroutine(ShootSequence());
-                shootTimer = 0f;
+                shootTimer = 0f; // ✅ 重置計時器
             }
         }
 
@@ -58,10 +74,8 @@ public class RangedChaserEnemy : MonoBehaviour
     {
         isShooting = true;
 
-        // 立即發射子彈
         FireBullet();
 
-        // 簡單延遲，模擬射擊冷卻
         yield return new WaitForSeconds(0.1f);
 
         isShooting = false;
@@ -90,4 +104,18 @@ public class RangedChaserEnemy : MonoBehaviour
         scale.x = -Mathf.Abs(scale.x) * Mathf.Sign(player.position.x - transform.position.x);
         transform.localScale = scale;
     }
+
+#if UNITY_EDITOR
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, chaseRange);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, shootingRange);
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, boostRange); // ✅ 顯示加速範圍
+    }
+#endif
 }
