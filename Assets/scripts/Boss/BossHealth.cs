@@ -97,28 +97,13 @@ public class BossHealth : MonoBehaviour
             VideoCutsceneManager.Instance.PlayVideo(() => { // <<<< 修正這裡，使用 .Instance >>>>
                 Debug.Log("BossHealth: 影片播放結束，加載劇情四。");
                 GameProgressionManager.AdvanceStory(); // 推進劇情到劇情四
-                GameProgressionManager.LoadNextStoryScene(); // 加載 StoryScene4
+                GameProgressionManager.LoadPlayerDeathStoryScene(); // 加載 StoryScene4
             });
         }
         else
         {
-            Debug.LogError("BossHealth: 未找到 VideoCutsceneManager 實例！直接加載劇情四。", this);
-            // 備用方案：如果影片管理器不存在，則直接加載場景，以防流程卡住
             GameProgressionManager.AdvanceStory(); // 推進劇情
             GameProgressionManager.LoadNextStoryScene(); // 加載 StoryScene4
         }
-        // === 修正結束 ===
-
-        // Removed: 舊的場景載入邏輯，因為它現在由影片播放的回調函數處理
-        // Removed: if (GameProgressionManager.CurrentLevelIndex == (GameProgressionManager.instance.gameScenes.Length - 1)) 
-        // Removed: {
-        // Removed:     Debug.Log("BossHealth: 最後一關 Boss 死亡。加載劇情四。");
-        // Removed:     GameProgressionManager.AdvanceStory();
-        // Removed:     GameProgressionManager.LoadNextStoryScene();
-        // Removed: }
-        // Removed: else
-        // Removed: {
-        // Removed:     Debug.LogWarning("BossHealth: 非最後一關的 Boss 死亡，但流程圖中未指定後續動作。");
-        // Removed: }
     }
 }
