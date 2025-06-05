@@ -7,9 +7,6 @@ public class EnemyOnlyTrigger : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             Debug.Log("🟢 怪物進入觸發區：" + other.name);
-
-            // 你可以在這裡做任何怪物碰到這區域的事情
-            // 例如讓怪物停止移動、觸發事件、變得憤怒等等
         }
     }
 

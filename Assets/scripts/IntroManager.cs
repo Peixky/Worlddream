@@ -1,313 +1,244 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro; // 如果使用 TextMeshPro 文本
-using System.Collections; // 如果使用協程
-using System; // 使用 Action 事件
+using TMPro;
+using System.Collections;
+using System; // Required for Action events, though not directly used in this snippet's public API
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(AudioSource))] // Ensures AudioSource component is present on this GameObject
 public class IntroManager : MonoBehaviour
 {
-    // UI Panel 名稱設定 (在 Inspector 中設定，讓腳本在每次 Scene 載入時自動查找)
-    [Header("UI Panel 名稱設定")]
-    public string introPanelName = "IntroPanel"; // V.S. 畫面 Panel 的名稱
-    public string startTextPanelName = "StartTextPanel"; // "START" 文字 Panel 的名稱
-    public string gameOverPanelName = "GameOverPanel"; // 遊戲結束 Panel 的名稱
+    [Header("UI 物件拖曳區（請從 Inspector 拖進來）")]
+    public GameObject introPanel;
+    public GameObject startTextPanel;
+    public GameObject fadePanel;
+    public TextMeshProUGUI loserTextUI;
 
-    // 實際的 Panel 引用 (在運行時獲取)
-    private GameObject currentIntroPanel;
-    private GameObject currentStartTextPanel;
-    private GameObject currentGameOverPanel;
-
-    // 遊戲結束 UI 元素 (在 GameOverPanel 下)
-    [Header("遊戲結束 UI 元素 (在 GameOverPanel 下)")]
-    public TextMeshProUGUI loserTextUI; // 拖曳 LoserText 物件上的 TextMeshProUGUI 元件到這裡
-    public Button restartButton; // 拖曳「再玩一次」按鈕的 Button 元件到這裡
-
-    // 時間設定
     [Header("時間設定")]
-    public float vsScreenDuration = 3f; // V.S. 畫面停留時間 (秒)
-    public float startTextDuration = 3f; // "START" 文字停留時間 (秒)
-    public float gameOverFadeDelay = 1.0f; // 遊戲結束畫面漸變到文字顯示的延遲 (畫面變暗的時間)
+    public float vsScreenDuration = 3f;
+    public float startTextDuration = 3f;
+    public float gameOverFadeDelay = 1.0f;
 
-    // 遊戲狀態的枚舉 (Enum)
-    public enum GameState
-    {
-        Intro,      // 遊戲介紹中 (V.S. 圖片顯示，時間暫停)
-        Starting,   // 準備開始 ("START" 文字顯示，時間暫停)
-        Playing,    // 遊戲正在進行中 (時間流動)
-        Paused,     // 遊戲暫停 (時間暫停)
-        GameOver    // 遊戲結束 (時間暫停)
-    }
+    [Header("音效設定")]
+    public AudioClip gameStartSoundEffect;
 
-    public static GameState currentGameState = GameState.Intro; // 靜態變數，初始為 Intro
+    // currentGameState 現在是 GameProgressionManager 管理的全局狀態
+    public static GameProgressionManager.GameState currentGameState = GameProgressionManager.GameState.Intro;
+
+    private AudioSource audioSource; // 私有變數來儲存 AudioSource 組件
 
     void Awake()
     {
-        // 單例模式：確保這個腳本在遊戲中只有一個實例
-        // 對於 Unity 2021.1 或更早版本，請使用 FindObjectsOfType
-        // 這裡修改為查找所有類型為 IntroManager 的物件，包括非激活的
-        // 如果數量大於 1，說明有重複的，就銷毀自己
-        if (FindObjectsOfType<IntroManager>(true).Length > 1) 
+        // 在 Awake 階段獲取 AudioSource 組件
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
         {
-            Destroy(gameObject);
+            Debug.LogError("IntroManager: AudioSource 組件遺失！無法播放音效。請將 AudioSource 添加到此 GameObject。", this);
+            enabled = false; // 如果沒有 AudioSource，禁用腳本
             return;
         }
-        DontDestroyOnLoad(gameObject); // 確保跨 Scene 存在
     }
 
     void Start()
     {
-        // Start 函數不再自動啟動 IntroRoutine 或 ShowIntroScreen
-        // 遊戲狀態和 UI 顯示將主要由 OnSceneLoaded 方法處理
-        // 這確保了 IntroManager 在 MainMenuScene 啟動時不會自動顯示 V.S. 畫面
+        Debug.Log($"IntroManager: 在 '{SceneManager.GetActiveScene().name}' 啟動。");
 
-        // 首次啟動時，確保 UI 引用被初始化 (針對 MainMenuScene 的情況)
-        InitializeCurrentSceneUI();
-        
-        // 如果是 MainMenuScene (Build Index 0)，將遊戲狀態設定為 Paused，時間恢復正常
-        if (SceneManager.GetActiveScene().buildIndex == 0) // Build Index 0 應該是 MainMenuScene
-        {
-            Time.timeScale = 1f; // 主選單是可互動的
-            currentGameState = GameState.Paused; // 主選單是暫停狀態，等待玩家點擊 Game Start
-        }
-        // 其他 Scene 的啟動邏輯會由 OnSceneLoaded 處理
+        // 初始化時確保所有相關 UI 都是隱藏的
+        if (introPanel != null) introPanel.SetActive(false);
+        if (startTextPanel != null) startTextPanel.SetActive(false);
+        if (fadePanel != null) fadePanel.SetActive(false);
+        if (loserTextUI != null) loserTextUI.gameObject.SetActive(false);
+
+        // 設定遊戲狀態並暫停時間以顯示 V.S. 畫面
+        Time.timeScale = 0f;
+        GameProgressionManager.currentGameState = GameProgressionManager.GameState.Intro;
+
+        // 啟動 Intro 流程
+        StartCoroutine(IntroRoutine());
     }
 
-    // 當 Scene 載入完成時，重新初始化 UI 引用並設定遊戲狀態
+    // 這個方法現在變得多餘，因為 IntroManager 只存在於 Level3GameScene，
+    // 其初始化邏輯已移至 Start()。保留此方法是為了避免對現有專案結構造成額外變動。
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        InitializeCurrentSceneUI(); // 初始化當前 Scene 的 UI 引用 (查找 IntroPanel, StartTextPanel, GameOverPanel)
-
-        // 根據載入的 Scene 名稱，決定是否啟動 V.S. 畫面流程
-        // V.S. 畫面現在只在 Level3GameScene (遊戲三) 開頭顯示
-        if (GameProgressionManager.instance != null && scene.name == GameProgressionManager.instance.gameScenes[2]) // 假設 gameScenes[2] 是 Level3GameScene
-        {
-            Debug.Log("IntroManager: 偵測到第三關遊戲 Scene。啟動 V.S. 畫面流程。");
-            Time.timeScale = 0f; // 暫停遊戲
-            currentGameState = GameState.Intro; // 設定狀態為 Intro
-            StartCoroutine(IntroRoutine()); // 啟動 V.S. 畫面流程
-        }
-        else // 其他遊戲關卡、大廳、商店、劇情 Scene 等，直接進入 Playing 狀態
-        {
-            Debug.Log($"IntroManager: 載入 Scene '{scene.name}'。遊戲進入 Playing 狀態。");
-            Time.timeScale = 1f; // 恢復遊戲時間
-            currentGameState = GameState.Playing; // 遊戲直接進入 Playing 狀態
-            // 確保所有 Intro/Start UI 都是隱藏的
-            if (currentIntroPanel != null) currentIntroPanel.SetActive(false);
-            if (currentStartTextPanel != null) currentStartTextPanel.SetActive(false);
-        }
-
-        // 確保 GameOverPanel 和 LoserText 始終是隱藏的，直到被 ShowGameOver 呼叫
-        if (currentGameOverPanel != null) currentGameOverPanel.SetActive(false);
+        // 這些邏輯已在 Start() 中處理，因為 IntroManager 只存在於 Level3GameScene
+        // 確保UI初始化
+        if (introPanel != null) introPanel.SetActive(false);
+        if (startTextPanel != null) startTextPanel.SetActive(false);
+        if (fadePanel != null) fadePanel.SetActive(false);
         if (loserTextUI != null) loserTextUI.gameObject.SetActive(false);
-        if (restartButton != null) restartButton.gameObject.SetActive(false); 
 
-        // 為「再玩一次」按鈕添加監聽器 (確保按鈕存在)
-        if (restartButton != null)
+        // 如果場景不是 Level3GameScene，但這個 IntroManager 被錯誤地保留下來，則直接進入 Playing 狀態
+        // 否則，按照 Level3GameScene 的流程啟動
+        if (GameProgressionManager.instance != null && scene.name == GameProgressionManager.instance.gameScenes[2])
         {
-            restartButton.onClick.RemoveAllListeners(); 
-            restartButton.onClick.AddListener(RestartGame); // <<<< 這裡綁定 RestartGame 方法 >>>>>
+            Debug.Log("步驟 1: 顯示 V.S. 圖片畫面。遊戲暫停中。");
+            Time.timeScale = 0f;
+            currentGameState = GameProgressionManager.GameState.Intro;
+            // StartCoroutine(IntroRoutine()); // 已在 Start() 中呼叫
+        }
+        else
+        {
+            Debug.Log($"IntroManager: 載入 Scene '{scene.name}' (非 Level3)。遊戲進入 Playing 狀態。");
+            Time.timeScale = 1f;
+            currentGameState = GameProgressionManager.GameState.Playing;
+            if (introPanel != null) introPanel.SetActive(false);
+            if (startTextPanel != null) startTextPanel.SetActive(false);
         }
     }
 
-    // 訂閱 Scene 加載事件 (在物件啟用時)
+    // OnEnable 和 OnDisable 需要重新考慮，因為 IntroManager 不再是 DontDestroyOnLoad。
+    // 如果它只在 Level3GameScene 存在，則這些訂閱和取消訂閱的時機可能需要根據生命週期調整。
+    // 但為保持與你提供程式碼結構的一致性，暫時保持原樣。
     void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    // 取消訂閱 (在物件禁用或銷毀時，防止空引用錯誤)
     void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    // 初始化當前 Scene 的 UI 引用 (根據名稱查找 Canvas 下的 Panel)
-    void InitializeCurrentSceneUI()
-    {
-        Canvas currentCanvas = FindFirstObjectByType<Canvas>(); 
-
-        if (currentCanvas != null)
-        {
-            // 查找 IntroPanel
-            Transform introPanelTransform = currentCanvas.transform.Find(introPanelName);
-            if (introPanelTransform != null) currentIntroPanel = introPanelTransform.gameObject; else currentIntroPanel = null;
-
-            // 查找 StartTextPanel
-            Transform startTextPanelTransform = currentCanvas.transform.Find(startTextPanelName);
-            if (startTextPanelTransform != null) currentStartTextPanel = startTextPanelTransform.gameObject; else currentStartTextPanel = null;
-
-            // 查找 GameOverPanel 及其子物件
-            Transform gameOverPanelTransform = currentCanvas.transform.Find(gameOverPanelName);
-            if (gameOverPanelTransform != null)
-            {
-                currentGameOverPanel = gameOverPanelTransform.gameObject;
-                // 從 currentGameOverPanel 下查找子物件
-                loserTextUI = currentGameOverPanel.GetComponentInChildren<TextMeshProUGUI>(true);
-                restartButton = currentGameOverPanel.GetComponentInChildren<Button>(true);
-            }
-            else
-            {
-                currentGameOverPanel = null;
-                loserTextUI = null; // 如果 GameOverPanel 不存在，則這些引用也設為 null
-                restartButton = null;
-            }
-        }
-        else
-        {
-            Debug.LogWarning("IntroManager: 當前 Scene 未找到 Canvas！", this);
-            currentIntroPanel = null; currentStartTextPanel = null; currentGameOverPanel = null; loserTextUI = null; restartButton = null;
-        }
-
-        // 確保所有這些 Panel 在初始化後都是隱藏的，直到被特定邏輯激活
-        if (currentIntroPanel != null) currentIntroPanel.SetActive(false);
-        if (currentStartTextPanel != null) currentStartTextPanel.SetActive(false);
-        if (currentGameOverPanel != null) currentGameOverPanel.SetActive(false);
-        if (loserTextUI != null) loserTextUI.gameObject.SetActive(false);
-        if (restartButton != null) restartButton.gameObject.SetActive(false);
-    }
-
-    // IntroRoutine 協程負責顯示 V.S. 畫面和 START 文字
     IEnumerator IntroRoutine()
     {
-        // 確保 UI 引用已在協程啟動時被初始化 (以防萬一)
-        if (currentIntroPanel == null && currentStartTextPanel == null)
-        {
-            InitializeCurrentSceneUI();
-        }
-
-        if (currentIntroPanel != null) currentIntroPanel.SetActive(true);
-        else Debug.LogError($"IntroManager: 無法顯示 Intro Panel '{introPanelName}'，請檢查名稱及是否存在於當前 Scene。", this);
-
+        // 顯示 V.S. 畫面
+        if (introPanel != null) introPanel.SetActive(true);
         Debug.Log("步驟 1: 顯示 V.S. 圖片畫面。遊戲暫停中。");
+
         yield return new WaitForSecondsRealtime(vsScreenDuration);
 
-        if (currentIntroPanel != null) currentIntroPanel.SetActive(false);
+        // 隱藏 V.S. 畫面，顯示 START 文字
+        if (introPanel != null) introPanel.SetActive(false);
+        if (startTextPanel != null) startTextPanel.SetActive(true);
 
-        if (currentStartTextPanel != null) currentStartTextPanel.SetActive(true);
-        else Debug.LogError($"IntroManager: 無法顯示 Start Text Panel '{startTextPanelName}'，請檢查名稱及是否存在於當前 Scene。", this);
-
-        // 獲取 StartTextPanel 下的 TextMeshProUGUI 元件並設定文字
-        TextMeshProUGUI startTextMesh = currentStartTextPanel?.GetComponentInChildren<TextMeshProUGUI>(true);
-        if (startTextMesh != null)
+        var startText = startTextPanel.GetComponentInChildren<TextMeshProUGUI>(true);
+        if (startText != null)
         {
-            startTextMesh.text = "START"; 
-            if (!startTextMesh.gameObject.activeSelf) startTextMesh.gameObject.SetActive(true);
-        }
-        else
-        {
-            Debug.LogWarning($"IntroManager: 未找到 '{startTextPanelName}' 下的 TextMeshProUGUI 元件！", currentStartTextPanel);
+            startText.text = "GAME START!"; // 設定為 GAME START!
+            startText.gameObject.SetActive(true);
         }
 
-        Debug.Log("步驟 2: V.S. 圖片消失延遲結束。顯示 START 文字。");
+        // 播放 Game Start 音效
+        if (gameStartSoundEffect != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(gameStartSoundEffect);
+            Debug.Log("IntroManager: 播放 Game Start 音效。");
+        }
+        else if (gameStartSoundEffect == null)
+        {
+            Debug.LogWarning("IntroManager: Game Start 音效 AudioClip 未設定！");
+        }
+
+        Debug.Log("步驟 2: 顯示 GAME START! 文字。");
+
         yield return new WaitForSecondsRealtime(startTextDuration);
 
-        if (currentStartTextPanel != null) currentStartTextPanel.SetActive(false);
+        // 隱藏 START 文字，遊戲開始
+        if (startTextPanel != null) startTextPanel.SetActive(false);
         Debug.Log("步驟 3: START 文字消失。遊戲開始！");
 
         Time.timeScale = 1f;
-        currentGameState = GameState.Playing;
-
-        GameEvents.OnGameStart?.Invoke();
+        GameProgressionManager.currentGameState = GameProgressionManager.GameState.Playing;
+        GameEvents.OnGameStart?.Invoke(); // 觸發遊戲開始事件
     }
 
-    // 當 Player 死亡或其他遊戲結束條件滿足時，外部腳本 (例如 PlayerHealth) 會呼叫此方法
     public static void ShowGameOver()
     {
-        if (currentGameState != GameState.GameOver)
+        var instance = FindFirstObjectByType<IntroManager>();
+        if (instance == null)
         {
-            Time.timeScale = 0f;
-            currentGameState = GameState.GameOver;
+            // 如果在 Level3GameScene 以外的場景被呼叫，IntroManager 實例將為 null，則直接返回
+            Debug.Log($"IntroManager: 未在當前場景 ({SceneManager.GetActiveScene().name}) 找到 IntroManager 實例，不顯示 GameOver UI。");
+            return;
+        }
 
-            IntroManager instance = FindFirstObjectByType<IntroManager>();
-            if (instance != null && instance.currentGameOverPanel != null)
+        // 確保只在 Level3GameScene 中生效
+        if (GameProgressionManager.instance != null && SceneManager.GetActiveScene().name == GameProgressionManager.instance.gameScenes[2])
+        {
+            if (GameProgressionManager.currentGameState != GameProgressionManager.GameState.GameOver)
             {
-                instance.currentGameOverPanel.SetActive(true);
-                Debug.Log("IntroManager: 顯示遊戲結束畫面。");
-                
-                instance.StartCoroutine(instance.ShowLoserTextFlow()); // 啟動流程
+                Time.timeScale = 0f;
+                GameProgressionManager.currentGameState = GameProgressionManager.GameState.GameOver;
+
+                // 顯示 FadePanel
+                if (instance.fadePanel != null)
+                {
+                    instance.fadePanel.SetActive(true);
+                    Debug.Log("IntroManager: 顯示遊戲結束畫面 (透過 FadePanel)。");
+                }
+                else
+                {
+                    Debug.LogWarning("IntroManager: FadePanel 未設定或未拖曳！");
+                }
+
+                instance.StartCoroutine(instance.ShowLoserTextFlow());
             }
-            else
-            {
-                Debug.LogError($"IntroManager: 無法顯示遊戲結束畫面！請確保當前 Scene 有名為 '{instance?.gameOverPanelName}' 的 Panel。", instance);
-            }
+        }
+        else
+        {
+            // 如果不在 Level3GameScene，且 IntroManager 實例意外存在，則不做 UI 顯示
+            Debug.Log($"IntroManager: 玩家在非 Level3GameScene 死亡 ({SceneManager.GetActiveScene().name})。遊戲結束畫面將不顯示。");
+            Time.timeScale = 0f; // 遊戲時間依然暫停
+            GameProgressionManager.currentGameState = GameProgressionManager.GameState.GameOver;
         }
     }
 
-    // 協程：控制游戏结束画面的渐变、文字和按钮显示
     IEnumerator ShowLoserTextFlow()
     {
-        // 1. 启动画面渐变
-        FadeEffect fadeEffect = currentGameOverPanel?.GetComponentInChildren<FadeEffect>(true);
+        FadeEffect fadeEffect = null;
+        if (fadePanel != null)
+        {
+            fadeEffect = fadePanel.GetComponentInChildren<FadeEffect>(true);
+        }
+
+        // 執行漸變效果
         if (fadeEffect != null)
         {
-            fadeEffect.StartFadeIn(); 
-            yield return new WaitForSecondsRealtime(fadeEffect.fadeDuration); 
+            fadeEffect.StartFadeIn();
+            yield return new WaitForSecondsRealtime(fadeEffect.fadeDuration);
         }
         else
         {
-            Debug.LogWarning("IntroManager: 未找到 GameOverPanel 下的 FadeEffect 腳本！畫面不會漸變。", currentGameOverPanel);
-            yield return new WaitForSecondsRealtime(gameOverFadeDelay); 
+            Debug.LogWarning("IntroManager: FadeEffect 沒有設定或不存在！畫面不會漸變。");
+            yield return new WaitForSecondsRealtime(gameOverFadeDelay);
         }
 
-        // 2. 显示 LoserText
+        // 顯示 LoserText
         if (loserTextUI != null)
         {
-            loserTextUI.gameObject.SetActive(true); 
-            Debug.Log("IntroManager: LoserText 已顯示。");
+            loserTextUI.gameObject.SetActive(true);
+            Debug.Log("IntroManager: 顯示 LoserText！");
         }
         else
         {
-            Debug.LogWarning("IntroManager: LoserText UI 未連結！無法顯示遊戲結束文字。", this);
+            Debug.LogWarning("IntroManager: LoserTextUI 未設定！無法顯示遊戲結束文字。");
         }
 
-        // 3. 显示「再玩一次」按钮
-        yield return new WaitForSecondsRealtime(0.5f); 
-        if (restartButton != null) 
-        {
-            restartButton.gameObject.SetActive(true); 
-            Debug.Log("IntroManager: 再玩一次按鈕已顯示。");
-        }
-        else
-        {
-            Debug.LogWarning("IntroManager: 再玩一次按鈕未連結！無法顯示。", this);
-        }
+        // 等待一小段時間讓玩家看清文字
+        yield return new WaitForSecondsRealtime(1.0f);
+
+        Debug.Log("IntroManager: 玩家死亡流程結束，載入玩家死亡劇情 Scene。");
+        GameProgressionManager.LoadNextStoryScene(); // 載入玩家死亡劇情 Scene
     }
 
-    // <<<< 這個方法就是 RestartGame()，它的名字被錯貼了 >>>>>>
-    public void RestartGame() // <<<< 這裡應該是 void RestartGame() >>>>>>
-    {
-        Debug.Log("IntroManager: '再玩一次' 按鈕被點擊。"); 
-        Time.timeScale = 1f; 
-        currentGameState = GameState.Playing; 
-
-        GameProgressionManager.ResetProgress(); 
-        
-        // 設置 CurrentLevelIndex 到遊戲三的索引
-        // 這裡不能直接設置 CurrentLevelIndex，因為它是只讀的
-        // 應該由 GameProgressionManager 內部的方法來管理
-        // 我們讓 GameProgressionManager 提供一個方法來重新開始指定關卡
-        
-        // 最簡單的回到遊戲三的開頭的邏輯：
-        SceneManager.LoadScene(GameProgressionManager.instance.gameScenes[2]); // 直接加載 Level3GameScene (遊戲三)
-    }
-
+    // PauseGame 和 ResumeGame 方法已移至 GameProgressionManager
     public static void PauseGame()
     {
-        if (currentGameState == GameState.Playing)
+        if (GameProgressionManager.currentGameState == GameProgressionManager.GameState.Playing)
         {
             Time.timeScale = 0f;
-            currentGameState = GameState.Paused;
+            GameProgressionManager.currentGameState = GameProgressionManager.GameState.Paused;
             Debug.Log("遊戲暫停。");
         }
     }
 
     public static void ResumeGame()
     {
-        if (currentGameState == GameState.Paused)
+        if (GameProgressionManager.currentGameState == GameProgressionManager.GameState.Paused)
         {
             Time.timeScale = 1f;
-            currentGameState = GameState.Playing;
+            GameProgressionManager.currentGameState = GameProgressionManager.GameState.Playing;
             Debug.Log("遊戲恢復。");
         }
     }

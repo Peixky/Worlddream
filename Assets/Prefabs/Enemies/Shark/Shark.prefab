@@ -204,6 +204,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 3
+  damageCooldown: 1
 --- !u!1 &5695200748415857339
 GameObject:
   m_ObjectHideFlags: 0
@@ -327,7 +328,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyHealth: {fileID: 8112543478865560632}
-  damageCooldown: 2
   bounceForce: 12
 --- !u!1 &6910107298052492149
 GameObject:
