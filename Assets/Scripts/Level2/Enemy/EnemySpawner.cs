@@ -2,8 +2,11 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+    [Header("生成設定")]
     public GameObject enemyPrefab;
     public float spawnRadius = 15f;
+    public Vector3 spawnOffset = Vector3.zero;
+    public bool destroyWhenOutOfRange = true;
 
     private GameObject spawnedEnemy;
     private Transform player;
@@ -19,13 +22,21 @@ public class EnemySpawner : MonoBehaviour
 
         float distance = Vector2.Distance(transform.position, player.position);
 
-        if (distance <= spawnRadius && spawnedEnemy == null)
+        if (distance <= spawnRadius)
         {
-            spawnedEnemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
+            if (spawnedEnemy == null)
+            {
+                Vector3 spawnPosition = transform.position + spawnOffset;
+                spawnedEnemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+            }
         }
-        else if (distance > spawnRadius && spawnedEnemy != null)
+        else
         {
-            Destroy(spawnedEnemy);
+            if (destroyWhenOutOfRange && spawnedEnemy != null)
+            {
+                Destroy(spawnedEnemy);
+                spawnedEnemy = null;
+            }
         }
     }
 
@@ -33,5 +44,8 @@ public class EnemySpawner : MonoBehaviour
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, spawnRadius);
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawSphere(transform.position + spawnOffset, 0.3f);
     }
 }

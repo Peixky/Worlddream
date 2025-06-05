@@ -3,29 +3,21 @@ using UnityEngine;
 public class EnemyHeadTrigger : MonoBehaviour
 {
     public EnemyHealth enemyHealth;
-    public float damageCooldown = 0.5f;
     public float bounceForce = 12f;
-
-    private float lastDamageTime = -999f;
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
 
-        float currentTime = Time.time;
+        Debug.Log("👟 玩家踩中怪物頭！");
 
-        if (currentTime - lastDamageTime < damageCooldown)
+        bool damaged = enemyHealth.TakeDamage(1);
+
+        if (!damaged)
         {
-            Debug.Log("🛡️ 怪物無敵中，這次不扣血");
-        }
-        else
-        {
-            Debug.Log("👟 玩家踩中怪物頭！");
-            enemyHealth.TakeDamage(1);
-            lastDamageTime = currentTime;
+            Debug.Log("🛡️ 怪物無敵，這次沒受傷");
         }
 
-        // 無論是否成功造成傷害，都強制彈開
         BouncePlayer(other);
     }
 
@@ -42,7 +34,6 @@ public class EnemyHeadTrigger : MonoBehaviour
         Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
         if (rb != null)
         {
-            // 強制給一個穩定向上的速度
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, bounceForce);
         }
     }

@@ -154,7 +154,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyHealth: {fileID: 3590194788129865093}
-  damageCooldown: 1
   bounceForce: 12
 --- !u!1 &7973145967316378625
 GameObject:
@@ -355,3 +354,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 2
+  damageCooldown: 1
