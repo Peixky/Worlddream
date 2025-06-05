@@ -92,7 +92,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyHealth: {fileID: 5333133807044020003}
-  damageCooldown: 1
   bounceForce: 12
 --- !u!1 &8211865127251575236
 GameObject:
@@ -294,6 +293,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 3
+  damageCooldown: 1
 --- !u!95 &3985981034846161395
 Animator:
   serializedVersion: 7

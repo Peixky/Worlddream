@@ -1830,7 +1830,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyHealth: {fileID: 1287655217}
-  damageCooldown: 1
   bounceForce: 12
 --- !u!61 &206840322
 BoxCollider2D:
@@ -2300,6 +2299,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 3
+  damageCooldown: 1
 --- !u!95 &256504740
 Animator:
   serializedVersion: 7
@@ -3007,7 +3007,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &309192561
 Transform:
   m_ObjectHideFlags: 0
@@ -7153,6 +7153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 3
+  damageCooldown: 1
 --- !u!114 &803075504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7670,6 +7671,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 3
+  damageCooldown: 1
 --- !u!114 &834036315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9986,6 +9988,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 3
+  damageCooldown: 1
 --- !u!61 &915368364
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -13122,7 +13125,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyHealth: {fileID: 2082298629}
-  damageCooldown: 1
   bounceForce: 12
 --- !u!61 &1173945002
 BoxCollider2D:
@@ -14115,6 +14117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 2
+  damageCooldown: 1
 --- !u!114 &1253391936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14660,6 +14663,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 3
+  damageCooldown: 1
 --- !u!95 &1287655218
 Animator:
   serializedVersion: 7
@@ -14877,7 +14881,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyHealth: {fileID: 803075503}
-  damageCooldown: 2
   bounceForce: 12
 --- !u!61 &1299098663
 BoxCollider2D:
@@ -17163,7 +17166,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyHealth: {fileID: 256504739}
-  damageCooldown: 1
   bounceForce: 12
 --- !u!61 &1521523227
 BoxCollider2D:
@@ -19230,7 +19232,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyHealth: {fileID: 1253391935}
-  damageCooldown: 1
   bounceForce: 12
 --- !u!61 &1811711958
 BoxCollider2D:
@@ -19458,7 +19459,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyHealth: {fileID: 915368363}
-  damageCooldown: 1
   bounceForce: 12
 --- !u!61 &1826420586
 BoxCollider2D:
@@ -31633,6 +31633,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 3
+  damageCooldown: 1
 --- !u!95 &2082298630
 Animator:
   serializedVersion: 7
@@ -32161,7 +32162,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyHealth: {fileID: 834036314}
-  damageCooldown: 1
   bounceForce: 12
 --- !u!61 &2125642728
 BoxCollider2D:

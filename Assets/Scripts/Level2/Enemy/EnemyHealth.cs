@@ -3,7 +3,7 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour
 {
     public int maxHealth = 3;
-    public float damageCooldown = 0.5f;
+    public float damageCooldown = 1f;
 
     private int currentHealth;
     private float lastDamageTime = -999f;
