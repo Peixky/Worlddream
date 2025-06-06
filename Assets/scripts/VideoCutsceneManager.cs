@@ -6,6 +6,7 @@ using System.Collections; // For coroutines
 
 public class VideoCutsceneManager : MonoBehaviour
 {
+    
     [Header("Video Setup")]
     public VideoPlayer videoPlayer; // 從 Hierarchy 拖曳 VideoPlaybackManager 物件上的 VideoPlayer 組件到這裡
     public RawImage videoDisplayImage; // 從 Hierarchy 拖曳 VideoDisplayImage (Canvas 下的 RawImage) 到這裡

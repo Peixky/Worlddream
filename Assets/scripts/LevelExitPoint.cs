@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement; // <<<< 確保有這個命名空間 >>>>>
 
-public class LevelExitPoint : MonoBehaviour
+public class Level1ExitPoint : MonoBehaviour
 {
     [Header("觸發設定")]
     public string playerTag = "Player"; // 確保你的玩家 GameObject 有這個 Tag

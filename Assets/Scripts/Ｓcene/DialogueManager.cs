@@ -107,7 +107,7 @@ public class DialogueManager : MonoBehaviour
                 break;
             case DialogueEndAction.EndGame:
                 Debug.Log("DialogueManager: 遊戲已全部結束！加載結局 Scene。");
-                SceneManager.LoadScene(GameProgressionManager.instance.endingSceneName);
+                SceneManager.LoadScene("End Scene");
                 break;
         }
     }
