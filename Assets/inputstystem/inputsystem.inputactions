@@ -1,0 +1,34 @@
+{
+    "name": "inputsystem",
+    "maps": [
+        {
+            "name": "PlayerOnGround",
+            "id": "c545fdec-7183-4a6f-9f8d-a560b1d20959",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "8125fbdf-20dc-43ad-b0ee-b76eb8f90507",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "ce406d01-d2ae-482d-9e43-2e4cbb15fd1c",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

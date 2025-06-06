@@ -34,7 +34,7 @@ EditorBuildSettings:
     guid: 0606540dbc2ea469090f3b4089b8de5b
   - enabled: 1
     path: Assets/Story/Scene/level2.unity
-    guid: e51d8055180484ace81ff26295d3892e
+    guid: 5e265070a02b442c29f3f6e236865349
   - enabled: 1
     path: Assets/Story/Scene/Levelselect.unity
     guid: ab2ee4f26112d5a49b019f8cdaf74ac9
@@ -50,6 +50,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Story/Scene/Monster.unity
     guid: 091e0bf1694bafa42a82daabacc4a02e
+  - enabled: 1
+    path: Assets/Story/Scene/playerDeathScene.unity
+    guid: 6a1c4319aa7814e5e9f1272b3e5117d7
   - enabled: 1
     path: Assets/Story/Scene/End Scene.unity
     guid: 6dee6dcbcbb484cdfacaa1cf86ab24bf

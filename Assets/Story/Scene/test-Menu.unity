@@ -724,16 +724,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 570352900}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 909a9f7e743ff495f913698a8ccd0057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  introPanelName: VsIntroImage
-  startTextPanelName: StartTextPanel
-  gameOverPanelName: FadePanel
+  introPanel: {fileID: 0}
+  startTextPanel: {fileID: 0}
+  fadePanel: {fileID: 0}
   loserTextUI: {fileID: 0}
-  restartButton: {fileID: 0}
   vsScreenDuration: 3
   startTextDuration: 3
   gameOverFadeDelay: 1
@@ -1027,6 +1026,7 @@ MonoBehaviour:
   - "Story/Scene/\u5287\u60C52"
   - "Story/Scene/\u5287\u60C53"
   - "Story/Scene/\u5287\u60C54"
+  - Story/Scene/playerDeathScene
   - Story/Scene/End Scene
   gameScenes:
   - Scene1
@@ -1035,6 +1035,7 @@ MonoBehaviour:
   lobbySceneName: test-LobbyScene
   storeSceneName: Story/Scene/StoreScene
   endingSceneName: Story/Scene/End Scene
+  playerDeathStorySceneName: Story/Scene/playerDeathScene
 --- !u!4 &1162558090
 Transform:
   m_ObjectHideFlags: 0
@@ -1411,10 +1412,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1025162124}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1930867083
 MonoBehaviour:
