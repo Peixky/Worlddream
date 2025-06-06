@@ -339,7 +339,7 @@ MonoBehaviour:
   moveSpeed: 2
   pauseTime: 1
   bombPrefab: {fileID: 2096027046329359916, guid: 9a9f9bc3577f94779a6f4a98007e6cad, type: 3}
-  attackRange: 8
+  attackRange: 12
   bombInterval: 5
 --- !u!114 &3590194788129865093
 MonoBehaviour:
