@@ -1,4 +1,5 @@
 using UnityEngine;
+using System; // 為了使用 Action
 
 public class EnemyHealth : MonoBehaviour
 {
@@ -8,6 +9,9 @@ public class EnemyHealth : MonoBehaviour
     private int currentHealth;
     private float lastDamageTime = -999f;
 
+    // ✅ 新增：死亡事件供外部訂閱
+    public event Action OnDied;
+
     void Start()
     {
         currentHealth = maxHealth;
@@ -16,7 +20,7 @@ public class EnemyHealth : MonoBehaviour
     void OnEnable()
     {
         currentHealth = maxHealth;
-        lastDamageTime = -999f; // 重置冷卻
+        lastDamageTime = -999f;
     }
 
     public bool TakeDamage(int damage)
@@ -39,12 +43,16 @@ public class EnemyHealth : MonoBehaviour
             Die();
         }
 
-        return true; // 有成功扣血
+        return true;
     }
 
     void Die()
     {
         Debug.Log($"{gameObject.name} 死亡！");
+
+        // ✅ 呼叫死亡事件
+        OnDied?.Invoke();
+
         Destroy(gameObject);
     }
 }
