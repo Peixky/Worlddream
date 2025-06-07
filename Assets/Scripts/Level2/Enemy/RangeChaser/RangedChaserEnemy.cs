@@ -13,8 +13,8 @@ public class RangedChaserEnemy : MonoBehaviour
 
     [Header("移動設定")]
     public float moveSpeed = 2f;
-    public float boostSpeed = 4f;          // 加速速度
-    public float boostRange = 5f;          // 觸發加速的距離
+    public float boostSpeed = 4f;
+    public float boostRange = 5f;
     public float chaseRange = 12f;
     public float chaseAcceleration = 10f;
 
@@ -34,16 +34,15 @@ public class RangedChaserEnemy : MonoBehaviour
         if (player == null) return;
 
         float distance = Vector2.Distance(transform.position, player.position);
-        shootTimer += Time.deltaTime; // ✅ 始終累加計時器
+        shootTimer += Time.deltaTime;
 
-        // 玩家太遠 → 停止
         if (distance > chaseRange)
         {
-            rb.linearVelocity = Vector2.zero;
+            // ✅ 停止移動：X 歸零、Y 不動
+            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
             return;
         }
 
-        // 玩家在追擊範圍內但未進入射擊距離 → 追擊
         if (distance > shootingRange)
         {
             if (!isShooting)
@@ -51,19 +50,23 @@ public class RangedChaserEnemy : MonoBehaviour
                 float currentSpeed = distance <= boostRange ? boostSpeed : moveSpeed;
 
                 Vector2 dir = (player.position - transform.position).normalized;
-                Vector2 targetVelocity = new Vector2(dir.x * currentSpeed, rb.linearVelocity.y);
 
-                rb.linearVelocity = Vector2.MoveTowards(rb.linearVelocity, targetVelocity, chaseAcceleration * Time.deltaTime);
+                // ✅ 只控制 X 方向的速度，Y 維持不變
+                float targetX = dir.x * currentSpeed;
+                float newX = Mathf.MoveTowards(rb.linearVelocity.x, targetX, chaseAcceleration * Time.deltaTime);
+
+                rb.linearVelocity = new Vector2(newX, rb.linearVelocity.y);
             }
         }
-        else // 玩家進入射擊距離
+        else
         {
-            rb.linearVelocity = Vector2.zero;
+            // ✅ 射擊時 X 停止，Y 維持不變
+            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
 
             if (shootTimer >= shootInterval && !isShooting)
             {
                 StartCoroutine(ShootSequence());
-                shootTimer = 0f; // ✅ 重置計時器
+                shootTimer = 0f;
             }
         }
 
@@ -115,7 +118,7 @@ public class RangedChaserEnemy : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, shootingRange);
 
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, boostRange); // ✅ 顯示加速範圍
+        Gizmos.DrawWireSphere(transform.position, boostRange);
     }
 #endif
 }

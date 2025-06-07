@@ -214,12 +214,12 @@ MonoBehaviour:
   pointA: {fileID: 1967887323779091098}
   pointB: {fileID: 4549422862197541529}
   moveSpeed: 2
-  waitTime: 1.5
+  waitTime: 1
   alertRange: 5
   dashSpeed: 6
   dashDistance: 5
-  preDashWaitTime: 0.8
-  postDashWaitTime: 1
+  preDashWaitTime: 1
+  postDashWaitTime: 0.5
   knockbackForce: 500
   maxStayDuration: 5
 --- !u!114 &3818312929870341308
@@ -235,7 +235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 3
-  damageCooldown: 1
+  damageCooldown: 0.5
 --- !u!95 &8722658006010509762
 Animator:
   serializedVersion: 7
