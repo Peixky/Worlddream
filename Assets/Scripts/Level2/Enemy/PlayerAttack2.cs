@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerAttack : MonoBehaviour
+public class PlayerAttack2 : MonoBehaviour
 {
     [Header("攻擊設定")]
     public Animator animator;
@@ -35,7 +35,7 @@ public class PlayerAttack : MonoBehaviour
         {
             Debug.Log("擊中：" + hit.name);
 
-            Health enemyHealth = hit.GetComponent<Health>();
+            EnemyHealth enemyHealth = hit.GetComponent<EnemyHealth>();
             if (enemyHealth != null)
             {
                 enemyHealth.TakeDamage(attackDamage);

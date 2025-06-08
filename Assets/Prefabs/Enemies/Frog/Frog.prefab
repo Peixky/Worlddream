@@ -235,7 +235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 3
-  damageCooldown: 0.5
+  damageCooldown: 0.3
 --- !u!95 &8722658006010509762
 Animator:
   serializedVersion: 7

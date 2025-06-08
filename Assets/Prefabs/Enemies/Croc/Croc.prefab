@@ -354,4 +354,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 2
-  damageCooldown: 0.5
+  damageCooldown: 0.3

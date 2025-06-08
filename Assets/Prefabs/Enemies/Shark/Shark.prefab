@@ -204,7 +204,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 3
-  damageCooldown: 0.5
+  damageCooldown: 0.3
 --- !u!1 &5695200748415857339
 GameObject:
   m_ObjectHideFlags: 0
