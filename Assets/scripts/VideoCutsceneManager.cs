@@ -6,7 +6,7 @@ using System.Collections; // For coroutines
 
 public class VideoCutsceneManager : MonoBehaviour
 {
-    
+
     [Header("Video Setup")]
     public VideoPlayer videoPlayer; // 從 Hierarchy 拖曳 VideoPlaybackManager 物件上的 VideoPlayer 組件到這裡
     public RawImage videoDisplayImage; // 從 Hierarchy 拖曳 VideoDisplayImage (Canvas 下的 RawImage) 到這裡
@@ -42,7 +42,7 @@ public class VideoCutsceneManager : MonoBehaviour
             videoDisplayImage.gameObject.SetActive(false);
         }
 
-        videoPlayer.loopPointReached += OnVideoEnd; 
+        videoPlayer.loopPointReached += OnVideoEnd;
     }
 
     void OnDisable()
@@ -66,9 +66,9 @@ public class VideoCutsceneManager : MonoBehaviour
 
         if (videoDisplayImage != null)
         {
-            videoDisplayImage.gameObject.SetActive(true); 
+            videoDisplayImage.gameObject.SetActive(true);
         }
-        
+
         // 停止背景音樂
         if (backgroundMusicSource != null)
         {
@@ -80,22 +80,28 @@ public class VideoCutsceneManager : MonoBehaviour
             Debug.LogWarning("VideoCutsceneManager: 背景音樂 AudioSource 未設定！無法停止背景音樂。", this);
         }
 
-        videoPlayer.Play(); 
-        Time.timeScale = 0f; 
+        videoPlayer.Play();
+        Time.timeScale = 0f;
         Debug.Log("VideoCutsceneManager: 開始播放影片過場動畫。");
     }
 
     void OnVideoEnd(VideoPlayer vp)
     {
-        Time.timeScale = 1f; 
-        Debug.Log("VideoCutsceneManager: 影片播放結束。");
+        Time.timeScale = 1f;
+        Debug.Log("VideoCutsceneManager: 影片播放結束，開始倒數 15 秒。");
 
         if (videoDisplayImage != null)
         {
-            videoDisplayImage.gameObject.SetActive(false); 
+            videoDisplayImage.gameObject.SetActive(false);
         }
 
-        // 移除：影片結束後不再恢復背景音樂的程式碼
+        StartCoroutine(WaitBeforeCallback(30f)); // ✅ 延遲執行
+    }
+
+    private IEnumerator WaitBeforeCallback(float delaySeconds)
+    {
+        yield return new WaitForSecondsRealtime(delaySeconds); // ✅ 不受 Time.timeScale 影響
+        Debug.Log("VideoCutsceneManager: 15 秒倒數結束，執行場景切換。");
 
         onVideoFinishedCallback?.Invoke();
     }
