@@ -3,12 +3,12 @@ using UnityEngine;
 public class AttackBoostPowerUp : MonoBehaviour
 {
     [Header("攻擊力提升設定")]
-    public int attackPowerIncrease = 5; // 玩家攻擊力增加量
-    public float sizeMultiplier = 1.2f; // 玩家尺寸的乘數 (例如 1.2f 放大 20%)
+    public int attackPowerIncrease = 5;
+    public float sizeMultiplier = 1.2f;
 
     [Header("音效與視覺特效 (可選)")]
-    public GameObject pickUpEffectPrefab; // 撿到時播放的特效 Prefab
-    public AudioClip pickUpSound; // 撿到時播放的音效 AudioClip
+    public GameObject pickUpEffectPrefab; 
+    public AudioClip pickUpSound; 
 
     private AudioSource audioSource; 
 
@@ -21,7 +21,6 @@ public class AttackBoostPowerUp : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            // === 修正這裡：直接呼叫 PlayerAttack 腳本上的方法 ===
             PlayerAttack playerAttackScript = other.GetComponent<PlayerAttack>(); 
             if (playerAttackScript != null)
             {
@@ -32,9 +31,7 @@ public class AttackBoostPowerUp : MonoBehaviour
             {
                 Debug.LogWarning("PlayerAttack 腳本未找到於玩家物件上！無法增加攻擊力。", other.gameObject);
             }
-            // ===============================================
 
-            // --- 放大玩家尺寸 ---
             other.transform.localScale *= sizeMultiplier;
             Debug.Log($"玩家尺寸放大 {sizeMultiplier} 倍！新尺寸：{other.transform.localScale}");
 

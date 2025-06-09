@@ -4,18 +4,16 @@ using System;
 
 public class GameProgressionManager : MonoBehaviour
 {
-    // === PlayerPrefs 鍵值 ===
     private const string CURRENT_STORY_KEY = "CurrentStoryIndex";
     private const string CURRENT_LEVEL_KEY = "CurrentLevelIndex";
     private const string HEALTH_KEY = "PlayerHealth";
     private const string CASH_KEY = "PlayerCash";
     private const string MAX_HEALTH_KEY = "PlayerMaxHealth";
 
-    // === 進度索引 ===
     public static int CurrentStoryIndex { get; private set; } 
     public static int CurrentLevelIndex { get; private set; } 
 
-    // === 玩家數據屬性 (靜態，透過 PlayerPrefs 持久化) ===
+    
     public static event Action OnPlayerHealthChanged; 
     public static event Action OnPlayerCashChanged;   
 
@@ -65,26 +63,24 @@ public class GameProgressionManager : MonoBehaviour
         }
     }
 
-    // === 從 IntroManager 移過來的全局遊戲狀態管理 ===
     public enum GameState
     {
-        Intro,      // 遊戲介紹中 (V.S. 圖片顯示，時間暫停)
-        Starting,   // 準備開始 ("START" 文字顯示，時間暫停)
-        Playing,    // 遊戲正在進行中 (時間流動)
-        Paused,     // 遊戲暫停 (時間暫停)
-        GameOver    // 遊戲結束 (時間暫停)
+        Intro,      
+        Playing,   
+        Paused,    
+        GameOver   
     }
 
-    public static GameState currentGameState = GameState.Intro; // 初始狀態可以根據需求設定
+    public static GameState currentGameState = GameState.Intro; 
 
-    // === 場景名稱設定 (與 Build Settings 匹配) ===
-    [Header("場景名稱設定 (與 Build Settings 匹配)")]
+    
+    [Header("場景名稱設定")]
     public string[] storyScenes; 
     public string[] gameScenes;  
     public string lobbySceneName = "LobbyScene"; 
     public string storeSceneName = "StoreScene"; 
     public string endingSceneName = "EndingScene"; 
-    public string bossDeathSceneName = "BossDeathScene"; // <<<< 修正這裡：變數名改為 bossDeathSceneName >>>>
+    public string bossDeathSceneName = "BossDeathScene"; 
 
     public static GameProgressionManager instance;
 
@@ -208,14 +204,14 @@ public class GameProgressionManager : MonoBehaviour
         SceneManager.LoadScene(instance.storeSceneName);
     }
 
-    public static void LoadBossDeathScene() // <<<< 修正：方法名改為 LoadBossDeathScene >>>>
+    public static void LoadBossDeathScene() 
     {
         if (instance == null) return;
         Debug.Log($"加載 Boss 死亡劇情 Scene: {instance.bossDeathSceneName}"); // 使用新的變數名
         SceneManager.LoadScene(instance.bossDeathSceneName);
     }
 
-    // === 遊戲數據操作方法 ===
+   
     public static void AddCash(int amount) { PlayerCash += amount; }
     public static bool SpendCash(int amount) 
     { 
@@ -225,7 +221,7 @@ public class GameProgressionManager : MonoBehaviour
     public static void AddHealth(int amount) { PlayerHealth += amount; }
     public static void SetPlayerMaxHealth(int newMax) { PlayerMaxHealth = newMax; PlayerHealth = PlayerHealth; }
 
-    // === 重置遊戲進度與所有數據 ===
+    
     public static void ResetProgress()
     {
         PlayerPrefs.DeleteKey(CURRENT_STORY_KEY);

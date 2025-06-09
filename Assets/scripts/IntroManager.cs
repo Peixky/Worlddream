@@ -1,41 +1,37 @@
 using UnityEngine;
-using UnityEngine.UI; // For RawImage
-using TMPro; // For TextMeshProUGUI
+using UnityEngine.UI; 
+using TMPro; 
 using System.Collections;
-using System; // Required for Action events
+using System; 
 using UnityEngine.SceneManagement;
 
-[RequireComponent(typeof(AudioSource))] // Ensures AudioSource component is present on this GameObject
+[RequireComponent(typeof(AudioSource))] 
 public class IntroManager : MonoBehaviour
 {
     [Header("UI 物件拖曳區（請從 Inspector 拖進來）")]
     public GameObject introPanel;
     public GameObject startTextPanel;
-    public GameObject fadePanel;        // 這個就是用來做 GameOver 遮罩的面板
-    public TextMeshProUGUI loserTextUI; // 這個是顯示 "GAME OVER" 文字的 UI
+    public GameObject fadePanel;        
+    public TextMeshProUGUI loserTextUI; 
 
     [Header("時間設定")]
     public float vsScreenDuration = 3f;
     public float startTextDuration = 3f;
-    public float gameOverFadeDelay = 1.0f; // 遊戲結束淡入後，文字顯示前的延遲
+    public float gameOverFadeDelay = 1.0f; 
 
     [Header("音效設定")]
     public AudioClip gameStartSoundEffect;
 
-    // currentGameState 現在是 GameProgressionManager 管理的全局狀態
-    // 注意：這個靜態變數在 Unity 跨場景時需要謹慎管理，GameProgressionManager 通常更適合管理全局狀態
     public static GameProgressionManager.GameState currentGameState = GameProgressionManager.GameState.Intro;
 
-    private AudioSource audioSource; // 私有變數來儲存 AudioSource 組件
-
+    private AudioSource audioSource; 
     void Awake()
     {
-        // 在 Awake 階段獲取 AudioSource 組件
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
         {
             Debug.LogError("IntroManager: AudioSource 組件遺失！無法播放音效。請將 AudioSource 添加到此 GameObject。", this);
-            enabled = false; // 如果沒有 AudioSource，禁用腳本
+            enabled = false; 
             return;
         }
     }
@@ -44,13 +40,13 @@ public class IntroManager : MonoBehaviour
     {
         Debug.Log($"IntroManager: 在 '{SceneManager.GetActiveScene().name}' 啟動。");
 
-        // 初始化時確保所有相關 UI 都是隱藏的
+        
         if (introPanel != null) introPanel.SetActive(false);
         if (startTextPanel != null) startTextPanel.SetActive(false);
-        if (fadePanel != null) fadePanel.SetActive(false); // 確保一開始是隱藏的
-        if (loserTextUI != null) loserTextUI.gameObject.SetActive(false); // 確保一開始是隱藏的
+        if (fadePanel != null) fadePanel.SetActive(false); 
+        if (loserTextUI != null) loserTextUI.gameObject.SetActive(false); 
 
-        // 設定遊戲狀態並暫停時間以顯示 V.S. 畫面
+        
         Time.timeScale = 0f;
         GameProgressionManager.currentGameState = GameProgressionManager.GameState.Intro;
 
@@ -79,25 +75,20 @@ public class IntroManager : MonoBehaviour
         ShowGameOver(); // 呼叫現有的顯示遊戲結束方法
     }
 
-    // 這個方法現在變得多餘，因為 IntroManager 只存在於 Level3GameScene，
-    // 其初始化邏輯已移至 Start()。保留此方法是為了避免對現有專案結構造成額外變動。
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // 這些邏輯已在 Start() 中處理，因為 IntroManager 只存在於 Level3GameScene
-        // 確保UI初始化
+
         if (introPanel != null) introPanel.SetActive(false);
         if (startTextPanel != null) startTextPanel.SetActive(false);
         if (fadePanel != null) fadePanel.SetActive(false);
         if (loserTextUI != null) loserTextUI.gameObject.SetActive(false);
 
-        // 如果場景不是 Level3GameScene，但這個 IntroManager 被錯誤地保留下來，則直接進入 Playing 狀態
-        // 否則，按照 Level3GameScene 的流程啟動
         if (GameProgressionManager.instance != null && scene.name == GameProgressionManager.instance.gameScenes[2])
         {
             Debug.Log("步驟 1: 顯示 V.S. 圖片畫面。遊戲暫停中。");
             Time.timeScale = 0f;
             currentGameState = GameProgressionManager.GameState.Intro;
-            // StartCoroutine(IntroRoutine()); // 已在 Start() 中呼叫
+            
         }
         else
         {
@@ -157,13 +148,10 @@ public class IntroManager : MonoBehaviour
         var instance = FindFirstObjectByType<IntroManager>();
         if (instance == null)
         {
-            // 如果在 Level3GameScene 以外的場景被呼叫，IntroManager 實例將為 null，則直接返回
             Debug.Log($"IntroManager: 未在當前場景 ({SceneManager.GetActiveScene().name}) 找到 IntroManager 實例，不顯示 GameOver UI。");
             return;
         }
 
-        // 確保只在 Level3GameScene 中生效
-        // 這裡假設 Level3GameScene 是 GameProgressionManager.instance.gameScenes[2]
         if (GameProgressionManager.instance != null && SceneManager.GetActiveScene().name == GameProgressionManager.instance.gameScenes[2])
         {
             if (GameProgressionManager.currentGameState != GameProgressionManager.GameState.GameOver)
@@ -199,7 +187,6 @@ public class IntroManager : MonoBehaviour
         FadeEffect fadeEffect = null;
         if (fadePanel != null)
         {
-            // 嘗試獲取 FadeEffect 組件，假設它在 fadePanel 或其子物件上
             fadeEffect = fadePanel.GetComponentInChildren<FadeEffect>(true);
             if (fadeEffect == null)
             {
@@ -210,7 +197,7 @@ public class IntroManager : MonoBehaviour
         // 執行漸變效果
         if (fadeEffect != null)
         {
-            fadeEffect.StartFadeIn(); // 假設 FadeEffect 有 StartFadeIn 方法
+            fadeEffect.StartFadeIn(); 
             yield return new WaitForSecondsRealtime(fadeEffect.fadeDuration);
         }
         else
@@ -223,7 +210,7 @@ public class IntroManager : MonoBehaviour
         if (loserTextUI != null)
         {
             loserTextUI.gameObject.SetActive(true);
-            loserTextUI.text = "GAME OVER"; // 確保顯示 "GAME OVER" 文字
+            loserTextUI.text = "GAME OVER"; 
             Debug.Log("IntroManager: 顯示 LoserText！");
         }
         else
@@ -231,15 +218,14 @@ public class IntroManager : MonoBehaviour
             Debug.LogWarning("IntroManager: LoserTextUI 未設定！無法顯示遊戲結束文字。");
         }
 
-        // 等待一小段時間讓玩家看清文字
         yield return new WaitForSecondsRealtime(2.0f); // 稍微增加顯示時間，以便玩家看清
 
         Debug.Log("IntroManager: 玩家死亡流程結束，載入玩家死亡劇情 Scene。");
-        GameProgressionManager.AdvanceStory(); // 如果這會導致重複加載，可能需要移除
-        GameProgressionManager.LoadNextStoryScene(); // 載入玩家死亡劇情 Scene
+        GameProgressionManager.AdvanceStory(); 
+        GameProgressionManager.LoadNextStoryScene();
     }
 
-    // PauseGame 和 ResumeGame 方法已移至 GameProgressionManager
+    
     public static void PauseGame()
     {
         if (GameProgressionManager.currentGameState == GameProgressionManager.GameState.Playing)

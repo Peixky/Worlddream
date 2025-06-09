@@ -45,12 +45,12 @@ public class FallingPlatform : MonoBehaviour
             yield return null;
         }
 
-        transform.position = originalPosition; // 還原位置（結束震動）
+        transform.position = originalPosition; 
 
         yield return new WaitForSeconds(fallDelay);
 
         rb.bodyType = RigidbodyType2D.Dynamic; // 掉落
-        col.enabled = false; // ✅ 關閉碰撞器（玩家穿透）
+        col.enabled = false;
 
         yield return new WaitForSeconds(resetDelay);
 
@@ -61,7 +61,7 @@ public class FallingPlatform : MonoBehaviour
         transform.position = originalPosition;
         transform.rotation = originalRotation;
 
-        col.enabled = true; // ✅ 恢復碰撞器
+        col.enabled = true; 
         isTriggered = false;
     }
 }

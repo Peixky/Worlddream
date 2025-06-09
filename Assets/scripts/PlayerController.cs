@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Environment Detection")]
     [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private LayerMask platformLayer; // 新增：Platform Layer (拖曳進來)
+    [SerializeField] private LayerMask platformLayer; 
 
     private Rigidbody2D rb;
     private BoxCollider2D boxCollider;
@@ -22,14 +22,14 @@ public class PlayerController : MonoBehaviour
     private bool isRecoiling = false;
 
     // Zipline
-    private Zipline currentZipline; // 假設 Zipline 腳本存在
+    private Zipline currentZipline; 
     private bool onZipline = false;
     private float t = 0f;
     private Vector2 startPoint, endPoint, direction;
     private float ziplineLength;
 
-    private int playerLayerIndex; // 儲存玩家自身的 Layer 索引
-    private int platformLayerIndex; // 儲存 Platform Layer 的索引
+    private int playerLayerIndex; 
+    private int platformLayerIndex; 
 
     private void Awake()
     {
@@ -37,8 +37,8 @@ public class PlayerController : MonoBehaviour
         boxCollider = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
 
-        playerLayerIndex = gameObject.layer; // 獲取玩家自己的 Layer 索引
-        platformLayerIndex = LayerMask.NameToLayer("Platform"); // 獲取 "Platform" Layer 的索引
+        playerLayerIndex = gameObject.layer; 
+        platformLayerIndex = LayerMask.NameToLayer("Platform");
 
         if (platformLayerIndex == -1)
         {
@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
 
         anim.SetBool("run", Mathf.Abs(horizontalInput) > 0.01f);
-        anim.SetBool("grounded", IsGrounded()); // IsGrounded 現在會檢查 Platform Layer
+        anim.SetBool("grounded", IsGrounded()); 
 
         if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && IsGrounded())
         {
@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour
     // 新增：用於在擊退時忽略碰撞
     public void StartKnockbackIgnoreCollision(float duration) 
     {
-        if (isRecoiling) return; // 如果正在回彈中，則不重複觸發
+        if (isRecoiling) return; 
         StartCoroutine(RecoilRoutine(duration));
     }
 
@@ -130,12 +130,9 @@ public class PlayerController : MonoBehaviour
             Debug.Log("PlayerController: 玩家擊退時暫時忽略 Platform Layer 碰撞。");
         }
 
-        yield return new WaitForSeconds(duration); // 等待擊退持續時間
-
+        yield return new WaitForSeconds(duration);
         isRecoiling = false;
-        canMove = true; // 擊退結束後恢復移動
-
-        // 擊退結束後恢復與 Platform Layer 的碰撞
+        canMove = true; 
         if (platformLayerIndex != -1 && playerLayerIndex != -1)
         {
             Physics2D.IgnoreLayerCollision(playerLayerIndex, platformLayerIndex, false);
@@ -220,24 +217,18 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("MovingPlatform"))
         {
-            // 不再直接在這裡設定父物件，而是啟動一個協程來延遲執行
+            
             StartCoroutine(ClearParentAfterFrame());
         }
-        // 其他的 OnCollisionExit2D 邏輯...
     }
 
     // 新增的協程，用於延遲設定父物件
     private IEnumerator ClearParentAfterFrame()
     {
-        // 等待一幀（或到幀的末尾），讓 Unity 完成當前的啟用/停用操作
         yield return null; 
-
-        // 確保在設定前，玩家的父物件仍然是剛離開的平台，避免意外設定
-        // 例如，如果玩家立刻跳到另一個平台上，這個檢查就很重要
         if (transform.parent != null && transform.parent.CompareTag("MovingPlatform"))
         {
             transform.parent = null;
-            // Debug.Log("玩家父物件已在下一幀設為 null。"); // 可選的調試訊息
         }
     }
 }

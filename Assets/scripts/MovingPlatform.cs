@@ -12,7 +12,6 @@ public class MovingPlatform : MonoBehaviour
     private Transform target;
     private Vector3 lastPosition;
 
-    // ✅ 提供平台移動速度給角色用
     public Vector3 PlatformVelocity { get; private set; }
 
     private void Start()
@@ -36,7 +35,6 @@ public class MovingPlatform : MonoBehaviour
             target = (target == pointA) ? pointB : pointA;
         }
 
-        // ✅ 計算每幀移動速度
         PlatformVelocity = (transform.position - lastPosition) / Time.deltaTime;
         lastPosition = transform.position;
 

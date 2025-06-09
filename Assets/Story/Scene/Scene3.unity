@@ -2009,7 +2009,7 @@ MonoBehaviour:
   waypoints:
   - {x: -1, y: -3.7, z: 0}
   - {x: -1, y: 1, z: 0}
-  moveSpeed: 2
+  moveSpeed: 3
   waitAtWaypointDuration: 1
   waitAtZeroDuration: 2
   linkedButton: {fileID: 2004494952}
@@ -5440,8 +5440,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   introPanel: {fileID: 734168394}
   startTextPanel: {fileID: 371828957}
-  fadePanel: {fileID: 1069483937}
-  loserTextUI: {fileID: 1681771727}
+  fadePanel: {fileID: 474290023}
+  loserTextUI: {fileID: 977939292}
   vsScreenDuration: 3
   startTextDuration: 2
   gameOverFadeDelay: 1

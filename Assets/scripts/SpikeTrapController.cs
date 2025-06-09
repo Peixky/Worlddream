@@ -27,7 +27,7 @@ public class SpikeTrapController : MonoBehaviour
         {
             damageCollider = visual.GetComponent<BoxCollider2D>();
             if (damageCollider != null)
-                damageCollider.enabled = false; // 一開始關掉傷害
+                damageCollider.enabled = false;
         }
         else
         {

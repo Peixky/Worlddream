@@ -1,21 +1,20 @@
 using UnityEngine;
-using UnityEngine.UI; // 使用 UnityEngine.UI.Image 需要這個命名空間
-using System.Collections; // 使用協程 (IEnumerator, StartCoroutine, WaitForSecondsRealtime) 需要這個命名空間
+using UnityEngine.UI; 
+using System.Collections;
 
 public class FadeEffect : MonoBehaviour 
 {
-    public Image fadeImage; // 拖曳 FadePanel 自己的 Image 元件到這裡
-    public float fadeDuration = 1.0f; // 漸變時間 (秒)
-    public float targetAlpha = 0.8f; // 目標透明度 (0.0 完全透明 - 1.0 完全不透明)
+    public Image fadeImage; 
+    public float fadeDuration = 1.0f; 
+    public float targetAlpha = 0.8f;
 
     void Awake()
     {
-        // 如果 fadeImage 沒有在 Inspector 中設置，嘗試自動獲取
         if (fadeImage == null)
         {
             fadeImage = GetComponent<Image>();
         }
-        // 確保初始是完全透明
+    
         if (fadeImage != null)
         {
             Color currentColor = fadeImage.color;
@@ -24,11 +23,11 @@ public class FadeEffect : MonoBehaviour
         }
     }
 
-    // 當需要漸變時呼叫此方法
+    
     public void StartFadeIn()
     {
-        if (fadeImage == null) return; // 確保 Image 存在
-        StopAllCoroutines(); // 停止任何正在運行的漸變協程
+        if (fadeImage == null) return; 
+        StopAllCoroutines();
         StartCoroutine(FadeInRoutine());
     }
 

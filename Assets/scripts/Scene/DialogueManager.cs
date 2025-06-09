@@ -7,26 +7,25 @@ using UnityEngine.SceneManagement;
 public class DialogueManager : MonoBehaviour
 {
     [Header("UI 元素引用")]
-    public Image backgroundImageUI; // 拖曳 DialogueBackground Image 到這裡
-    public GameObject dialoguePanelObject; // 拖曳 DialoguePanel 到這裡
-    public TextMeshProUGUI dialogueTextUI; // 拖曳 DialogueText (TextMeshPro) 到這裡
-
+    public Image backgroundImageUI; 
+    public GameObject dialoguePanelObject; 
+    public TextMeshProUGUI dialogueTextUI; 
     [Header("劇情內容")]
-    public List<Sprite> backgrounds; // 拖曳所有背景圖片 Sprite (依序) 到這裡
-    public List<string> dialogues; // 填寫所有對話內容 (依序) 到這裡
+    public List<Sprite> backgrounds; 
+    public List<string> dialogues; 
 
     [Header("劇情結束後動作")]
     public DialogueEndAction dialogueEndAction;
     public enum DialogueEndAction
     {
-        LoadNextGameScene,              // 劇情結束後加載下一關遊戲 Scene
-        LoadLobbyScene,                 // 劇情結束後加載大廳 Scene
-        LoadNextStoryScene,             // 劇情結束後加載下一段劇情 Scene
-        LoadStoreScene,                 // 劇情結束後加載商店場景
-        EndGame                         // 劇情結束後遊戲結束
+        LoadNextGameScene,              
+        LoadLobbyScene,                 
+        LoadNextStoryScene,            
+        LoadStoreScene,               
+        EndGame                      
     }
 
-    private int currentDialogueIndex = 0; // 當前對話步驟的索引
+    private int currentDialogueIndex = 0;
 
     void Start()
     {
@@ -78,7 +77,6 @@ public class DialogueManager : MonoBehaviour
 
     void EndDialogue()
     {
-        // 隱藏所有劇情 UI
         backgroundImageUI.gameObject.SetActive(false);
         dialoguePanelObject.SetActive(false);
         enabled = false;
@@ -87,8 +85,6 @@ public class DialogueManager : MonoBehaviour
         {
             case DialogueEndAction.LoadNextGameScene:
                 Debug.Log("DialogueManager: 劇情結束，加載下一關遊戲 Scene (不推進索引)。");
-                // <<<< 修正這裡：不推進 Level，直接加載 >>>>>>
-                // GameProgressionManager.AdvanceLevel(); // 移除這行！
                 GameProgressionManager.LoadNextGameScene(); 
                 break;
             case DialogueEndAction.LoadLobbyScene:
@@ -97,8 +93,7 @@ public class DialogueManager : MonoBehaviour
                 break;
             case DialogueEndAction.LoadNextStoryScene:
                 Debug.Log("DialogueManager: 劇情結束，加載下一段劇情 Scene (不推進索引)。");
-                // <<<< 修正這裡：不推進 Story，直接加載 >>>>>>
-                GameProgressionManager.AdvanceStory(); // 移除這行！
+                GameProgressionManager.AdvanceStory(); 
                 GameProgressionManager.LoadNextStoryScene(); 
                 break;
             case DialogueEndAction.LoadStoreScene:

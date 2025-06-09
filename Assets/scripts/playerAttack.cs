@@ -1,15 +1,14 @@
 using UnityEngine;
-using System.Collections; // 為了 StartCoroutine, 如果 PlayerController 裡面有 Recoil 是協程
-
+using System.Collections; 
 public class PlayerAttack : MonoBehaviour
 {
     [Header("攻擊設定")]
     public Animator animator;
     public Transform attackPoint;
     public float attackRange = 1f;
-    public int attackDamage = 1; // 玩家目前的基礎攻擊力
+    public int attackDamage = 1; 
     public LayerMask enemyLayer;
-    public LayerMask destructibleWallLayer; // <<<< 新增：可破壞牆壁的 Layer >>>>
+    public LayerMask destructibleWallLayer;
 
     [Header("攻擊後回彈設定")]
     public PlayerController playerMovement; 
@@ -31,7 +30,6 @@ public class PlayerAttack : MonoBehaviour
 
     void Attack()
     {
-        // 玩家在回彈狀態時不能攻擊，這個檢查保持不變
         if (playerMovement != null && playerMovement.IsRecoilActive())
             return;
 
@@ -57,17 +55,6 @@ public class PlayerAttack : MonoBehaviour
             {
                 enemyHealth.TakeDamage(attackDamage);
                 Debug.Log($"{hit.name} 受到 {attackDamage} 傷害 (敵人)");
-
-                // === 修正這裡：移除呼叫 StartRecoilToLastIdle ===
-                // Recoil (回彈) 和 canMove (移動控制) 現在由 PlayerDamageHandler 負責觸發
-                // PlayerDamageHandler 會呼叫 PlayerController.StartKnockbackIgnoreCollision
-                // 而 StartKnockbackIgnoreCollision 內部包含了 RecoilRoutine 的啟動和 canMove 的管理。
-                // 所以，PlayerAttack 不再需要在這裡直接控制回彈了。
-                // if (playerMovement != null)
-                // {
-                //     playerMovement.StartRecoilToLastIdle(recoilDuration);
-                // }
-                // ===========================================
             }
             else
             {

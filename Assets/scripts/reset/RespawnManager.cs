@@ -55,12 +55,12 @@ public class RespawnManager : MonoBehaviour
             newPlayer.transform.position = currentRespawnPoint.position;
             newPlayer.transform.rotation = currentRespawnPoint.rotation;
 
-            // ✅ 回復血量
+            //回復血量
             var health = newPlayer.GetComponent<Health>();
             if (health != null)
                 health.SetHealth(health.MaxHealth);
 
-            // ✅ 重設死亡旗標
+            //重設死亡旗標
             var damageHandler = newPlayer.GetComponent<PlayerDamageHandler>();
             if (damageHandler != null)
                 damageHandler.ResetState();
@@ -72,7 +72,7 @@ public class RespawnManager : MonoBehaviour
             Debug.LogWarning("RespawnManager: 找不到玩家物件！");
         }
 
-        // ✅ 重置 IResettable 物件（可選）
+        //重置 IResettable 物件（可選）
         var resettableObjects = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
             .OfType<IResettable>()
             .ToArray();

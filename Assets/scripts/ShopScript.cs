@@ -4,8 +4,8 @@ using UnityEngine.UI;
 public class ShopScript : MonoBehaviour
 {
     public int healthPrice = 1; // 一滴血 1 元
-    public Health playerHealth; // 請在 Inspector 指定 Player 的 Health
-    public Slider healthSlider; // 可選：滑桿顯示（僅供商店 UI 使用）
+    public Health playerHealth; 
+    public Slider healthSlider; 
 
     void Start()
     {

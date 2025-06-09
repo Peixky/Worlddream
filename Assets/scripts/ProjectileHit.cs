@@ -8,7 +8,6 @@ public class ProjectileHit : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            // ✅ 改為通用 Health.cs，支援玩家或其他角色
             Health hp = other.GetComponent<Health>();
             if (hp != null)
             {
@@ -17,7 +16,7 @@ public class ProjectileHit : MonoBehaviour
 
             Destroy(gameObject);
         }
-        else if (!other.isTrigger) // 撞到非Trigger物件就刪除自己
+        else if (!other.isTrigger)
         {
             Destroy(gameObject); 
         }
