@@ -1004,6 +1004,9 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 0
+  destructibleWallLayer:
+    serializedVersion: 2
+    m_Bits: 0
   playerMovement: {fileID: 0}
   recoilDuration: 0.3
 --- !u!114 &419482446
@@ -1018,6 +1021,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dedfa51b5023a4b4696f6191c1b4bb55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scene3Name: Level3GameScene
 --- !u!95 &419482447
 Animator:
   serializedVersion: 7
@@ -1086,6 +1090,9 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  platformLayer:
+    serializedVersion: 2
+    m_Bits: 0
   canMove: 1
 --- !u!61 &419482450
 BoxCollider2D:

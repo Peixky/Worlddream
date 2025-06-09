@@ -479,12 +479,16 @@ MonoBehaviour:
   - {fileID: -2814304345878303478, guid: a8380c33dbcbe4e858a0b694e4f72491, type: 3}
   - {fileID: 7485733297916660296, guid: 8e604c55d24d14910829c6011e3be505, type: 3}
   - {fileID: 7485733297916660296, guid: 8e604c55d24d14910829c6011e3be505, type: 3}
+  - {fileID: 1119597707047980681, guid: f479b4df252bf4f278e932c8f512f195, type: 3}
+  - {fileID: 1119597707047980681, guid: f479b4df252bf4f278e932c8f512f195, type: 3}
   dialogues:
   - "Major respect, you\u2019ve completed two trials."
   - And now...
   - You must defeat me to wake up from the dream!
   - This time, I actually turned into something kinda normal.
   - Becoming a brave knight should be enough to beat the BOSS!
+  - 'Eating a pineapple boosts your attack power! '
+  - But you have to hit the wall in front 30 times first.
   dialogueEndAction: 0
 --- !u!1 &1129617296
 GameObject:
