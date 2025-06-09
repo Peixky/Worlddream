@@ -13,7 +13,6 @@ public class GameProgressionManager : MonoBehaviour
     public static int CurrentStoryIndex { get; private set; } 
     public static int CurrentLevelIndex { get; private set; } 
 
-    
     public static event Action OnPlayerHealthChanged; 
     public static event Action OnPlayerCashChanged;   
 
@@ -65,15 +64,11 @@ public class GameProgressionManager : MonoBehaviour
 
     public enum GameState
     {
-        Intro,      
-        Playing,   
-        Paused,    
-        GameOver   
+        Intro, Playing, Paused, GameOver
     }
 
     public static GameState currentGameState = GameState.Intro; 
 
-    
     [Header("場景名稱設定")]
     public string[] storyScenes; 
     public string[] gameScenes;  
@@ -89,7 +84,8 @@ public class GameProgressionManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); 
+            DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded; // <<< 加入事件
         }
         else if (instance != this)
         {
@@ -113,7 +109,25 @@ public class GameProgressionManager : MonoBehaviour
         }
     }
 
-    // === 進度讀取與保存 ===
+    // <<< 新增：處理關閉特定物件
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "level2" || scene.name == "Scene1")
+        {
+            GameObject exit = GameObject.Find("Levelexit");
+            if (exit != null)
+            {
+                exit.SetActive(false);
+                Debug.Log("已關閉 Levelexit");
+            }
+        }
+    }
+
+    void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
     void LoadProgress() 
     {
         CurrentStoryIndex = PlayerPrefs.GetInt(CURRENT_STORY_KEY, 0); 
@@ -129,7 +143,6 @@ public class GameProgressionManager : MonoBehaviour
         Debug.Log($"進度保存：目前劇情索引 {CurrentStoryIndex}, 目前關卡索引 {CurrentLevelIndex}");
     }
 
-    // === 進度推進方法 ===
     public static void AdvanceStory()
     {
         CurrentStoryIndex++;
@@ -144,7 +157,6 @@ public class GameProgressionManager : MonoBehaviour
         Debug.Log($"關卡推進到：{CurrentLevelIndex}");
     }
 
-    // === 遊戲流程控制 ===
     public static void StartGameFlow()
     {
         ResetProgress(); 
@@ -207,11 +219,10 @@ public class GameProgressionManager : MonoBehaviour
     public static void LoadBossDeathScene() 
     {
         if (instance == null) return;
-        Debug.Log($"加載 Boss 死亡劇情 Scene: {instance.bossDeathSceneName}"); // 使用新的變數名
+        Debug.Log($"加載 Boss 死亡劇情 Scene: {instance.bossDeathSceneName}");
         SceneManager.LoadScene(instance.bossDeathSceneName);
     }
 
-   
     public static void AddCash(int amount) { PlayerCash += amount; }
     public static bool SpendCash(int amount) 
     { 
@@ -221,7 +232,6 @@ public class GameProgressionManager : MonoBehaviour
     public static void AddHealth(int amount) { PlayerHealth += amount; }
     public static void SetPlayerMaxHealth(int newMax) { PlayerMaxHealth = newMax; PlayerHealth = PlayerHealth; }
 
-    
     public static void ResetProgress()
     {
         PlayerPrefs.DeleteKey(CURRENT_STORY_KEY);
@@ -243,7 +253,6 @@ public class GameProgressionManager : MonoBehaviour
         OnPlayerCashChanged?.Invoke();
     }
 
-    // === 從 IntroManager 移過來的全局暫停/恢復方法 ===
     public static void PauseGame()
     {
         if (currentGameState == GameState.Playing)

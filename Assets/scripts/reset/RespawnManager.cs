@@ -25,14 +25,21 @@ public class RespawnManager : MonoBehaviour
     public void SetRespawnPoint(Transform point)
     {
         currentRespawnPoint = point;
+
+        // 讓該物件也不會被場景刪除
+        if (point != null)
+        {
+            DontDestroyOnLoad(point.gameObject);
+        }
+
         Debug.Log("RespawnManager: 設定重生點 -> " + point.name);
     }
 
     public void Respawn(GameObject playerObj)
     {
-        if (currentRespawnPoint == null)
+        if (currentRespawnPoint == null || currentRespawnPoint.Equals(null))
         {
-            Debug.LogWarning("RespawnManager: 尚未設定重生點！");
+            Debug.LogWarning("RespawnManager: 尚未設定有效的重生點！");
             return;
         }
 
@@ -50,17 +57,15 @@ public class RespawnManager : MonoBehaviour
         // 嘗試找新玩家（場景重載後原本玩家可能不存在）
         var newPlayer = GameObject.FindWithTag("Player");
 
-        if (newPlayer != null)
+        if (newPlayer != null && currentRespawnPoint != null && !currentRespawnPoint.Equals(null))
         {
             newPlayer.transform.position = currentRespawnPoint.position;
             newPlayer.transform.rotation = currentRespawnPoint.rotation;
 
-            //回復血量
             var health = newPlayer.GetComponent<Health>();
             if (health != null)
                 health.SetHealth(health.MaxHealth);
 
-            //重設死亡旗標
             var damageHandler = newPlayer.GetComponent<PlayerDamageHandler>();
             if (damageHandler != null)
                 damageHandler.ResetState();
@@ -69,10 +74,10 @@ public class RespawnManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("RespawnManager: 找不到玩家物件！");
+            Debug.LogWarning("RespawnManager: 找不到玩家或重生點無效！");
         }
 
-        //重置 IResettable 物件（可選）
+        // 重置所有 IResettable 物件
         var resettableObjects = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
             .OfType<IResettable>()
             .ToArray();
