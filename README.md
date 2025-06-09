@@ -36,11 +36,27 @@ After watching the video, Jason laughed uncontrollably. Not only had he beaten t
 
 </details>
 
+## Story Synopsis
+Jason, a dedicated fitness enthusiast, pushed his body to the limit in pursuit of the perfect muscular physique. But after an intense workout, he dozed off—only to find himself trapped in a strange and surreal dream world.
+
+Suddenly transformed into a tiny blue cartoon character, then a dinosaur, and eventually a battle-ready knight, Jason must conquer bizarre challenges to escape the dream. From daring parkour stages to monster battles and a final showdown with a fearsome boss, each level tests his resolve and courage.
+
+As the dream deepens, Jason wonders if he’ll ever wake up—but part of him begins to enjoy the adventure.
+
+Embark on a wild journey through Jason’s subconscious. Run, fight, transform—and help him find his way back to gym reality!
+
 ## Game Introduction
 
 In Jason’s Dream Trials, step into the mind of Jason — a gym enthusiast who, after an intense workout, accidentally falls into a surreal dream world. What starts as a moment of rest turns into a series of bizarre transformations and trials. From a blue cartoon figure to a tiny dinosaur, and eventually a valiant knight, Jason must conquer parkour challenges, defeat monsters, and face fearsome bosses in order to escape his dream and return to reality.
 
 As the player, you’ll control Jason through these dream levels, using simple controls (arrow keys to move, space bar to attack), and adapt to each transformation. Each stage is a new challenge — run, jump, fight, and survive! Will you be strong enough to help Jason awaken?
+
+## Control Guide
+SPACE → attack enemies or boss.(Available only in Level 2 & Level 3)
+W → Direct for the player to jump.
+A → Direct for the player to go left.
+D → Direct for the player to go right.
+PAUSE → Direct for the settings for volume of music & resume the game & go back to main menu & exit from the game & skip to next level.
 
 # 繁體中文版本
 <details  open>
@@ -73,8 +89,24 @@ As the player, you’ll control Jason through these dream levels, using simple c
 > 回想起一路上經歷的種種驚險與恐怖，傑森依然感到不可思議。但同時，他其實也挺享受當騎士、挑戰魔王的過程。而現在，回到現實的他，又重新開始了自己的健身計畫。
 </details>
 
+## 故事簡介
+
+在健身房苦練的傑森，為了鍛鍊出完美肌肉體態，擬定了一套嚴格的健身計畫。然而，一次過度訓練讓他在短暫休息時意外墜入了一場奇幻夢境。他變成了一隻藍色的小卡通角色，接著是小恐龍，最後成為披甲上陣的騎士！
+
+每一次的轉變都伴隨著新的關卡與試煉：極限跑酷、打怪過關、最終魔王戰。他必須通過這些挑戰才能回到現實世界。隨著任務越來越困難，傑森開始懷疑自己是否還有機會醒來……但他也發現，這場夢，似乎沒那麼可怕，甚至有點令人著迷。
+
+踏上這段冒險旅程，幫助傑森征服夢境、戰勝恐懼，找回屬於他的健身房人生！
+
 ## 遊戲介紹
 
 在《Jason的夢境試煉》中，你將進入一位健身狂人Jason的潛意識世界。一次過度訓練後的短暫休息，竟讓他掉入一場奇幻又詭異的夢境之中。從藍色卡通人物、小恐龍到英勇騎士，傑森必須完成一關又一關的試煉，包括跑酷挑戰、擊敗怪獸、最終對抗魔王，才能成功醒來，重返現實世界。
 
 玩家將操作傑森穿越這些夢境關卡，利用簡單的控制方式（方向鍵移動、空白鍵攻擊）應對每次的變身與挑戰。每一關都是全新的考驗——跑起來、跳起來、戰鬥起來、生存下來！你準備好幫助傑森醒來了嗎？
+
+## 操作指引
+
+SPACE → 攻擊敵人或魔王。（僅限第二與第三關使用）
+W → 指引玩家跳躍。
+A → 指引玩家向左移動。
+D → 指引玩家向右移動。
+PAUSE → 開啟設定功能，可調整音樂音量、繼續遊戲、返回主選單、退出遊戲或跳至下一關。
