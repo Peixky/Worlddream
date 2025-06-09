@@ -30,7 +30,7 @@
 
 > When he defeated the boss, the screen suddenly lit up and played a video left by the boss himself—he knew he would be defeated eventually. The video showed the boss in agony.
 
-After watching the video, Jason laughed uncontrollably. Not only had he beaten the final boss, but he could finally return to reality.
+> After watching the video, Jason laughed uncontrollably. Not only had he beaten the final boss, but he could finally return to reality.
 
 > Looking back at all the terrifying things he had experienced, Jason was still in disbelief. But at the same time, he actually enjoyed being a knight and defeating the demon lord. Now, back in the real world, he continued his workout plan once more.
 
