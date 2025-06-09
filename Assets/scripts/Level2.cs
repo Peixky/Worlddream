@@ -28,6 +28,9 @@ public class Level2 : MonoBehaviour
                 Debug.LogWarning("Level2: 找不到 Storyexit，請確認名稱正確。");
             }
 
+            GameObject exit2 = GameObject.Find("Levelexit");
+            exit2.SetActive(true);
+
             // 取消事件註冊，避免之後場景切換時多次觸發
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
