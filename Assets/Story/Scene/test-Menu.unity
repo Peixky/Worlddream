@@ -1129,7 +1129,7 @@ MonoBehaviour:
   gameScenes:
   - Scene1
   - level2
-  - Scene 3
+  - Scene3
   lobbySceneName: test-LobbyScene
   storeSceneName: Story/Scene/StoreScene
   endingSceneName: Story/Scene/End Scene

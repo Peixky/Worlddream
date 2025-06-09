@@ -207,7 +207,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &117322818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5986,7 +5986,7 @@ MonoBehaviour:
   bounceRadius: 5
   shockwavePrefab: {fileID: 5041579208905481066, guid: ccb9af8c51505414c84ac97043762262, type: 3}
   shockwaveSpawnPoint: {fileID: 556990510}
-  shockwaveYOffset: 0.1
+  shockwaveYOffset: -1.45
   projectiles:
   - {fileID: 4437662844466423889, guid: 2674ca798a500d840b33e11590945939, type: 3}
   - {fileID: 3143441850250619615, guid: dbb82a061a9623a4380d45bf6923145d, type: 3}
