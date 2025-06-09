@@ -87,8 +87,8 @@ public class PatrollingEnemy : MonoBehaviour
         }
 
         animator.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
-        animator.SetBool("IsDashing", isDashing);
-        animator.SetBool("IsPreparingToDash", isPreparingToDash);
+        animator.SetBool("isDashing", isDashing);
+        animator.SetBool("isPreparingToDash", isPreparingToDash);
     }
 
     void Patrol()

@@ -74,17 +74,6 @@ public class PlayerController : MonoBehaviour
         {
             Jump();
         }
-        
-        // 滑鼠左鍵點擊 → 瞬移玩家到滑鼠位置
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mouseWorldPos.z = 0f; 
-
-            transform.position = mouseWorldPos;
-
-            rb.linearVelocity = Vector2.zero;
-        }
 
     }
 
