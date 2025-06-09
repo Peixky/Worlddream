@@ -5526,7 +5526,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &412348054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5569,13 +5569,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpawnserTung (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4304775891705080204, guid: 526c4c6e194904bc0899b509cc1cb296, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8342153673217305577, guid: 526c4c6e194904bc0899b509cc1cb296, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.15000153
+      value: 0.11
       objectReference: {fileID: 0}
     - target: {fileID: 8342153673217305577, guid: 526c4c6e194904bc0899b509cc1cb296, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.84
+      value: -2.96
       objectReference: {fileID: 0}
     - target: {fileID: 8342153673217305577, guid: 526c4c6e194904bc0899b509cc1cb296, type: 3}
       propertyPath: m_LocalPosition.z
@@ -26104,7 +26108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63068d8a6b36440408402084690c9710, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 5
+  maxHealth: 10
   healthBarUI: {fileID: 2018950984}
 --- !u!114 &1834820055
 MonoBehaviour:
