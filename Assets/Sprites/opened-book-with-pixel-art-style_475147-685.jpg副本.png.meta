@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      "opened-book-with-pixel-art-style_475147-685.jpg\u526F\u672C_0": -8863116518330657581
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
