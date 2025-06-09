@@ -219,6 +219,7 @@ public class IntroManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(1.0f);
 
         Debug.Log("IntroManager: 玩家死亡流程結束，載入玩家死亡劇情 Scene。");
+        GameProgressionManager.AdvanceStory();
         GameProgressionManager.LoadNextStoryScene(); // 載入玩家死亡劇情 Scene
     }
 

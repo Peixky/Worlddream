@@ -84,7 +84,7 @@ public class GameProgressionManager : MonoBehaviour
     public string lobbySceneName = "LobbyScene"; 
     public string storeSceneName = "StoreScene"; 
     public string endingSceneName = "EndingScene"; 
-    public string playerDeathStorySceneName = "playerDeathScene"; // <<<< 新增：玩家死亡後的劇情 Scene 名稱 >>>>
+    public string bossDeathSceneName = "BossDeathScene"; // <<<< 修正這裡：變數名改為 bossDeathSceneName >>>>
 
     public static GameProgressionManager instance;
 
@@ -208,11 +208,11 @@ public class GameProgressionManager : MonoBehaviour
         SceneManager.LoadScene(instance.storeSceneName);
     }
 
-    public static void LoadPlayerDeathStoryScene() // <<<< 新增：加載玩家死亡劇情 Scene >>>>
+    public static void LoadBossDeathScene() // <<<< 修正：方法名改為 LoadBossDeathScene >>>>
     {
         if (instance == null) return;
-        Debug.Log($"加載玩家死亡劇情 Scene: {instance.playerDeathStorySceneName}");
-        SceneManager.LoadScene(instance.playerDeathStorySceneName);
+        Debug.Log($"加載 Boss 死亡劇情 Scene: {instance.bossDeathSceneName}"); // 使用新的變數名
+        SceneManager.LoadScene(instance.bossDeathSceneName);
     }
 
     // === 遊戲數據操作方法 ===

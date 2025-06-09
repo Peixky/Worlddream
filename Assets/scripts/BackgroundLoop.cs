@@ -8,6 +8,13 @@ public class LoopingBackground : MonoBehaviour
 
     private void Start()
     {
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        if (sr == null)
+        {
+            Debug.LogError("❌ BackgroundLoop: 找不到 SpriteRenderer，請確認此物件上有貼圖！");
+            return;
+        }
+        float width = sr.bounds.size.x;
         cam = Camera.main;
         backgroundWidth = GetComponent<SpriteRenderer>().bounds.size.x;
     }

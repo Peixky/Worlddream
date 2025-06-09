@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Environment Detection")]
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask platformLayer; // 新增：Platform Layer (拖曳進來)
 
     private Rigidbody2D rb;
     private BoxCollider2D boxCollider;
@@ -21,17 +22,28 @@ public class PlayerController : MonoBehaviour
     private bool isRecoiling = false;
 
     // Zipline
-    private Zipline currentZipline;
+    private Zipline currentZipline; // 假設 Zipline 腳本存在
     private bool onZipline = false;
     private float t = 0f;
     private Vector2 startPoint, endPoint, direction;
     private float ziplineLength;
+
+    private int playerLayerIndex; // 儲存玩家自身的 Layer 索引
+    private int platformLayerIndex; // 儲存 Platform Layer 的索引
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
+
+        playerLayerIndex = gameObject.layer; // 獲取玩家自己的 Layer 索引
+        platformLayerIndex = LayerMask.NameToLayer("Platform"); // 獲取 "Platform" Layer 的索引
+
+        if (platformLayerIndex == -1)
+        {
+            Debug.LogWarning("PlayerController: 未找到 'Platform' Layer！請確保已在 Physics2D Layer 設定中添加此 Layer。", this);
+        }
     }
 
     private void Update()
@@ -44,7 +56,7 @@ public class PlayerController : MonoBehaviour
             {
                 JumpOffZipline();
             }
-            return; // 滑索中不處理正常地面行為
+            return;
         }
 
         horizontalInput = Input.GetAxis("Horizontal");
@@ -56,7 +68,7 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
 
         anim.SetBool("run", Mathf.Abs(horizontalInput) > 0.01f);
-        anim.SetBool("grounded", IsGrounded());
+        anim.SetBool("grounded", IsGrounded()); // IsGrounded 現在會檢查 Platform Layer
 
         if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && IsGrounded())
         {
@@ -86,7 +98,8 @@ public class PlayerController : MonoBehaviour
 
     public bool IsGrounded()
     {
-        RaycastHit2D hit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0f, Vector2.down, 0.1f, groundLayer);
+        LayerMask combinedGroundLayers = groundLayer | platformLayer;
+        RaycastHit2D hit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0f, Vector2.down, 0.1f, combinedGroundLayers);
         return hit.collider != null;
     }
 
@@ -96,21 +109,43 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(force, ForceMode2D.Impulse);
     }
 
-    public void StartRecoilToLastIdle(float duration)
+    // 新增：用於在擊退時忽略碰撞
+    public void StartKnockbackIgnoreCollision(float duration) 
     {
-        if (isRecoiling) return;
+        if (isRecoiling) return; // 如果正在回彈中，則不重複觸發
         StartCoroutine(RecoilRoutine(duration));
     }
 
-    private IEnumerator RecoilRoutine(float duration)
+    private IEnumerator RecoilRoutine(float duration) 
     {
         isRecoiling = true;
         canMove = false;
         anim.SetBool("run", false);
         anim.SetTrigger("recoil");
-        yield return new WaitForSeconds(duration);
+
+        // 在擊退時暫時忽略與 Platform Layer 的碰撞
+        if (platformLayerIndex != -1 && playerLayerIndex != -1)
+        {
+            Physics2D.IgnoreLayerCollision(playerLayerIndex, platformLayerIndex, true);
+            Debug.Log("PlayerController: 玩家擊退時暫時忽略 Platform Layer 碰撞。");
+        }
+
+        yield return new WaitForSeconds(duration); // 等待擊退持續時間
+
         isRecoiling = false;
-        canMove = true;
+        canMove = true; // 擊退結束後恢復移動
+
+        // 擊退結束後恢復與 Platform Layer 的碰撞
+        if (platformLayerIndex != -1 && playerLayerIndex != -1)
+        {
+            Physics2D.IgnoreLayerCollision(playerLayerIndex, platformLayerIndex, false);
+            Debug.Log("PlayerController: 玩家擊退結束，恢復 Platform Layer 碰撞。");
+        }
+    }
+
+    public void StartRecoilToLastIdle(float duration)
+    {
+        StartCoroutine(RecoilRoutine(duration));
     }
 
     public bool IsRecoilActive()

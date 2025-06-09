@@ -1,8 +1,9 @@
+// BossHealth.cs
 using UnityEngine;
-using System.Collections; // 確保有這個命名空間，用於協程
-using System; // 確保有這個命名空間，用於 Action 事件 (給 Lambda 用)
+using System.Collections;
+using System; 
 
-[RequireComponent(typeof(Health))]
+[RequireComponent(typeof(Rigidbody2D), typeof(Health))]
 public class BossHealth : MonoBehaviour
 {
     [Header("Boss 死亡設定")]
@@ -22,7 +23,6 @@ public class BossHealth : MonoBehaviour
         bossController = GetComponent<BossController>();
         health = GetComponent<Health>();
 
-        // 訂閱死亡事件
         health.OnDied += HandleDeath;
     }
 
@@ -32,6 +32,11 @@ public class BossHealth : MonoBehaviour
         isDead = true;
 
         Debug.Log(gameObject.name + " 死亡了！");
+
+        if (ScreenFlashManager.Instance != null)
+        {
+            ScreenFlashManager.Instance.StopFlashing();
+        }
 
         Collider2D col = GetComponent<Collider2D>();
         if (col != null) col.enabled = false;
@@ -51,7 +56,6 @@ public class BossHealth : MonoBehaviour
         }
 
         StartCoroutine(RotateToTarget());
-        
     }
 
     IEnumerator RotateToTarget()
@@ -60,22 +64,17 @@ public class BossHealth : MonoBehaviour
         float startRotationZ = currentRotationZ;
         float endRotationZ = targetRotationZ;
 
-        // 計算旋轉方向，確保短路徑
         if (endRotationZ > startRotationZ && (endRotationZ - startRotationZ) > 180f)
             startRotationZ -= 360f;
-        else if (startRotationZ < endRotationZ && (startRotationZ - endRotationZ) < -180f) // 修正這裡的邏輯
+        else if (startRotationZ < endRotationZ && (startRotationZ - endRotationZ) < -180f)
             startRotationZ += 360f;
-        
-        // 確保目標旋轉值在 0 到 360 之間，與 EulerAngles 一致
+
         if (targetRotationZ < 0) targetRotationZ += 360f;
         if (targetRotationZ >= 360) targetRotationZ -= 360f;
 
-
         float elapsedTime = 0f;
-        // 如果 targetRotationZ 和當前旋轉非常接近，直接設定時間為 0 或避免除以零
         float totalDegrees = Mathf.Abs(endRotationZ - startRotationZ);
         float duration = (rotationSpeed > 0 && totalDegrees > 0.01f) ? (totalDegrees / rotationSpeed) : 0f;
-
 
         while (elapsedTime < duration)
         {
@@ -85,25 +84,22 @@ public class BossHealth : MonoBehaviour
             yield return null;
         }
 
-        transform.rotation = Quaternion.Euler(0, 0, targetRotationZ); // 確保最終角度精確
+        transform.rotation = Quaternion.Euler(0, 0, targetRotationZ);
 
-        // === 修正開始 ===
         Debug.Log("BossHealth: Boss倒下動畫結束。準備播放影片過場動畫。");
-        
-        // 直接使用 VideoCutsceneManager.Instance 存取實例
+
         if (VideoCutsceneManager.Instance != null)
         {
-            // 播放影片，並在影片結束後觸發載入劇情四
-            VideoCutsceneManager.Instance.PlayVideo(() => { // <<<< 修正這裡，使用 .Instance >>>>
-                Debug.Log("BossHealth: 影片播放結束，加載劇情四。");
-                GameProgressionManager.AdvanceStory(); // 推進劇情到劇情四
-                GameProgressionManager.LoadPlayerDeathStoryScene(); // 加載 StoryScene4
+            // 播放影片，並在影片結束後觸發載入「Boss 死亡劇情 Scene」
+            VideoCutsceneManager.Instance.PlayVideo(() => {
+                Debug.Log("BossHealth: 影片播放結束，加載 Boss 死亡劇情 Scene。");
+                GameProgressionManager.LoadBossDeathScene(); // <<<< 修正這裡，呼叫 LoadBossDeathScene >>>>
             });
         }
         else
         {
-            GameProgressionManager.AdvanceStory(); // 推進劇情
-            GameProgressionManager.LoadNextStoryScene(); // 加載 StoryScene4
+            Debug.LogError("BossHealth: 未找到 VideoCutsceneManager 實例！直接加載 Boss 死亡劇情 Scene。", this);
+            GameProgressionManager.LoadBossDeathScene(); // <<<< 修正這裡 >>>>
         }
     }
 }

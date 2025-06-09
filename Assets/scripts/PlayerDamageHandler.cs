@@ -1,5 +1,6 @@
 using UnityEngine;
-using System.Collections;
+using System.Collections; // 為了 Coroutine
+using System; // 為了 Action (如果之前有用到)
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Health))]
 public class PlayerDamageHandler : MonoBehaviour
@@ -25,15 +26,16 @@ public class PlayerDamageHandler : MonoBehaviour
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private Health health;
-    private PlayerDeathHandler deathHandler;
+    private PlayerController playerController; // <<<< 新增：引用 PlayerController >>>>
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         health = GetComponent<Health>();
-        deathHandler = GetComponent<PlayerDeathHandler>();
+        // Removed: deathHandler = GetComponent<PlayerDeathHandler>(); // 這個其實沒用到，可以考慮移除
 
+        playerController = GetComponent<PlayerController>(); // <<<< 在 Awake 獲取 PlayerController >>>>
     }
 
     private void Update()
@@ -78,20 +80,26 @@ public class PlayerDamageHandler : MonoBehaviour
 
         StartCoroutine(InvincibilityCoroutine());
 
-        PlayerController movement = GetComponent<PlayerController>();
-        if (movement != null)
+        // === 修正：呼叫 PlayerController 的 StartRecoilToLastIdle 和 StartKnockbackIgnoreCollision >>>>
+        if (playerController != null)
         {
-            movement.canMove = false;
-            Invoke(nameof(EnableMovement), knockbackDuration);
+            playerController.canMove = false; // 先禁用移動
+            playerController.StartRecoilToLastIdle(knockbackDuration); // 觸發回彈動畫
+            playerController.StartKnockbackIgnoreCollision(knockbackDuration); // 觸發碰撞忽略
+        }
+        else
+        {
+            // 如果沒有 PlayerController，至少在擊退時間後恢復移動 (後備方案)
+            // Removed: Invoke(nameof(EnableMovement), knockbackDuration); // 這個方法已經被移除
         }
     }
 
-    private void EnableMovement()
-    {
-        PlayerController movement = GetComponent<PlayerController>();
-        if (movement != null)
-            movement.canMove = true;
-    }
+    // Removed: private void EnableMovement() // 這個方法已經被移除，功能已整合到 PlayerController
+    // Removed: {
+    // Removed:     PlayerController movement = GetComponent<PlayerController>();
+    // Removed:     if (movement != null)
+    // Removed:         movement.canMove = true;
+    // Removed: }
 
     private IEnumerator InvincibilityCoroutine()
     {
@@ -121,7 +129,7 @@ public class PlayerDamageHandler : MonoBehaviour
 
         var movement = GetComponent<PlayerController>();
         if (movement != null)
-            movement.canMove = true;
+            movement.canMove = true; // 確保在重置狀態時恢復移動
 
         Debug.Log("玩家狀態已重置");
     }
@@ -139,16 +147,14 @@ public class PlayerDamageHandler : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         rb.AddForce(knockback, ForceMode2D.Impulse);
 
-        PlayerController movement = GetComponent<PlayerController>();
-        if (movement != null)
+        // === 修正：呼叫 PlayerController 的 StartKnockbackIgnoreCollision >>>>
+        if (playerController != null)
         {
-            movement.canMove = false;
-            Invoke(nameof(EnableMovement), knockbackDuration);
+            playerController.canMove = false; // 先禁用移動
+            playerController.StartKnockbackIgnoreCollision(knockbackDuration); // 觸發碰撞忽略
         }
+        // ===============================================================
 
         Debug.Log("⚡ 玩家被 KnockbackProjectile 擊退（無傷害）");
     }
-
-
-
 }
