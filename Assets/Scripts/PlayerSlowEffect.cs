@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerSlowEffect : MonoBehaviour
 {
-    public float slowMultiplier = 0.5f; // 移動速度倍率（例如 0.5 表示減速為 50%）
+    public float slowMultiplier = 0.5f; 
     public float duration = 1f;
 
     private Rigidbody2D rb;
@@ -18,7 +18,7 @@ public class PlayerSlowEffect : MonoBehaviour
         }
         else
         {
-            Destroy(this); // 沒有剛體就無效
+            Destroy(this); 
         }
     }
 
@@ -26,7 +26,6 @@ public class PlayerSlowEffect : MonoBehaviour
     {
         isSlowing = true;
 
-        // 減速期間持續降低 velocity
         float timer = 0f;
         while (timer < duration)
         {

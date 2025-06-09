@@ -4,14 +4,14 @@ using UnityEngine.SceneManagement;
 public class Level1tohome : MonoBehaviour
 {
     [Header("觸發設定")]
-    public string playerTag = "Player";         // 玩家 Tag
-    public float transitionDelay = 1.0f;         // 延遲幾秒後切場景
+    public string playerTag = "Player";        
+    public float transitionDelay = 1.0f;        
     [Header("場景設定")]
-    public string menuSceneName = "test-Menu"; // 要載入的場景名稱
+    public string menuSceneName = "test-Menu"; 
 
-    private bool hasTriggered = false;           // 防止重複觸發
+    private bool hasTriggered = false;          
 
-    // 3D 觸發
+    
     void OnTriggerEnter(Collider other)
     {
         if (!hasTriggered && other.CompareTag(playerTag))

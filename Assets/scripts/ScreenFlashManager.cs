@@ -12,7 +12,7 @@ public class ScreenFlashManager : MonoBehaviour
 
     public static ScreenFlashManager Instance { get; private set; }
 
-    private bool isFlashing = false; // <<<< 新增：控制是否持續閃爍的旗標 >>>>
+    private bool isFlashing = false; 
 
     void Awake()
     {
@@ -41,36 +41,36 @@ public class ScreenFlashManager : MonoBehaviour
         flashPanel.gameObject.SetActive(false); 
     }
 
-    // 公開方法：觸發畫面開始持續閃爍
+   
     public void FlashScreen()
     {
         if (flashPanel == null || !enabled) return;
 
-        isFlashing = true; // <<<< 設定為開始持續閃爍 >>>>
+        isFlashing = true;
         flashPanel.gameObject.SetActive(true); 
 
         StopAllCoroutines(); 
         StartCoroutine(FlashRoutine()); 
     }
 
-    // <<<< 新增：公開方法，用於停止畫面閃爍 >>>>
+   
     public void StopFlashing()
     {
-        isFlashing = false; // 設定旗標為停止
-        StopAllCoroutines(); // 停止所有協程 (包括 FlashRoutine)
+        isFlashing = false;
+        StopAllCoroutines(); 
         if (flashPanel != null)
         {
             Color c = flashPanel.color;
-            c.a = 0f; // 將 Panel 設為完全透明
+            c.a = 0f; 
             flashPanel.color = c;
-            flashPanel.gameObject.SetActive(false); // 隱藏 Panel
+            flashPanel.gameObject.SetActive(false); 
         }
         Debug.Log("ScreenFlashManager: 畫面閃紅已停止。");
     }
 
     IEnumerator FlashRoutine()
     {
-        while (isFlashing) // <<<< 迴圈：只要 isFlashing 為 true 就一直閃 >>>>
+        while (isFlashing) 
         {
             // 階段 1: 淡入 (Fade In)
             float timer = 0f;
@@ -103,11 +103,9 @@ public class ScreenFlashManager : MonoBehaviour
             }
             flashPanel.color = targetColor;
 
-            // 如果迴圈繼續，會在下一次迭代時再次從透明開始淡入
-            // 可以在這裡加一個短暫的停頓，讓閃爍效果更明顯
-            // yield return new WaitForSecondsRealtime(0.1f); 
+            
         }
-        // 當 isFlashing 變為 false 時，迴圈結束，協程也會結束
-        flashPanel.gameObject.SetActive(false); // 確保在迴圈結束後隱藏 Panel
+       
+        flashPanel.gameObject.SetActive(false);
     }
 }

@@ -4,8 +4,8 @@ using UnityEngine.UI;
 public class HealthBarUI : MonoBehaviour
 {
     [Header("血條設定")]
-    public Image fillImage;              // 拖入要縮放的血條 Image（type: Filled）
-    public bool fillFromRight = false;   // 設 true 表示從右邊開始縮減
+    public Image fillImage;           
+    public bool fillFromRight = false;   
 
     private void Awake()
     {
@@ -13,7 +13,7 @@ public class HealthBarUI : MonoBehaviour
         {
             fillImage.type = Image.Type.Filled;
             fillImage.fillMethod = Image.FillMethod.Horizontal;
-            fillImage.fillOrigin = fillFromRight ? 1 : 0; // 1=Right, 0=Left
+            fillImage.fillOrigin = fillFromRight ? 1 : 0; 
         }
     }
 
