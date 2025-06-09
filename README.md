@@ -10,7 +10,7 @@
 
 ## Complete Story
 <details>
-<summary>SLIDING is a fantastical world...</summary>
+<summary>The dream of the gym</summary>
  
 >  Jason was working out hard at the gym. His goal was to become super strong and have a body full of muscles. To achieve this, he made a detailed workout plan. However, because he had trained for too long the day before, he suddenly felt extremely tired today—his body was fatigued, and he even felt a bit dizzy. So, he decided to take a short rest.
 
@@ -43,7 +43,7 @@ After watching the video, Jason laughed uncontrollably. Not only had he beaten t
 
 ## 完整故事
 <details>
-<summary>SLIDING是一個充滿奇幻色彩的世界......</summary>
+<summary>健身房之夢</summary>
 
 > Jason正在健身房努力鍛鍊，他的目標是變得非常強壯，擁有一副充滿肌肉的身體。為了達成這個目標，他制定了一套詳細的健身計畫，然而，由於前一天鍛鍊得太久，他今天突然感到極度疲憊——全身無力，甚至有點頭暈，所以，他決定稍微休息一下。
 
