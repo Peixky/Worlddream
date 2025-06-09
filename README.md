@@ -1,4 +1,4 @@
-# _SLIDING_
+# Worldream
 > [!NOTE]
 > <a href="#繁體中文">跳轉到繁體中文版本</a>
 
@@ -36,6 +36,11 @@ After watching the video, Jason laughed uncontrollably. Not only had he beaten t
 
 </details>
 
+## Game Introduction
+
+In Jason’s Dream Trials, step into the mind of Jason — a gym enthusiast who, after an intense workout, accidentally falls into a surreal dream world. What starts as a moment of rest turns into a series of bizarre transformations and trials. From a blue cartoon figure to a tiny dinosaur, and eventually a valiant knight, Jason must conquer parkour challenges, defeat monsters, and face fearsome bosses in order to escape his dream and return to reality.
+
+As the player, you’ll control Jason through these dream levels, using simple controls (arrow keys to move, space bar to attack), and adapt to each transformation. Each stage is a new challenge — run, jump, fight, and survive! Will you be strong enough to help Jason awaken?
 
 # 繁體中文版本
 <details  open>
@@ -67,3 +72,9 @@ After watching the video, Jason laughed uncontrollably. Not only had he beaten t
 
 > 回想起一路上經歷的種種驚險與恐怖，傑森依然感到不可思議。但同時，他其實也挺享受當騎士、挑戰魔王的過程。而現在，回到現實的他，又重新開始了自己的健身計畫。
 </details>
+
+## 遊戲介紹
+
+在《Jason的夢境試煉》中，你將進入一位健身狂人Jason的潛意識世界。一次過度訓練後的短暫休息，竟讓他掉入一場奇幻又詭異的夢境之中。從藍色卡通人物、小恐龍到英勇騎士，傑森必須完成一關又一關的試煉，包括跑酷挑戰、擊敗怪獸、最終對抗魔王，才能成功醒來，重返現實世界。
+
+玩家將操作傑森穿越這些夢境關卡，利用簡單的控制方式（方向鍵移動、空白鍵攻擊）應對每次的變身與挑戰。每一關都是全新的考驗——跑起來、跳起來、戰鬥起來、生存下來！你準備好幫助傑森醒來了嗎？
