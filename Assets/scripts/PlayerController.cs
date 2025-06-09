@@ -216,11 +216,28 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("MovingPlatform"))
         {
+            // 不再直接在這裡設定父物件，而是啟動一個協程來延遲執行
+            StartCoroutine(ClearParentAfterFrame());
+        }
+        // 其他的 OnCollisionExit2D 邏輯...
+    }
+
+    // 新增的協程，用於延遲設定父物件
+    private IEnumerator ClearParentAfterFrame()
+    {
+        // 等待一幀（或到幀的末尾），讓 Unity 完成當前的啟用/停用操作
+        yield return null; 
+
+        // 確保在設定前，玩家的父物件仍然是剛離開的平台，避免意外設定
+        // 例如，如果玩家立刻跳到另一個平台上，這個檢查就很重要
+        if (transform.parent != null && transform.parent.CompareTag("MovingPlatform"))
+        {
             transform.parent = null;
+            // Debug.Log("玩家父物件已在下一幀設為 null。"); // 可選的調試訊息
         }
     }
 }

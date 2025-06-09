@@ -42,14 +42,16 @@ public class VideoCutsceneManager : MonoBehaviour
             videoDisplayImage.gameObject.SetActive(false);
         }
 
-        videoPlayer.loopPointReached += OnVideoEnd;
+        // 訂閱影片結束事件
+        videoPlayer.loopPointReached += HandleVideoFinished; // 修改這裡，使用新的函式
     }
 
     void OnDisable()
     {
         if (videoPlayer != null)
         {
-            videoPlayer.loopPointReached -= OnVideoEnd;
+            // 取消訂閱影片結束事件
+            videoPlayer.loopPointReached -= HandleVideoFinished; // 修改這裡
         }
     }
 
@@ -81,28 +83,29 @@ public class VideoCutsceneManager : MonoBehaviour
         }
 
         videoPlayer.Play();
-        Time.timeScale = 0f;
+        Time.timeScale = 0f; // 影片播放期間暫停時間
         Debug.Log("VideoCutsceneManager: 開始播放影片過場動畫。");
     }
 
-    void OnVideoEnd(VideoPlayer vp)
+    // 新的影片結束處理函式
+    void HandleVideoFinished(VideoPlayer vp)
     {
-        Time.timeScale = 1f;
-        Debug.Log("VideoCutsceneManager: 影片播放結束，開始倒數 15 秒。");
+        // 影片結束時不需要恢復 Time.timeScale，因為您說要直接進劇情，
+        // 且劇情可能會有自己的時間控制或場景切換。
+        // if (Time.timeScale != 0f) Time.timeScale = 1f; // 這一行現在不需要了
+
+        Debug.Log("VideoCutsceneManager: 影片播放結束。");
 
         if (videoDisplayImage != null)
         {
+            // 您可以選擇是否要隱藏畫面，如果下一段劇情是切換場景或完全覆蓋，這行也可以移除。
+            // 但為了避免影片殘影，通常還是會隱藏。
             videoDisplayImage.gameObject.SetActive(false);
         }
 
-        StartCoroutine(WaitBeforeCallback(30f)); // ✅ 延遲執行
-    }
-
-    private IEnumerator WaitBeforeCallback(float delaySeconds)
-    {
-        yield return new WaitForSecondsRealtime(delaySeconds); // ✅ 不受 Time.timeScale 影響
-        Debug.Log("VideoCutsceneManager: 15 秒倒數結束，執行場景切換。");
-
+        // 影片播放結束後立即觸發回調，進入劇情
+        // 假設這個 onVideoFinishedCallback 就是用來進入劇情的。
         onVideoFinishedCallback?.Invoke();
+        Debug.Log("VideoCutsceneManager: 已執行影片結束後的回調（即將進入劇情）。");
     }
 }

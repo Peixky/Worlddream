@@ -697,7 +697,7 @@ MonoBehaviour:
   - {fileID: -5535821660565706578, guid: 0bd65a8f21c11470883af6d6d3221f00, type: 3}
   - {fileID: -4832355584681267828, guid: 7eb6bf71c34f5416ba2128db2a1d07b5, type: 3}
   - {fileID: -234824681610274591, guid: aa8a87ef8942041e4b89feb00270091b, type: 3}
-  - {fileID: -3744307979370998673, guid: 94eacb2540d124bfa8caf603805953fb, type: 3}
+  - {fileID: 4687513573015726406, guid: c02694ece7dde4ed4a3f0495df87442b, type: 3}
   dialogues:
   - Phew... I almost died there.
   - "It should be over now\u2026 Time to get up and hit the gym!"
@@ -708,7 +708,7 @@ MonoBehaviour:
   - ' There still more?!'
   - 'Game Guide: You must defeat all monsters to clear the level.'
   - Use the arrow keys to move left and right, and to jump.
-  - 'Game Guide: Right-click the mouse to shoot fireballs and attack enemies. '
+  - "Game Guide: Press the spacebar to attack the monster \uFF01"
   dialogueEndAction: 0
 --- !u!4 &1182109172
 Transform:
