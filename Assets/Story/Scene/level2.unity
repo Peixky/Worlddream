@@ -26231,6 +26231,7 @@ GameObject:
   - component: {fileID: 1834820063}
   - component: {fileID: 1834820064}
   - component: {fileID: 1834820065}
+  - component: {fileID: 1834820066}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -26531,6 +26532,18 @@ MonoBehaviour:
     m_Bits: 512
   playerMovement: {fileID: 1834820059}
   recoilDuration: 0.3
+--- !u!114 &1834820066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1834820053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa3efefc1c47c4a028f2e0726f4d1f3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1850090897
 GameObject:
   m_ObjectHideFlags: 0
