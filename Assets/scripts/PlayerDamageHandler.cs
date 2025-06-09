@@ -26,16 +26,15 @@ public class PlayerDamageHandler : MonoBehaviour
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private Health health;
-    private PlayerController playerController; // <<<< 新增：引用 PlayerController >>>>
+    private PlayerController playerController;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         health = GetComponent<Health>();
-        // Removed: deathHandler = GetComponent<PlayerDeathHandler>(); // 這個其實沒用到，可以考慮移除
 
-        playerController = GetComponent<PlayerController>(); // <<<< 在 Awake 獲取 PlayerController >>>>
+        playerController = GetComponent<PlayerController>(); 
     }
 
     private void Update()
@@ -80,26 +79,15 @@ public class PlayerDamageHandler : MonoBehaviour
 
         StartCoroutine(InvincibilityCoroutine());
 
-        // === 修正：呼叫 PlayerController 的 StartRecoilToLastIdle 和 StartKnockbackIgnoreCollision >>>>
         if (playerController != null)
         {
-            playerController.canMove = false; // 先禁用移動
-            playerController.StartRecoilToLastIdle(knockbackDuration); // 觸發回彈動畫
-            playerController.StartKnockbackIgnoreCollision(knockbackDuration); // 觸發碰撞忽略
+            playerController.canMove = false; 
+            playerController.StartRecoilToLastIdle(knockbackDuration);
+            playerController.StartKnockbackIgnoreCollision(knockbackDuration); 
         }
-        else
-        {
-            // 如果沒有 PlayerController，至少在擊退時間後恢復移動 (後備方案)
-            // Removed: Invoke(nameof(EnableMovement), knockbackDuration); // 這個方法已經被移除
-        }
+
     }
 
-    // Removed: private void EnableMovement() // 這個方法已經被移除，功能已整合到 PlayerController
-    // Removed: {
-    // Removed:     PlayerController movement = GetComponent<PlayerController>();
-    // Removed:     if (movement != null)
-    // Removed:         movement.canMove = true;
-    // Removed: }
 
     private IEnumerator InvincibilityCoroutine()
     {
@@ -129,7 +117,7 @@ public class PlayerDamageHandler : MonoBehaviour
 
         var movement = GetComponent<PlayerController>();
         if (movement != null)
-            movement.canMove = true; // 確保在重置狀態時恢復移動
+            movement.canMove = true;
 
         Debug.Log("玩家狀態已重置");
     }
@@ -147,13 +135,12 @@ public class PlayerDamageHandler : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         rb.AddForce(knockback, ForceMode2D.Impulse);
 
-        // === 修正：呼叫 PlayerController 的 StartKnockbackIgnoreCollision >>>>
         if (playerController != null)
         {
-            playerController.canMove = false; // 先禁用移動
-            playerController.StartKnockbackIgnoreCollision(knockbackDuration); // 觸發碰撞忽略
+            playerController.canMove = false;
+            playerController.StartKnockbackIgnoreCollision(knockbackDuration);
         }
-        // ===============================================================
+
 
         Debug.Log("⚡ 玩家被 KnockbackProjectile 擊退（無傷害）");
     }
