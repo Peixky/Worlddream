@@ -68,12 +68,24 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
 
         anim.SetBool("run", Mathf.Abs(horizontalInput) > 0.01f);
-        anim.SetBool("grounded", IsGrounded()); 
+        anim.SetBool("grounded", IsGrounded());
 
         if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && IsGrounded())
         {
             Jump();
         }
+        
+        // 滑鼠左鍵點擊 → 瞬移玩家到滑鼠位置
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mouseWorldPos.z = 0f; 
+
+            transform.position = mouseWorldPos;
+
+            rb.linearVelocity = Vector2.zero;
+        }
+
     }
 
     private void FixedUpdate()
@@ -109,7 +121,6 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(force, ForceMode2D.Impulse);
     }
 
-    // 新增：用於在擊退時忽略碰撞
     public void StartKnockbackIgnoreCollision(float duration) 
     {
         if (isRecoiling) return; 
@@ -217,12 +228,10 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("MovingPlatform"))
         {
-            
             StartCoroutine(ClearParentAfterFrame());
         }
     }
 
-    // 新增的協程，用於延遲設定父物件
     private IEnumerator ClearParentAfterFrame()
     {
         yield return null; 
