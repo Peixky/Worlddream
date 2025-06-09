@@ -74,6 +74,8 @@ public class PlayerAttack : MonoBehaviour
                 Debug.LogWarning($"{hit.name} 沒有 Health 或 DestructibleWall 腳本，無法造成傷害。", hit.gameObject);
             }
         }
+
+        Debug.Log("Attack triggered");
     }
 
     public void IncreaseAttackPower(int amount)

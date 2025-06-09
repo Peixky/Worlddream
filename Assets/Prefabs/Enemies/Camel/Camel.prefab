@@ -149,6 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 3
+  damageCooldown: 0.5
 --- !u!61 &1888004073136040458
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -183,7 +184,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.024406135, y: -0.21779191}
+  m_Offset: {x: 0.024406135, y: -0.15616894}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -193,7 +194,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.6934136, y: 2.208495}
+  m_Size: {x: 1.6934136, y: 2.3317409}
   m_EdgeRadius: 0
 --- !u!1 &8319887883724559338
 GameObject:
@@ -206,6 +207,7 @@ GameObject:
   - component: {fileID: 2162571453950432631}
   - component: {fileID: 5784358540507289427}
   - component: {fileID: 1557730205644534455}
+  - component: {fileID: 2396968870364685487}
   m_Layer: 9
   m_Name: HeadTrigger
   m_TagString: Untagged
@@ -262,7 +264,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.117750645, y: -0.35423097}
+  m_Offset: {x: -0.117750645, y: -0.24218917}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -272,7 +274,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 3.7334623, y: 0.8595324}
+  m_Size: {x: 3.7334623, y: 0.6354488}
   m_EdgeRadius: 0
 --- !u!114 &1557730205644534455
 MonoBehaviour:
@@ -287,5 +289,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyHealth: {fileID: 8647855228669839152}
-  damageCooldown: 1
   bounceForce: 12
+--- !u!114 &2396968870364685487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8319887883724559338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccdb17b23a2b24ae1b07eee048f7d2b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  attackPoint: {fileID: 0}
+  attackRange: 1
+  attackDamage: 1
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  playerMovement: {fileID: 0}
+  recoilDuration: 0.3
