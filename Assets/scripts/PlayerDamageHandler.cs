@@ -1,6 +1,6 @@
 using UnityEngine;
-using System.Collections; 
-using System; 
+using System.Collections; // 為了 Coroutine
+using System; // 為了 Action (如果之前有用到)
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Health))]
 public class PlayerDamageHandler : MonoBehaviour
@@ -26,13 +26,14 @@ public class PlayerDamageHandler : MonoBehaviour
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private Health health;
-    private PlayerController playerController; 
+    private PlayerController playerController;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         health = GetComponent<Health>();
+
         playerController = GetComponent<PlayerController>(); 
     }
 
@@ -78,17 +79,13 @@ public class PlayerDamageHandler : MonoBehaviour
 
         StartCoroutine(InvincibilityCoroutine());
 
-        // === 修正：呼叫 PlayerController 的 StartRecoilToLastIdle 和 StartKnockbackIgnoreCollision >>>>
         if (playerController != null)
         {
-            playerController.canMove = false; // 先禁用移動
-            playerController.StartRecoilToLastIdle(knockbackDuration); // 觸發回彈動畫
-            playerController.StartKnockbackIgnoreCollision(knockbackDuration); // 觸發碰撞忽略
+            playerController.canMove = false; 
+            playerController.StartRecoilToLastIdle(knockbackDuration);
+            playerController.StartKnockbackIgnoreCollision(knockbackDuration); 
         }
-        else
-        {
-            
-        }
+
     }
 
 
@@ -120,7 +117,7 @@ public class PlayerDamageHandler : MonoBehaviour
 
         var movement = GetComponent<PlayerController>();
         if (movement != null)
-            movement.canMove = true; // 確保在重置狀態時恢復移動
+            movement.canMove = true;
 
         Debug.Log("玩家狀態已重置");
     }
@@ -138,12 +135,13 @@ public class PlayerDamageHandler : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         rb.AddForce(knockback, ForceMode2D.Impulse);
 
-        
         if (playerController != null)
         {
-            playerController.canMove = false; 
-            playerController.StartKnockbackIgnoreCollision(knockbackDuration); 
+            playerController.canMove = false;
+            playerController.StartKnockbackIgnoreCollision(knockbackDuration);
         }
+
+
         Debug.Log("⚡ 玩家被 KnockbackProjectile 擊退（無傷害）");
     }
 }
