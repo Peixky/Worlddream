@@ -68,12 +68,24 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
 
         anim.SetBool("run", Mathf.Abs(horizontalInput) > 0.01f);
-        anim.SetBool("grounded", IsGrounded()); // IsGrounded 現在會檢查 Platform Layer
+        anim.SetBool("grounded", IsGrounded());
 
         if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && IsGrounded())
         {
             Jump();
         }
+        
+        // 滑鼠左鍵點擊 → 瞬移玩家到滑鼠位置
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mouseWorldPos.z = 0f; 
+
+            transform.position = mouseWorldPos;
+
+            rb.linearVelocity = Vector2.zero;
+        }
+
     }
 
     private void FixedUpdate()
@@ -109,7 +121,6 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(force, ForceMode2D.Impulse);
     }
 
-    // 新增：用於在擊退時忽略碰撞
     public void StartKnockbackIgnoreCollision(float duration) 
     {
         if (isRecoiling) return; // 如果正在回彈中，則不重複觸發
@@ -220,24 +231,17 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("MovingPlatform"))
         {
-            // 不再直接在這裡設定父物件，而是啟動一個協程來延遲執行
             StartCoroutine(ClearParentAfterFrame());
         }
-        // 其他的 OnCollisionExit2D 邏輯...
     }
 
-    // 新增的協程，用於延遲設定父物件
     private IEnumerator ClearParentAfterFrame()
     {
-        // 等待一幀（或到幀的末尾），讓 Unity 完成當前的啟用/停用操作
         yield return null; 
 
-        // 確保在設定前，玩家的父物件仍然是剛離開的平台，避免意外設定
-        // 例如，如果玩家立刻跳到另一個平台上，這個檢查就很重要
         if (transform.parent != null && transform.parent.CompareTag("MovingPlatform"))
         {
             transform.parent = null;
-            // Debug.Log("玩家父物件已在下一幀設為 null。"); // 可選的調試訊息
         }
     }
 }
