@@ -52,10 +52,10 @@ In Jason’s Dream Trials, step into the mind of Jason — a gym enthusiast who,
 As the player, you’ll control Jason through these dream levels, using simple controls (arrow keys to move, space bar to attack), and adapt to each transformation. Each stage is a new challenge — run, jump, fight, and survive! Will you be strong enough to help Jason awaken?
 
 ## Control Guide
-SPACE → attack enemies or boss.(Available only in Level 2 & Level 3)
-W → Direct for the player to jump.
-A → Direct for the player to go left.
-D → Direct for the player to go right.
+SPACE → attack enemies or boss.(Available only in Level 2 & Level 3)<br>
+W → Direct for the player to jump.<br>
+A → Direct for the player to go left.<br>
+D → Direct for the player to go right.<br>
 PAUSE → Direct for the settings for volume of music & resume the game & go back to main menu & exit from the game & skip to next level.
 
 # 繁體中文版本
@@ -105,8 +105,8 @@ PAUSE → Direct for the settings for volume of music & resume the game & go bac
 
 ## 操作指引
 
-SPACE → 攻擊敵人或魔王。（僅限第二與第三關使用）
-W → 指引玩家跳躍。
-A → 指引玩家向左移動。
-D → 指引玩家向右移動。
+SPACE → 攻擊敵人或魔王。（僅限第二與第三關使用）<br>
+W → 指引玩家跳躍。<br>
+A → 指引玩家向左移動。<br>
+D → 指引玩家向右移動。<br>
 PAUSE → 開啟設定功能，可調整音樂音量、繼續遊戲、返回主選單、退出遊戲或跳至下一關。
