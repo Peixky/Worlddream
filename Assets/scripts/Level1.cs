@@ -29,9 +29,7 @@ public class Level1 : MonoBehaviour
                 Debug.LogWarning("找不到 ExitTrigger，請確認物件名稱是否正確。");
             }
             
-            GameObject exit2 = GameObject.Find("Levelexit");
-            exit2.SetActive(true);
-
+           
 
             // ✅ 一定要取消訂閱，避免未來場景切換重複執行
             SceneManager.sceneLoaded -= OnSceneLoaded;

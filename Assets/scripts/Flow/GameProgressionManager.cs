@@ -27,7 +27,6 @@ public class GameProgressionManager : MonoBehaviour
                 PlayerPrefs.SetInt(HEALTH_KEY, clampedHealth);
                 PlayerPrefs.Save(); 
                 OnPlayerHealthChanged?.Invoke(); 
-                Debug.Log($"GameProgressionManager: 玩家血量更新為: {clampedHealth}");
             }
         }
     }
@@ -42,7 +41,6 @@ public class GameProgressionManager : MonoBehaviour
                 PlayerPrefs.SetInt(CASH_KEY, value);
                 PlayerPrefs.Save(); 
                 OnPlayerCashChanged?.Invoke(); 
-                Debug.Log($"GameProgressionManager: 玩家金幣更新為: {value}");
             }
         }
     }
@@ -57,17 +55,15 @@ public class GameProgressionManager : MonoBehaviour
                 PlayerPrefs.SetInt(MAX_HEALTH_KEY, value);
                 PlayerPrefs.Save(); 
                 OnPlayerHealthChanged?.Invoke(); 
-                Debug.Log($"GameProgressionManager: 玩家最大血量更新為: {value}");
             }
         }
     }
 
-    public enum GameState
-    {
-        Intro, Playing, Paused, GameOver
-    }
+    public enum GameState { Intro, Playing, Paused, GameOver }
+    public static GameState currentGameState = GameState.Intro;
 
-    public static GameState currentGameState = GameState.Intro; 
+    public enum GameFlowMode { Story, Level }
+    public static GameFlowMode currentGameFlowMode = GameFlowMode.Story;
 
     [Header("場景名稱設定")]
     public string[] storyScenes; 
@@ -85,41 +81,26 @@ public class GameProgressionManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
-            SceneManager.sceneLoaded += OnSceneLoaded; // <<< 加入事件
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else if (instance != this)
         {
-            Destroy(gameObject); 
-            return; 
+            Destroy(gameObject);
+            return;
         }
 
         LoadProgress(); 
         OnPlayerHealthChanged?.Invoke(); 
         OnPlayerCashChanged?.Invoke();
-
-        if (SceneManager.GetActiveScene().buildIndex == 0) 
-        {
-            Time.timeScale = 1f; 
-            currentGameState = GameState.Paused; 
-        }
-        else
-        {
-            Time.timeScale = 1f;
-            currentGameState = GameState.Playing;
-        }
     }
 
-    // <<< 新增：處理關閉特定物件
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.name == "level2" || scene.name == "Scene1")
         {
             GameObject exit = GameObject.Find("Levelexit");
             if (exit != null)
-            {
                 exit.SetActive(false);
-                Debug.Log("已關閉 Levelexit");
-            }
         }
     }
 
@@ -128,76 +109,77 @@ public class GameProgressionManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    void LoadProgress() 
+    void LoadProgress()
     {
-        CurrentStoryIndex = PlayerPrefs.GetInt(CURRENT_STORY_KEY, 0); 
-        CurrentLevelIndex = PlayerPrefs.GetInt(CURRENT_LEVEL_KEY, 0); 
-        Debug.Log($"進度加載：目前劇情索引 {CurrentStoryIndex}, 目前關卡索引 {CurrentLevelIndex}");
+        CurrentStoryIndex = PlayerPrefs.GetInt(CURRENT_STORY_KEY, 0);
+        CurrentLevelIndex = PlayerPrefs.GetInt(CURRENT_LEVEL_KEY, 0);
     }
 
-    void SaveProgress() 
+    void SaveProgress()
     {
         PlayerPrefs.SetInt(CURRENT_STORY_KEY, CurrentStoryIndex);
         PlayerPrefs.SetInt(CURRENT_LEVEL_KEY, CurrentLevelIndex);
-        PlayerPrefs.Save(); 
-        Debug.Log($"進度保存：目前劇情索引 {CurrentStoryIndex}, 目前關卡索引 {CurrentLevelIndex}");
+        PlayerPrefs.Save();
     }
 
     public static void AdvanceStory()
     {
         CurrentStoryIndex++;
         instance.SaveProgress(); 
-        Debug.Log($"劇情推進到：{CurrentStoryIndex}");
     }
 
     public static void AdvanceLevel()
     {
         CurrentLevelIndex++;
         instance.SaveProgress(); 
-        Debug.Log($"關卡推進到：{CurrentLevelIndex}");
     }
 
     public static void StartGameFlow()
     {
+        currentGameFlowMode = GameFlowMode.Story;
         ResetProgress(); 
         instance.SaveProgress(); 
         LoadLobbyScene(); 
     }
 
+    public static void StartLevelMode()
+    {
+        currentGameFlowMode = GameFlowMode.Level;
+        LoadNextGameScene();
+    }
+
     public static void LoadNextStoryScene()
     {
         if (instance == null) return;
+
         if (CurrentStoryIndex < instance.storyScenes.Length)
         {
-            Debug.Log($"加載劇情 Scene: {instance.storyScenes[CurrentStoryIndex]}");
             SceneManager.LoadScene(instance.storyScenes[CurrentStoryIndex]);
         }
         else
         {
-            Debug.Log("所有劇情已結束！加載遊戲結束 Scene。");
-            SceneManager.LoadScene(instance.endingSceneName); 
+            SceneManager.LoadScene(instance.endingSceneName);
         }
     }
 
     public static void LoadNextGameScene()
     {
         if (instance == null) return;
+
         if (CurrentLevelIndex < instance.gameScenes.Length)
         {
-            Debug.Log($"加載關卡 Scene: {instance.gameScenes[CurrentLevelIndex]}");
             SceneManager.LoadScene(instance.gameScenes[CurrentLevelIndex]);
         }
         else
         {
-            Debug.Log("所有關卡已結束！加載最終劇情或結束畫面。");
-            if (instance.storyScenes.Length > 0)
+            if (currentGameFlowMode == GameFlowMode.Story && instance.storyScenes.Length > 0)
             {
-                CurrentStoryIndex = instance.storyScenes.Length - 1; 
-                LoadNextStoryScene(); 
+                CurrentStoryIndex = instance.storyScenes.Length - 1;
+                LoadNextStoryScene();
             }
             else
             {
-                SceneManager.LoadScene(instance.endingSceneName); 
+                LoadLobbyScene();
             }
         }
     }
@@ -205,29 +187,26 @@ public class GameProgressionManager : MonoBehaviour
     public static void LoadLobbyScene()
     {
         if (instance == null) return;
-        Debug.Log($"加載大廳 Scene: {instance.lobbySceneName}");
         SceneManager.LoadScene(instance.lobbySceneName);
     }
 
     public static void LoadStoreScene()
     {
         if (instance == null) return;
-        Debug.Log($"加載商店 Scene: {instance.storeSceneName}");
         SceneManager.LoadScene(instance.storeSceneName);
     }
 
-    public static void LoadBossDeathScene() 
+    public static void LoadBossDeathScene()
     {
         if (instance == null) return;
-        Debug.Log($"加載 Boss 死亡劇情 Scene: {instance.bossDeathSceneName}");
         SceneManager.LoadScene(instance.bossDeathSceneName);
     }
 
     public static void AddCash(int amount) { PlayerCash += amount; }
-    public static bool SpendCash(int amount) 
-    { 
-        if (PlayerCash >= amount) { PlayerCash -= amount; return true; } 
-        Debug.Log("金幣不足！"); return false; 
+    public static bool SpendCash(int amount)
+    {
+        if (PlayerCash >= amount) { PlayerCash -= amount; return true; }
+        return false;
     }
     public static void AddHealth(int amount) { PlayerHealth += amount; }
     public static void SetPlayerMaxHealth(int newMax) { PlayerMaxHealth = newMax; PlayerHealth = PlayerHealth; }
@@ -239,15 +218,13 @@ public class GameProgressionManager : MonoBehaviour
         PlayerPrefs.DeleteKey(HEALTH_KEY);
         PlayerPrefs.DeleteKey(CASH_KEY);
         PlayerPrefs.DeleteKey(MAX_HEALTH_KEY);
-        PlayerPrefs.Save(); 
+        PlayerPrefs.Save();
 
         CurrentStoryIndex = 0;
         CurrentLevelIndex = 0;
-        PlayerHealth = PlayerPrefs.GetInt(HEALTH_KEY, 3); 
-        PlayerCash = PlayerPrefs.GetInt(CASH_KEY, 0);     
-        PlayerMaxHealth = PlayerPrefs.GetInt(MAX_HEALTH_KEY, 10); 
-
-        Debug.Log("遊戲進度與所有玩家數據已重置。");
+        PlayerHealth = 3;
+        PlayerCash = 0;
+        PlayerMaxHealth = 10;
 
         OnPlayerHealthChanged?.Invoke();
         OnPlayerCashChanged?.Invoke();
@@ -259,7 +236,6 @@ public class GameProgressionManager : MonoBehaviour
         {
             Time.timeScale = 0f;
             currentGameState = GameState.Paused;
-            Debug.Log("遊戲暫停。");
         }
     }
 
@@ -269,7 +245,6 @@ public class GameProgressionManager : MonoBehaviour
         {
             Time.timeScale = 1f;
             currentGameState = GameState.Playing;
-            Debug.Log("遊戲恢復。");
         }
     }
 }

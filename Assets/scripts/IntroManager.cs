@@ -81,7 +81,7 @@ public class IntroManager : MonoBehaviour
         instance.StartCoroutine(instance.ShowLoserTextFlow());
     }
 
-    IEnumerator ShowLoserTextFlow()
+IEnumerator ShowLoserTextFlow()
     {
         yield return new WaitForSecondsRealtime(gameOverFadeDelay);
 
@@ -91,10 +91,20 @@ public class IntroManager : MonoBehaviour
             loserTextUI.text = "GAME OVER";
         }
 
-        yield return new WaitForSecondsRealtime(2f);
+        yield return new WaitForSecondsRealtime(2f); // 顯示 GAME OVER 文字時間
+
+        // === ⏱️ 額外等待一小段時間再清除 UI ===
+        yield return new WaitForSecondsRealtime(1f);
+
+        // === 清除 UI ===
+        SetUIActive(false);
+        Debug.Log("IntroManager: 所有 UI 元件已關閉。");
+
+        // === 接著進入下一段劇情 ===
         GameProgressionManager.AdvanceStory();
         GameProgressionManager.LoadNextStoryScene();
     }
+
 
     void SetUIActive(bool active)
     {

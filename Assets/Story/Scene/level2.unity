@@ -472,7 +472,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &42057328
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19088,7 +19088,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1309245850
 RectTransform:
   m_ObjectHideFlags: 0
@@ -25816,7 +25816,6 @@ GameObject:
   - component: {fileID: 1834820055}
   - component: {fileID: 1834820054}
   - component: {fileID: 1834820063}
-  - component: {fileID: 1834820064}
   - component: {fileID: 1834820065}
   - component: {fileID: 1834820066}
   m_Layer: 0
@@ -26081,23 +26080,11 @@ MonoBehaviour:
   knockbackForceX: 3
   knockbackForceY: 5
   knockbackDuration: 0.3
-  deathYThreshold: -10
+  deathYThreshold: -30
   invincibleTime: 1.5
   flashInterval: 0.1
   shockKnockbackForceX: 12
   shockKnockbackForceY: 10
---- !u!114 &1834820064
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1834820053}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9411ac14d881e3b47b36fd4af4372f82, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1834820065
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using UnityEngine;
-using UnityEngine.UI; 
+using UnityEngine.UI;
 using TMPro;
+
 public class LobbyController : MonoBehaviour
 {
     [Header("UI 元素引用")]
@@ -11,9 +12,10 @@ public class LobbyController : MonoBehaviour
     {
         Time.timeScale = 1f; 
 
+
         if (nextStoryButton != null)
         {
-            nextStoryButton.onClick.RemoveAllListeners(); 
+            nextStoryButton.onClick.RemoveAllListeners();
             nextStoryButton.onClick.AddListener(OnNextStoryButtonClick);
         }
         else
@@ -29,6 +31,7 @@ public class LobbyController : MonoBehaviour
         if (GameProgressionManager.instance != null)
         {
             Debug.Log($"Lobby: 目前劇情索引: {GameProgressionManager.CurrentStoryIndex}, 目前關卡索引: {GameProgressionManager.CurrentLevelIndex}");
+            GameProgressionManager.ResetProgress();
         }
         else
         {

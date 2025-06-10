@@ -43,9 +43,8 @@ public class RespawnManager : MonoBehaviour
             return;
         }
 
-        player = playerObj; // 保存目前玩家，供場景載入後使用
+        player = playerObj; 
 
-        // 重新載入場景（將會清空場景物件，但此物件會保留）
         SceneManager.sceneLoaded += OnSceneLoaded;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
